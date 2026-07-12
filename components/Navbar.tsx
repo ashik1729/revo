@@ -36,7 +36,7 @@ export default function Navbar() {
         }`}
       >
         <nav
-          className="mx-auto flex max-w-7xl items-center justify-between px-4 py-1 sm:px-5 lg:px-6"
+          className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-5 lg:px-6"
           aria-label="Main navigation"
         >
           <Link href="#home" className="flex shrink-0 items-center leading-none" onClick={closeMenu}>
