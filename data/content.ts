@@ -19,7 +19,7 @@ export const navLinks = [
 ] as const;
 
 export const heroContent = {
-  eyebrow: "Hospitality Packaging Solutions",
+  eyebrow: "Hospitality & Maintenance Solutions",
   headline: "Integrated Hospitality & Building Maintenance Solutions",
   subheadline:
     "Specialists in hospitality packaging and supply solutions for hotels, resorts, and facilities — delivering quality products, reliable bulk supply, and tailored packaging across Qatar.",
