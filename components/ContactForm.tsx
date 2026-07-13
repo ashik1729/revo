@@ -44,7 +44,7 @@ export default function ContactForm() {
   } | null>(null);
 
   const specificOptions = useMemo(
-    () => (formData.inquiryType === "Product" ? productOptions : serviceOptions),
+    () => [...(formData.inquiryType === "Product" ? productOptions : serviceOptions), "Other"],
     [formData.inquiryType],
   );
 
