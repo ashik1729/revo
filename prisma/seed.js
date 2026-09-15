@@ -129,16 +129,16 @@ async function main() {
   }
 
   const productData = [
-    { icon: "Leaf", title: "ECO Range Products", description: "Sustainable packaging designed to lower environmental impact without compromising performance." },
-    { icon: "Wheat", title: "Bagasse Products", description: "Plant-fiber food packaging from sugarcane residue — sturdy, compostable, and food-safe." },
-    { icon: "Package", title: "Paper & Kraft Products", description: "Containers, boxes, cups, bags, wraps, trays, and tissue essentials in recyclable kraft." },
-    { icon: "TreePine", title: "Wooden Products", description: "Natural wooden cutlery and serving items for cafés, catering, and hospitality brands." },
-    { icon: "Box", title: "Styro Foam Products", description: "Insulated foam packaging for hot and cold food service where temperature retention matters." },
-    { icon: "Layers", title: "Aluminium Products", description: "Foil containers and trays built for catering, bakeries, and high-volume kitchens." },
-    { icon: "Droplets", title: "Hygiene Products", description: "Napkins, tissues, hats, and hygiene supplies for F&B and facility operations." },
-    { icon: "Sparkles", title: "Cleaning Products", description: "Dispensers and cleaning essentials that keep front-of-house and kitchens running clean." },
-    { icon: "ShoppingBag", title: "Plastic Bags & Films", description: "Zipper bags, films, and flexible packaging for storage, retail, and food prep." },
-    { icon: "CupSoda", title: "Plastic Products", description: "Cups, lids, cutlery, microwavable containers, sushi trays, and salad bowls." },
+    { icon: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=900&q=80", title: "ECO Range Products", description: "Sustainable packaging designed to lower environmental impact without compromising performance." },
+    { icon: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=900&q=80", title: "Bagasse Products", description: "Plant-fiber food packaging from sugarcane residue — sturdy, compostable, and food-safe." },
+    { icon: "https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&w=900&q=80", title: "Paper & Kraft Products", description: "Containers, boxes, cups, bags, wraps, trays, and tissue essentials in recyclable kraft." },
+    { icon: "https://images.unsplash.com/photo-1556911220-bff31c28d0fc?auto=format&fit=crop&w=900&q=80", title: "Wooden Products", description: "Natural wooden cutlery and serving items for cafés, catering, and hospitality brands." },
+    { icon: "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&w=900&q=80", title: "Styro Foam Products", description: "Insulated foam packaging for hot and cold food service where temperature retention matters." },
+    { icon: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=900&q=80", title: "Aluminium Products", description: "Foil containers and trays built for catering, bakeries, and high-volume kitchens." },
+    { icon: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=900&q=80", title: "Hygiene Products", description: "Napkins, tissues, hats, and hygiene supplies for F&B and facility operations." },
+    { icon: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=900&q=80", title: "Cleaning Products", description: "Dispensers and cleaning essentials that keep front-of-house and kitchens running clean." },
+    { icon: "https://images.unsplash.com/photo-1610557892470-55d9e80c0bce?auto=format&fit=crop&w=900&q=80", title: "Plastic Bags & Films", description: "Zipper bags, films, and flexible packaging for storage, retail, and food prep." },
+    { icon: "https://images.unsplash.com/photo-1497534446932-c925b458314e?auto=format&fit=crop&w=900&q=80", title: "Plastic Products", description: "Cups, lids, cutlery, microwavable containers, sushi trays, and salad bowls." },
   ];
 
   for (const [index, item] of productData.entries()) {
@@ -159,9 +159,9 @@ async function main() {
   }
 
   const serviceData = [
-    { icon: "Building2", title: "Building Maintenance", description: "Comprehensive upkeep to keep your facilities running smoothly." },
-    { icon: "AirVent", title: "HVAC", description: "Heating, ventilation, and air conditioning installation and service." },
-    { icon: "Settings2", title: "Installation", description: "Professional installation services for equipment and systems." },
+    { icon: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=1200&q=80", title: "Building Maintenance", description: "Comprehensive upkeep to keep your facilities running smoothly." },
+    { icon: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=1200&q=80", title: "HVAC", description: "Heating, ventilation, and air conditioning installation and service." },
+    { icon: "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&w=1200&q=80", title: "Installation", description: "Professional installation services for equipment and systems." },
   ];
 
   for (const [index, item] of serviceData.entries()) {

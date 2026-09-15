@@ -5,8 +5,10 @@ import {
   footerContent,
   heroContent,
   navLinks,
+  productImageByTitle,
   products,
   productsSectionTitle,
+  serviceImageByTitle,
   services,
 } from "@/data/content";
 import { getDb } from "@/lib/db";
@@ -39,6 +41,8 @@ export interface SiteContent {
   about: {
     title: string;
     description: string;
+    imageUrl: string;
+    imageAlt: string;
   };
   productsSectionTitle: string;
   servicesSectionTitle: string;
@@ -46,8 +50,20 @@ export interface SiteContent {
     title: string;
     description: string;
   };
-  products: ReadonlyArray<{ id: string; title: string; description: string; icon: string }>;
-  services: ReadonlyArray<{ id: string; title: string; description: string; icon: string }>;
+  products: ReadonlyArray<{
+    id: string;
+    title: string;
+    description: string;
+    imageUrl: string;
+    imageAlt: string;
+  }>;
+  services: ReadonlyArray<{
+    id: string;
+    title: string;
+    description: string;
+    imageUrl: string;
+    imageAlt: string;
+  }>;
   faqs: ReadonlyArray<{ question: string; answer: string }>;
   footer: {
     quickLinks: ReadonlyArray<{ label: string; href: string }>;
@@ -64,6 +80,28 @@ function toPhoneHref(phone: string) {
 function toWhatsappHref(whatsapp: string) {
   const compact = whatsapp.replace(/[^\d]/g, "");
   return compact ? `https://wa.me/${compact}` : "";
+}
+
+function resolveMedia(
+  stored: string,
+  title: string,
+  lookup: Record<string, { imageUrl: string; imageAlt: string }>,
+  fallbackAlt: string,
+) {
+  if (stored.startsWith("http")) {
+    return { imageUrl: stored, imageAlt: title };
+  }
+
+  const fromTitle = lookup[title];
+  if (fromTitle) {
+    return fromTitle;
+  }
+
+  return {
+    imageUrl:
+      "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=900&q=80",
+    imageAlt: fallbackAlt,
+  };
 }
 
 function getFallbackContent(locale: SiteLocale): SiteContent {
@@ -114,6 +152,8 @@ function getFallbackContent(locale: SiteLocale): SiteContent {
         locale === "ar"
           ? "ريفو قطر شريك موثوق للفنادق والمنشآت في قطر، نوفر تغليفاً صديقاً للبيئة ومستلزمات المنشآت وخدمات صيانة المباني."
           : aboutContent.description,
+      imageUrl: aboutContent.imageUrl,
+      imageAlt: aboutContent.imageAlt,
     },
     productsSectionTitle:
       locale === "ar" ? "منتجات تغليف الضيافة" : productsSectionTitle,
@@ -129,13 +169,15 @@ function getFallbackContent(locale: SiteLocale): SiteContent {
       id: item.id,
       title: item.title,
       description: item.description,
-      icon: item.icon,
+      imageUrl: item.imageUrl,
+      imageAlt: item.imageAlt,
     })),
     services: services.map((item) => ({
       id: item.id,
       title: item.title,
       description: item.description,
-      icon: item.icon,
+      imageUrl: item.imageUrl,
+      imageAlt: item.imageAlt,
     })),
     faqs: [...faqs],
     footer: {
@@ -190,15 +232,18 @@ export async function getSiteContent(locale: SiteLocale): Promise<SiteContent> {
         ? productItems.map((item) => {
             const localeTranslation = item.translations.find((entry) => entry.locale === locale);
             const fallbackTranslation = item.translations[0];
+            const title = localeTranslation?.title || fallbackTranslation?.title || "Product";
+            const media = resolveMedia(item.icon, title, productImageByTitle, title);
 
             return {
               id: item.id,
-              icon: item.icon,
-              title: localeTranslation?.title || fallbackTranslation?.title || "Product",
+              title,
               description:
                 localeTranslation?.description ||
                 fallbackTranslation?.description ||
                 "Description not set.",
+              imageUrl: media.imageUrl,
+              imageAlt: media.imageAlt,
             };
           })
         : fallback.products;
@@ -208,15 +253,18 @@ export async function getSiteContent(locale: SiteLocale): Promise<SiteContent> {
         ? serviceItems.map((item) => {
             const localeTranslation = item.translations.find((entry) => entry.locale === locale);
             const fallbackTranslation = item.translations[0];
+            const title = localeTranslation?.title || fallbackTranslation?.title || "Service";
+            const media = resolveMedia(item.icon, title, serviceImageByTitle, title);
 
             return {
               id: item.id,
-              icon: item.icon,
-              title: localeTranslation?.title || fallbackTranslation?.title || "Service",
+              title,
               description:
                 localeTranslation?.description ||
                 fallbackTranslation?.description ||
                 "Description not set.",
+              imageUrl: media.imageUrl,
+              imageAlt: media.imageAlt,
             };
           })
         : fallback.services;
@@ -248,6 +296,8 @@ export async function getSiteContent(locale: SiteLocale): Promise<SiteContent> {
       about: {
         title: translation?.aboutTitle || fallback.about.title,
         description: translation?.aboutDescription || fallback.about.description,
+        imageUrl: fallback.about.imageUrl,
+        imageAlt: fallback.about.imageAlt,
       },
       productsSectionTitle:
         translation?.productsSectionTitle || fallback.productsSectionTitle,

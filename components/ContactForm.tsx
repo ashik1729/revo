@@ -1,7 +1,8 @@
 "use client";
 
 import { FormEvent, useMemo, useState } from "react";
-import { MapPin, Phone, Mail, CheckCircle, AlertCircle, Send } from "lucide-react";
+import Image from "next/image";
+import { CheckCircle, AlertCircle, Send } from "lucide-react";
 import {
   companyInfo,
   inquiryTypes,
@@ -14,8 +15,6 @@ import {
   type InquiryType,
 } from "@/lib/api/contact";
 import ScrollReveal from "@/components/ScrollReveal";
-import SectionHeading from "@/components/ui/SectionHeading";
-import IconBox from "@/components/ui/IconBox";
 import type { SiteContent } from "@/lib/site-content";
 
 const initialFormState: ContactFormData = {
@@ -60,9 +59,9 @@ export default function ContactForm({
   );
 
   const contactCards = [
-    { icon: MapPin, title: "Address", content: company.address, href: undefined },
-    { icon: Phone, title: "Phone", content: company.phone, href: company.phoneHref },
-    { icon: Mail, title: "Email", content: company.email, href: company.emailHref },
+    { title: "Address", content: company.address, href: undefined },
+    { title: "Phone", content: company.phone, href: company.phoneHref },
+    { title: "Email", content: company.email, href: company.emailHref },
   ] as const;
 
   const handleInquiryTypeChange = (value: InquiryType) => {
@@ -96,19 +95,32 @@ export default function ContactForm({
   };
 
   return (
-    <section id="contact" className="section-gradient relative overflow-hidden py-24">
-      <div className="pointer-events-none absolute -left-20 bottom-0 h-72 w-72 rounded-full bg-navy/5 blur-3xl" />
+    <section id="contact" className="relative overflow-hidden bg-white py-24">
+      <div className="relative mb-14 h-56 w-full sm:h-72">
+        <Image
+          src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1920&q=80"
+          alt="Modern office reception ready for client meetings"
+          fill
+          className="object-cover"
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-navy/55" />
+        <div className="absolute inset-0 flex items-end">
+          <div className="mx-auto w-full max-w-7xl px-4 pb-8 sm:px-6 lg:px-8">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent-light">
+              Get In Touch
+            </p>
+            <h2 className="mt-2 max-w-2xl text-3xl font-bold text-white sm:text-4xl">{title}</h2>
+          </div>
+        </div>
+      </div>
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <SectionHeading label="Get In Touch" title={title} description={description} />
+        <p className="mb-10 max-w-2xl text-lg text-slate-600">{description}</p>
 
         <div className="grid gap-10 lg:grid-cols-5">
           <ScrollReveal className="lg:col-span-3" variant="left">
-            <form
-              onSubmit={handleSubmit}
-              className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-lg shadow-navy/5 sm:p-8"
-              noValidate
-            >
+            <form onSubmit={handleSubmit} className="space-y-5" noValidate>
               {toast && (
                 <div
                   role="alert"
@@ -249,26 +261,30 @@ export default function ContactForm({
             </form>
           </ScrollReveal>
 
-          <div className="flex flex-col gap-5 lg:col-span-2">
+          <div className="flex flex-col gap-8 lg:col-span-2">
+            <div className="relative min-h-[220px] overflow-hidden">
+              <Image
+                src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1000&q=80"
+                alt="Hospitality property exterior in warm daylight"
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 40vw"
+              />
+            </div>
             {contactCards.map((card, index) => (
               <ScrollReveal key={card.title} delay={index * 100} variant="right">
-                <article className="group flex gap-4 rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm transition-all duration-500 hover:-translate-y-1 hover:border-accent/20 hover:shadow-lg">
-                  <IconBox icon={card.icon} size="sm" />
-                  <div>
-                    <h3 className="font-semibold text-navy">{card.title}</h3>
-                    {card.href ? (
-                      <a
-                        href={card.href}
-                        className="mt-1.5 block text-sm text-slate-600 transition-colors duration-300 group-hover:text-accent"
-                      >
-                        {card.content}
-                      </a>
-                    ) : (
-                      <p className="mt-1.5 text-sm leading-relaxed text-slate-600">
-                        {card.content}
-                      </p>
-                    )}
-                  </div>
+                <article className="border-l-2 border-accent pl-4">
+                  <h3 className="font-semibold text-navy">{card.title}</h3>
+                  {card.href ? (
+                    <a
+                      href={card.href}
+                      className="mt-1.5 block text-sm text-slate-600 transition-colors duration-300 hover:text-accent"
+                    >
+                      {card.content}
+                    </a>
+                  ) : (
+                    <p className="mt-1.5 text-sm leading-relaxed text-slate-600">{card.content}</p>
+                  )}
                 </article>
               </ScrollReveal>
             ))}

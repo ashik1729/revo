@@ -322,7 +322,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
                     <input type="hidden" name="itemId" value={item.id} />
                     <div className="grid gap-3 sm:grid-cols-3">
                       <input name="title" defaultValue={localeEntry?.title} className={inputClassName()} required />
-                      <input name="icon" defaultValue={item.icon} className={inputClassName()} required />
+                      <input name="icon" defaultValue={item.icon} placeholder="Image URL" className={inputClassName()} required />
                       <input type="number" name="orderIndex" defaultValue={item.orderIndex} className={inputClassName()} />
                     </div>
                     <textarea
@@ -355,7 +355,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
               <p className="mb-2 text-sm font-semibold text-slate-700">Add product</p>
               <div className="grid gap-3 sm:grid-cols-3">
                 <input name="title" placeholder="Product title" className={inputClassName()} required />
-                <input name="icon" placeholder="BedDouble" className={inputClassName()} required />
+                <input name="icon" placeholder="https://... image URL" className={inputClassName()} required />
                 <input type="number" name="orderIndex" defaultValue={99} className={inputClassName()} />
               </div>
               <textarea
@@ -388,7 +388,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
                     <input type="hidden" name="itemId" value={item.id} />
                     <div className="grid gap-3 sm:grid-cols-3">
                       <input name="title" defaultValue={localeEntry?.title} className={inputClassName()} required />
-                      <input name="icon" defaultValue={item.icon} className={inputClassName()} required />
+                      <input name="icon" defaultValue={item.icon} placeholder="Image URL" className={inputClassName()} required />
                       <input type="number" name="orderIndex" defaultValue={item.orderIndex} className={inputClassName()} />
                     </div>
                     <textarea
@@ -421,7 +421,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
               <p className="mb-2 text-sm font-semibold text-slate-700">Add service</p>
               <div className="grid gap-3 sm:grid-cols-3">
                 <input name="title" placeholder="Service title" className={inputClassName()} required />
-                <input name="icon" placeholder="Building2" className={inputClassName()} required />
+                <input name="icon" placeholder="https://... image URL" className={inputClassName()} required />
                 <input type="number" name="orderIndex" defaultValue={99} className={inputClassName()} />
               </div>
               <textarea
