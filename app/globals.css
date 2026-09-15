@@ -204,3 +204,106 @@ body {
   opacity: 1;
   animation: shimmer 1.5s linear;
 }
+
+@keyframes hero-word-in {
+  from {
+    opacity: 0;
+    transform: translateY(1.1em) rotateX(40deg);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotateX(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-brand-in {
+  from {
+    opacity: 0;
+    letter-spacing: 0.08em;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    letter-spacing: -0.02em;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes hero-ken-burns {
+  from {
+    transform: scale(1.05);
+  }
+  to {
+    transform: scale(1.14);
+  }
+}
+
+.hero-brand {
+  animation: hero-brand-in 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.hero-word {
+  transform-origin: bottom;
+  animation: hero-word-in 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.hero-eyebrow,
+.hero-sub,
+.hero-cta {
+  animation: hero-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.hero-ken-burns {
+  animation: hero-ken-burns 6.5s ease-out both;
+}
+
+.hero-progress {
+  width: 100%;
+  transform-origin: left center;
+  animation: hero-progress 6.5s linear both;
+}
+
+.hero-progress-paused {
+  animation-play-state: paused;
+}
+
+[dir="rtl"] .hero-progress {
+  transform-origin: right center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-brand,
+  .hero-word,
+  .hero-eyebrow,
+  .hero-sub,
+  .hero-cta,
+  .hero-ken-burns,
+  .hero-progress {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+}

@@ -32,51 +32,80 @@ export const heroSlidesByLocale: Record<
   en: [
     {
       imageUrl: `${RP}/2025/01/Slide-1-1.webp`,
-      imageAlt: "Eco-friendly packaging banner",
+      imageAlt: "Eco-friendly packaging collection",
       eyebrow: "Eco-Friendly Packaging",
       headline: "Sustainable Solutions for a Greener Tomorrow",
       subheadline:
-        "Trusted packaging partner for hotels, F&B, and facilities across Qatar.",
+        "Compostable cups, lids, and foodservice packs for hotels and F&B across Qatar.",
     },
     {
       imageUrl: `${RP}/2025/01/Slide-2-1.webp`,
-      imageAlt: "Packaging excellence banner",
-      eyebrow: "Your Packaging Partner",
-      headline: "Excellence Backed by Experience",
+      imageAlt: "Premium packaging supply",
+      eyebrow: "Paper & Kraft Range",
+      headline: "Boxes, Bags & Everyday Kraft Essentials",
       subheadline:
-        "Eco range, bagasse, kraft, aluminium, hygiene, cleaning, and specialty plastics — supplied reliably.",
+        "Pizza boxes, paper bags, wraps, and trays built for busy commercial kitchens.",
     },
     {
       imageUrl: `${RP}/2025/01/Slide-3-1.webp`,
-      imageAlt: "Innovation in packaging banner",
+      imageAlt: "Innovative packaging formats",
       eyebrow: "Innovation in Packaging",
       headline: "Pioneering Sustainability in Qatar",
       subheadline:
-        "Biodegradable, Kraft, and PLA-style options designed for everyday commercial use.",
+        "Biodegradable, kraft, and PLA-style options designed for everyday commercial use.",
+    },
+    {
+      imageUrl: `${RP}/2025/01/Homepage-Banner-4b.webp`,
+      imageAlt: "Bagasse and plant-fiber packaging",
+      eyebrow: "Bagasse Collection",
+      headline: "Plant-Fiber Plates, Bowls & Meal Trays",
+      subheadline:
+        "Heat-resistant bagasse ware with matching lids for takeaway and catering.",
+    },
+    {
+      imageUrl: `${RP}/2025/01/Homepage-Banner-5.jpg`,
+      imageAlt: "Complete packaging catalogue",
+      eyebrow: "Full Catalogue Supply",
+      headline: "From Aluminium to Hygiene — One Partner",
+      subheadline:
+        "Aluminium, plastics, cleaning, and hygiene lines delivered reliably in Doha.",
     },
   ],
   ar: [
     {
       imageUrl: `${RP}/2025/01/Slide-1-1.webp`,
-      imageAlt: "بانر تغليف صديق للبيئة",
+      imageAlt: "مجموعة تغليف صديق للبيئة",
       eyebrow: "تغليف صديق للبيئة",
       headline: "حلول مستدامة لغد أكثر خضرة",
-      subheadline: "شريك موثوق للتغليف للفنادق وقطاع الأغذية والمنشآت في قطر.",
+      subheadline: "أكواب وأغطية وتغليف غذائي قابل للتحلل للفنادق وقطاع الأغذية في قطر.",
     },
     {
       imageUrl: `${RP}/2025/01/Slide-2-1.webp`,
-      imageAlt: "بانر التميز في التغليف",
-      eyebrow: "شريكك في التغليف",
-      headline: "تميز مدعوم بالخبرة",
-      subheadline:
-        "نطاق بيئي، باجاس، كرتون، ألمنيوم، نظافة، تنظيف، وبلاستيك متخصص — بتوريد موثوق.",
+      imageAlt: "توريدات تغليف مميزة",
+      eyebrow: "نطاق الورق والكرتون",
+      headline: "صناديق وأكياس ومستلزمات كرتون يومية",
+      subheadline: "علب بيتزا وأكياس ورق ولفائف وصواني للمطابخ التجارية المزدحمة.",
     },
     {
       imageUrl: `${RP}/2025/01/Slide-3-1.webp`,
-      imageAlt: "بانر الابتكار في التغليف",
+      imageAlt: "ابتكار في أشكال التغليف",
       eyebrow: "ابتكار في التغليف",
       headline: "ريادة الاستدامة في قطر",
       subheadline: "خيارات قابلة للتحلل وكرتون وPLA للاستخدام التجاري اليومي.",
+    },
+    {
+      imageUrl: `${RP}/2025/01/Homepage-Banner-4b.webp`,
+      imageAlt: "تغليف الباجاس والألياف النباتية",
+      eyebrow: "مجموعة الباجاس",
+      headline: "أطباق وأوعية وصواني وجبات من ألياف نباتية",
+      subheadline: "أدوات باجاس مقاومة للحرارة مع أغطية للطلبات الخارجية والتموين.",
+    },
+    {
+      imageUrl: `${RP}/2025/01/Homepage-Banner-5.jpg`,
+      imageAlt: "كتالوج تغليف متكامل",
+      eyebrow: "توريد الكتالوج الكامل",
+      headline: "من الألمنيوم إلى النظافة — شريك واحد",
+      subheadline: "خطوط ألمنيوم وبلاستيك وتنظيف ونظافة بتوريد موثوق في الدوحة.",
     },
   ],
 };
