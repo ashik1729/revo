@@ -1,49 +1,9 @@
 import Image from "next/image";
 import ScrollReveal from "@/components/ScrollReveal";
-import SectionHeading from "@/components/ui/SectionHeading";
+import ProductCatalog from "@/components/ProductCatalog";
+import FeaturedSlider from "@/components/FeaturedSlider";
+import SolutionsGrid from "@/components/SolutionsGrid";
 import type { SiteContent } from "@/lib/site-content";
-
-interface MediaCardProps {
-  title: string;
-  description: string;
-  details?: string;
-  imageUrl: string;
-  imageAlt: string;
-  delay?: number;
-}
-
-function MediaCard({
-  title,
-  description,
-  details,
-  imageUrl,
-  imageAlt,
-  delay = 0,
-}: MediaCardProps) {
-  return (
-    <ScrollReveal delay={delay} variant="up">
-      <article className="group relative h-full overflow-hidden bg-navy">
-        <div className="relative aspect-[4/5]">
-          <Image
-            src={imageUrl}
-            alt={imageAlt}
-            fill
-            className="object-cover transition-transform duration-700 group-hover:scale-105"
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/50 to-transparent" />
-        </div>
-        <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6">
-          <h3 className="text-lg font-semibold text-white sm:text-xl">{title}</h3>
-          <p className="mt-2 text-sm leading-relaxed text-slate-100">{description}</p>
-          {details ? (
-            <p className="mt-2 text-xs leading-relaxed text-slate-300">{details}</p>
-          ) : null}
-        </div>
-      </article>
-    </ScrollReveal>
-  );
-}
 
 interface ProductsServicesProps {
   about: SiteContent["about"];
@@ -51,10 +11,16 @@ interface ProductsServicesProps {
   mission: SiteContent["mission"];
   productsList: SiteContent["products"];
   servicesList: SiteContent["services"];
+  featuredList: SiteContent["featured"];
   productsTitle: string;
   productsDescription: string;
   servicesTitle: string;
   servicesDescription: string;
+  featuredTitle: string;
+  featuredDescription: string;
+  viewDetailsLabel: string;
+  availableInLabel: string;
+  closeLabel: string;
 }
 
 export function ProductsServicesContent({
@@ -63,16 +29,22 @@ export function ProductsServicesContent({
   mission,
   productsList,
   servicesList,
+  featuredList,
   productsTitle,
   productsDescription,
   servicesTitle,
   servicesDescription,
+  featuredTitle,
+  featuredDescription,
+  viewDetailsLabel,
+  availableInLabel,
+  closeLabel,
 }: ProductsServicesProps) {
   return (
     <>
       <section id="about" className="relative overflow-hidden bg-slate-50">
         <div className="grid lg:grid-cols-2">
-          <div className="relative min-h-[340px] lg:min-h-[580px]">
+          <div className="relative min-h-[320px] lg:min-h-[520px]">
             <Image
               src={about.imageUrl}
               alt={about.imageAlt}
@@ -103,7 +75,7 @@ export function ProductsServicesContent({
         </div>
       </section>
 
-      <section className="bg-navy py-16 text-white">
+      <section className="bg-navy py-14 text-white">
         <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
           <ScrollReveal variant="up">
             <h3 className="text-2xl font-bold text-accent-light">{vision.title}</h3>
@@ -116,51 +88,30 @@ export function ProductsServicesContent({
         </div>
       </section>
 
-      <section id="products" className="relative bg-white py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <SectionHeading
-            label="Catalogue"
-            title={productsTitle}
-            description={productsDescription}
-          />
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-            {productsList.map((product, index) => (
-              <MediaCard
-                key={product.id}
-                title={product.title}
-                description={product.description}
-                details={product.details}
-                imageUrl={product.imageUrl}
-                imageAlt={product.imageAlt}
-                delay={index * 30}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
+      <ProductCatalog
+        title={productsTitle}
+        description={productsDescription}
+        items={productsList}
+        viewDetailsLabel={viewDetailsLabel}
+        availableInLabel={availableInLabel}
+        closeLabel={closeLabel}
+      />
 
-      <section id="solutions" className="relative bg-slate-50 py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <SectionHeading
-            label="Why Choose Us"
-            title={servicesTitle}
-            description={servicesDescription}
-          />
-          <div className="grid gap-5 lg:grid-cols-3">
-            {servicesList.map((service, index) => (
-              <MediaCard
-                key={service.id}
-                title={service.title}
-                description={service.description}
-                details={service.details}
-                imageUrl={service.imageUrl}
-                imageAlt={service.imageAlt}
-                delay={index * 80}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
+      <div id="featured">
+        <FeaturedSlider
+          title={featuredTitle}
+          description={featuredDescription}
+          items={featuredList}
+        />
+      </div>
+
+      <SolutionsGrid
+        title={servicesTitle}
+        description={servicesDescription}
+        items={servicesList}
+        viewDetailsLabel={viewDetailsLabel}
+        closeLabel={closeLabel}
+      />
     </>
   );
 }

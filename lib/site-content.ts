@@ -1,7 +1,9 @@
 import {
   companyInfo,
   faqsByLocale,
+  featuredByLocale,
   footerContent,
+  heroSlidesByLocale,
   localeCopy,
   navLinksByLocale,
   productsByLocale,
@@ -10,6 +12,16 @@ import {
 } from "@/data/content";
 import { getDb } from "@/lib/db";
 import type { SiteLocale } from "@/lib/i18n";
+
+export interface CatalogItem {
+  id: string;
+  title: string;
+  description: string;
+  details: string;
+  imageUrl: string;
+  imageAlt: string;
+  sizes: readonly string[];
+}
 
 export interface SiteContent {
   locale: SiteLocale;
@@ -40,6 +52,13 @@ export interface SiteContent {
     imageUrl: string;
     imageAlt: string;
     trustBadges: ReadonlyArray<{ label: string }>;
+    slides: ReadonlyArray<{
+      imageUrl: string;
+      imageAlt: string;
+      eyebrow: string;
+      headline: string;
+      subheadline: string;
+    }>;
   };
   about: {
     title: string;
@@ -54,30 +73,24 @@ export interface SiteContent {
   productsSectionDescription: string;
   servicesSectionTitle: string;
   servicesSectionDescription: string;
+  featuredSectionTitle: string;
+  featuredSectionDescription: string;
   faqSectionTitle: string;
   faqSectionDescription: string;
+  ui: {
+    viewDetailsLabel: string;
+    availableInLabel: string;
+    closeLabel: string;
+  };
   contact: {
     title: string;
     description: string;
     bannerUrl: string;
     sideImageUrl: string;
   };
-  products: ReadonlyArray<{
-    id: string;
-    title: string;
-    description: string;
-    details: string;
-    imageUrl: string;
-    imageAlt: string;
-  }>;
-  services: ReadonlyArray<{
-    id: string;
-    title: string;
-    description: string;
-    details: string;
-    imageUrl: string;
-    imageAlt: string;
-  }>;
+  products: ReadonlyArray<CatalogItem>;
+  services: ReadonlyArray<CatalogItem>;
+  featured: ReadonlyArray<CatalogItem>;
   faqs: ReadonlyArray<{ question: string; answer: string }>;
   footer: {
     quickLinks: ReadonlyArray<{ label: string; href: string }>;
@@ -105,7 +118,9 @@ export function getFallbackContent(locale: SiteLocale): SiteContent {
   const copy = localeCopy[code];
   const products = productsByLocale[code];
   const services = solutionsByLocale[code];
+  const featured = featuredByLocale[code];
   const nav = navLinksByLocale[code];
+  const slides = heroSlidesByLocale[code];
 
   return {
     locale,
@@ -136,6 +151,7 @@ export function getFallbackContent(locale: SiteLocale): SiteContent {
       imageUrl: companyInfo.heroImageUrl,
       imageAlt: copy.heroImageAlt,
       trustBadges: copy.trustBadges.map((label) => ({ label })),
+      slides: [...slides],
     },
     about: {
       title: copy.aboutTitle,
@@ -150,8 +166,15 @@ export function getFallbackContent(locale: SiteLocale): SiteContent {
     productsSectionDescription: copy.productsSectionDescription,
     servicesSectionTitle: copy.servicesSectionTitle,
     servicesSectionDescription: copy.servicesSectionDescription,
+    featuredSectionTitle: copy.featuredSectionTitle,
+    featuredSectionDescription: copy.featuredSectionDescription,
     faqSectionTitle: copy.faqSectionTitle,
     faqSectionDescription: copy.faqSectionDescription,
+    ui: {
+      viewDetailsLabel: copy.viewDetailsLabel,
+      availableInLabel: copy.availableInLabel,
+      closeLabel: copy.closeLabel,
+    },
     contact: {
       title: copy.contactTitle,
       description: copy.contactDescription,
@@ -160,6 +183,10 @@ export function getFallbackContent(locale: SiteLocale): SiteContent {
     },
     products: products.map((item) => ({ ...item })),
     services: services.map((item) => ({ ...item })),
+    featured: featured.map((item) => ({
+      ...item,
+      details: item.description,
+    })),
     faqs: [...faqsByLocale[code]],
     footer: {
       ...footerContent,
@@ -175,9 +202,7 @@ export function getFallbackContent(locale: SiteLocale): SiteContent {
 export async function getSiteContent(locale: SiteLocale): Promise<SiteContent> {
   const fallback = getFallbackContent(locale);
   const db = getDb();
-  if (!db) {
-    return fallback;
-  }
+  if (!db) return fallback;
 
   try {
     const [settings, translation, navItems, productItems, serviceItems, faqItems] =
@@ -219,34 +244,38 @@ export async function getSiteContent(locale: SiteLocale): Promise<SiteContent> {
 
     const products =
       productItems.length > 0
-        ? productItems.map((item) => {
+        ? productItems.map((item, index) => {
             const localeTranslation = item.translations.find((entry) => entry.locale === locale);
             const first = item.translations[0];
             const title = localeTranslation?.title || first?.title || "Product";
+            const fallbackProduct = fallback.products[index] || fallback.products[0];
             return {
               id: item.id,
               title,
               description: localeTranslation?.description || first?.description || "",
               details: localeTranslation?.details || first?.details || "",
-              imageUrl: item.imageUrl || fallback.products[0]?.imageUrl || "",
+              imageUrl: item.imageUrl || fallbackProduct?.imageUrl || "",
               imageAlt: title,
+              sizes: fallbackProduct?.sizes || [],
             };
           })
         : fallback.products;
 
     const services =
       serviceItems.length > 0
-        ? serviceItems.map((item) => {
+        ? serviceItems.map((item, index) => {
             const localeTranslation = item.translations.find((entry) => entry.locale === locale);
             const first = item.translations[0];
             const title = localeTranslation?.title || first?.title || "Solution";
+            const fallbackService = fallback.services[index] || fallback.services[0];
             return {
               id: item.id,
               title,
               description: localeTranslation?.description || first?.description || "",
               details: localeTranslation?.details || first?.details || "",
-              imageUrl: item.imageUrl || fallback.services[0]?.imageUrl || "",
+              imageUrl: item.imageUrl || fallbackService?.imageUrl || "",
               imageAlt: title,
+              sizes: fallbackService?.sizes || [],
             };
           })
         : fallback.services;
@@ -274,6 +303,7 @@ export async function getSiteContent(locale: SiteLocale): Promise<SiteContent> {
     return {
       ...fallback,
       company: {
+        ...fallback.company,
         name: settings?.companyName || fallback.company.name,
         tagline: translation?.tagline || fallback.company.tagline,
         address: settings?.address || fallback.company.address,
@@ -293,6 +323,7 @@ export async function getSiteContent(locale: SiteLocale): Promise<SiteContent> {
       },
       nav,
       hero: {
+        ...fallback.hero,
         eyebrow: translation?.heroEyebrow || fallback.hero.eyebrow,
         headline: translation?.heroHeadline || fallback.hero.headline,
         subheadline: translation?.heroSubheadline || fallback.hero.subheadline,
@@ -305,6 +336,20 @@ export async function getSiteContent(locale: SiteLocale): Promise<SiteContent> {
         imageUrl: settings?.heroImageUrl || fallback.hero.imageUrl,
         imageAlt: translation?.heroImageAlt || fallback.hero.imageAlt,
         trustBadges: trustBadges.length > 0 ? trustBadges : fallback.hero.trustBadges,
+        slides:
+          settings?.heroImageUrl
+            ? fallback.hero.slides.map((slide, index) =>
+                index === 0
+                  ? {
+                      ...slide,
+                      imageUrl: settings.heroImageUrl,
+                      headline: translation?.heroHeadline || slide.headline,
+                      subheadline: translation?.heroSubheadline || slide.subheadline,
+                      eyebrow: translation?.heroEyebrow || slide.eyebrow,
+                    }
+                  : slide,
+              )
+            : fallback.hero.slides,
       },
       about: {
         title: translation?.aboutTitle || fallback.about.title,

@@ -1,3 +1,6 @@
+/** Realpack CDN image helpers */
+const RP = "https://realpackpackaging.com/wp-content/uploads";
+
 export type LocaleCode = "en" | "ar";
 
 export const companyInfo = {
@@ -10,21 +13,79 @@ export const companyInfo = {
   emailHref: "mailto:info@revo.qa",
   whatsapp: "97470718232",
   whatsappHref: "https://wa.me/97470718232",
-  heroImageUrl:
-    "https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&w=1920&q=80",
-  aboutImageUrl:
-    "https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&w=1400&q=80",
-  contactBannerUrl:
-    "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1920&q=80",
-  contactSideImageUrl:
-    "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1000&q=80",
+  heroImageUrl: `${RP}/2025/01/Slide-1-1.webp`,
+  aboutImageUrl: `${RP}/2025/01/Homepage-Banner-2.jpg`,
+  contactBannerUrl: `${RP}/2025/01/Homepage-Banner-3.jpg`,
+  contactSideImageUrl: `${RP}/2025/01/Homepage-Banner-5.jpg`,
 } as const;
+
+export const heroSlidesByLocale: Record<
+  LocaleCode,
+  ReadonlyArray<{
+    imageUrl: string;
+    imageAlt: string;
+    eyebrow: string;
+    headline: string;
+    subheadline: string;
+  }>
+> = {
+  en: [
+    {
+      imageUrl: `${RP}/2025/01/Slide-1-1.webp`,
+      imageAlt: "Eco-friendly packaging banner",
+      eyebrow: "Eco-Friendly Packaging",
+      headline: "Sustainable Solutions for a Greener Tomorrow",
+      subheadline:
+        "Trusted packaging partner for hotels, F&B, and facilities across Qatar.",
+    },
+    {
+      imageUrl: `${RP}/2025/01/Slide-2-1.webp`,
+      imageAlt: "Packaging excellence banner",
+      eyebrow: "Your Packaging Partner",
+      headline: "Excellence Backed by Experience",
+      subheadline:
+        "Eco range, bagasse, kraft, aluminium, hygiene, cleaning, and specialty plastics — supplied reliably.",
+    },
+    {
+      imageUrl: `${RP}/2025/01/Slide-3-1.webp`,
+      imageAlt: "Innovation in packaging banner",
+      eyebrow: "Innovation in Packaging",
+      headline: "Pioneering Sustainability in Qatar",
+      subheadline:
+        "Biodegradable, Kraft, and PLA-style options designed for everyday commercial use.",
+    },
+  ],
+  ar: [
+    {
+      imageUrl: `${RP}/2025/01/Slide-1-1.webp`,
+      imageAlt: "بانر تغليف صديق للبيئة",
+      eyebrow: "تغليف صديق للبيئة",
+      headline: "حلول مستدامة لغد أكثر خضرة",
+      subheadline: "شريك موثوق للتغليف للفنادق وقطاع الأغذية والمنشآت في قطر.",
+    },
+    {
+      imageUrl: `${RP}/2025/01/Slide-2-1.webp`,
+      imageAlt: "بانر التميز في التغليف",
+      eyebrow: "شريكك في التغليف",
+      headline: "تميز مدعوم بالخبرة",
+      subheadline:
+        "نطاق بيئي، باجاس، كرتون، ألمنيوم، نظافة، تنظيف، وبلاستيك متخصص — بتوريد موثوق.",
+    },
+    {
+      imageUrl: `${RP}/2025/01/Slide-3-1.webp`,
+      imageAlt: "بانر الابتكار في التغليف",
+      eyebrow: "ابتكار في التغليف",
+      headline: "ريادة الاستدامة في قطر",
+      subheadline: "خيارات قابلة للتحلل وكرتون وPLA للاستخدام التجاري اليومي.",
+    },
+  ],
+};
 
 export const navLinksByLocale: Record<LocaleCode, ReadonlyArray<{ label: string; href: string }>> = {
   en: [
     { label: "Home", href: "#home" },
     { label: "Products", href: "#products" },
-    { label: "Solutions", href: "#solutions" },
+    { label: "Featured", href: "#featured" },
     { label: "About", href: "#about" },
     { label: "FAQ", href: "#faq" },
     { label: "Contact", href: "#contact" },
@@ -32,7 +93,7 @@ export const navLinksByLocale: Record<LocaleCode, ReadonlyArray<{ label: string;
   ar: [
     { label: "الرئيسية", href: "#home" },
     { label: "المنتجات", href: "#products" },
-    { label: "الحلول", href: "#solutions" },
+    { label: "مميز", href: "#featured" },
     { label: "من نحن", href: "#about" },
     { label: "الأسئلة", href: "#faq" },
     { label: "اتصل بنا", href: "#contact" },
@@ -64,10 +125,15 @@ export const localeCopy: Record<
     productsSectionDescription: string;
     servicesSectionTitle: string;
     servicesSectionDescription: string;
+    featuredSectionTitle: string;
+    featuredSectionDescription: string;
     faqSectionTitle: string;
     faqSectionDescription: string;
     contactTitle: string;
     contactDescription: string;
+    viewDetailsLabel: string;
+    availableInLabel: string;
+    closeLabel: string;
   }
 > = {
   en: {
@@ -75,73 +141,263 @@ export const localeCopy: Record<
     heroEyebrow: "Eco-Friendly Packaging",
     heroHeadline: "Sustainable Solutions for a Greener Tomorrow",
     heroSubheadline:
-      "Revo Qatar supplies eco-friendly and cost-effective packaging for hotels, restaurants, retail, and facilities across Qatar — biodegradable, Kraft, bagasse, aluminium, hygiene, and specialty ranges backed by reliable delivery.",
+      "Trusted packaging partner for hotels, F&B, and facilities across Qatar.",
     heroCtaLabel: "Contact Us",
     heroCtaHref: "#contact",
     heroSecondaryCtaLabel: "Browse Products",
     heroSecondaryCtaHref: "#products",
-    heroImageAlt: "Stacks of kraft packaging boxes ready for hospitality supply",
+    heroImageAlt: "Eco-friendly packaging banner",
     trustBadges: ["Eco Range", "Bulk Supply", "Qatar Delivery"],
     aboutTitle: "About Revo Qatar",
     aboutDescription:
-      "Revo Qatar is a trusted packaging partner for businesses across Qatar. We provide an extensive range of high-quality eco-friendly products — including biodegradable, Kraft, bagasse, PLA-style plant-based options, aluminium, hygiene, cleaning, and specialty plastic ranges — designed for daily commercial use while supporting a healthier planet.",
+      "Revo Qatar supplies eco-friendly and cost-effective packaging for businesses across Qatar — biodegradable, Kraft, bagasse, aluminium, hygiene, cleaning, and specialty plastic ranges.",
     aboutExtra:
-      "Founded with deep packaging and hospitality supply experience, we help hotels, F&B operators, retailers, and facilities reduce their carbon footprint with practical, accessible sustainable packaging. From food containers and shopping bags to customizable solutions, our team guides you to the right range for your operations.",
-    aboutImageAlt: "Organized warehouse shelves with packaged goods ready for supply",
+      "We help hotels, restaurants, retail, and facilities choose practical sustainable packaging with reliable local supply from Industrial Area, Doha.",
+    aboutImageAlt: "Packaging supply banner",
     visionTitle: "Our Vision",
     visionText:
-      "To lead packaging supply in Qatar toward a more sustainable future by providing innovative, renewable, and eco-conscious packaging solutions that businesses can rely on every day.",
+      "To lead packaging supply in Qatar toward a more sustainable future with innovative, renewable solutions.",
     missionTitle: "Our Mission",
     missionText:
-      "To improve environmental outcomes by offering accessible, durable, and sustainable packaging that meets unique business needs while promoting responsible operations across hospitality, retail, and facilities.",
-    productsSectionTitle: "Our Packaging Products",
-    productsSectionDescription:
-      "A complete catalogue for food service and commercial packaging — from compostable eco ranges to kraft, aluminium, hygiene, cleaning, and specialty plastics.",
+      "To offer accessible, durable, and sustainable packaging that meets unique business needs while promoting environmental responsibility.",
+    productsSectionTitle: "Our Products",
+    productsSectionDescription: "Browse packaging categories — tap a card for full details and available sizes.",
     servicesSectionTitle: "Sustainable Focus",
-    servicesSectionDescription:
-      "Three pillars that define how we source and supply packaging for a greener operation.",
+    servicesSectionDescription: "Biodegradable, Kraft, and PLA-style solutions for greener operations.",
+    featuredSectionTitle: "Popular Items",
+    featuredSectionDescription: "Selected packaging lines from our catalogue, ready for bulk enquiry.",
     faqSectionTitle: "Frequently Asked Questions",
-    faqSectionDescription: "Everything you need to know about ordering packaging with Revo Qatar.",
+    faqSectionDescription: "Quick answers about ordering packaging with Revo Qatar.",
     contactTitle: "Have questions or need assistance?",
-    contactDescription:
-      "Our team will help you find the right packaging solutions for your business — quotes, bulk supply, and product guidance.",
+    contactDescription: "Tell us what you need — quotes, sizes, and bulk supply guidance.",
+    viewDetailsLabel: "View details",
+    availableInLabel: "Available in",
+    closeLabel: "Close",
   },
   ar: {
     tagline: "شريكك الحقيقي في التغليف في قطر",
     heroEyebrow: "تغليف صديق للبيئة",
     heroHeadline: "حلول مستدامة لغد أكثر خضرة",
-    heroSubheadline:
-      "توفر ريفو قطر تغليفاً صديقاً للبيئة وفعّال التكلفة للفنادق والمطاعم والتجزئة والمنشآت في قطر — بما في ذلك المنتجات القابلة للتحلل والكرتون والباجاس والألمنيوم ومستلزمات النظافة، مع توريد موثوق.",
+    heroSubheadline: "شريك موثوق للتغليف للفنادق وقطاع الأغذية والمنشآت في قطر.",
     heroCtaLabel: "تواصل معنا",
     heroCtaHref: "#contact",
     heroSecondaryCtaLabel: "تصفح المنتجات",
     heroSecondaryCtaHref: "#products",
-    heroImageAlt: "صناديق تغليف كرتونية جاهزة للتوريد لقطاع الضيافة",
+    heroImageAlt: "بانر تغليف صديق للبيئة",
     trustBadges: ["نطاق بيئي", "توريد بالجملة", "توصيل داخل قطر"],
     aboutTitle: "عن ريفو قطر",
     aboutDescription:
-      "ريفو قطر شريك موثوق في التغليف للشركات في قطر. نوفر مجموعة واسعة من المنتجات عالية الجودة الصديقة للبيئة — بما في ذلك القابلة للتحلل والكرتون والباجاس وخيارات نباتية شبيهة بـ PLA والألمنيوم والنظافة والتنظيف والبلاستيك المتخصص — للاستخدام التجاري اليومي مع دعم بيئة أكثر صحة.",
+      "توفر ريفو قطر تغليفاً صديقاً للبيئة وفعّال التكلفة للشركات في قطر — قابل للتحلل، كرتون، باجاس، ألمنيوم، نظافة، تنظيف، وبلاستيك متخصص.",
     aboutExtra:
-      "بخبرة في توريد التغليف والضيافة، نساعد الفنادق وقطاع الأغذية والتجزئة والمنشآت على تقليل البصمة الكربونية عبر حلول تغليف عملية ومستدامة. من حاويات الطعام وأكياس التسوق إلى الحلول المخصصة، يرشدك فريقنا إلى النطاق المناسب لعملياتك.",
-    aboutImageAlt: "رفوف مستودع منظمة تحتوي على بضائع معبأة جاهزة للتوريد",
+      "نساعد الفنادق والمطاعم والتجزئة والمنشآت على اختيار تغليف مستدام عملي مع توريد محلي موثوق من المنطقة الصناعية بالدوحة.",
+    aboutImageAlt: "بانر توريد التغليف",
     visionTitle: "رؤيتنا",
-    visionText:
-      "قيادة توريد التغليف في قطر نحو مستقبل أكثر استدامة عبر حلول مبتكرة ومتجددة وواعية بيئياً يمكن للشركات الاعتماد عليها يومياً.",
+    visionText: "قيادة توريد التغليف في قطر نحو مستقبل أكثر استدامة بحلول مبتكرة ومتجددة.",
     missionTitle: "رسالتنا",
     missionText:
-      "تحسين الأثر البيئي عبر تقديم تغليف متاح ومتين ومستدام يلبي احتياجات الأعمال ويعزز ممارسات مسؤولة في الضيافة والتجزئة والمنشآت.",
-    productsSectionTitle: "منتجات التغليف",
-    productsSectionDescription:
-      "كتالوج متكامل لتغليف الخدمات الغذائية والاستخدام التجاري — من النطاق البيئي القابل للتحلل إلى الكرتون والألمنيوم والنظافة والتنظيف والبلاستيك المتخصص.",
+      "تقديم تغليف متاح ومتين ومستدام يلبي احتياجات الأعمال ويعزز المسؤولية البيئية.",
+    productsSectionTitle: "منتجاتنا",
+    productsSectionDescription: "تصفح فئات التغليف — اضغط البطاقة للتفاصيل والأحجام المتاحة.",
     servicesSectionTitle: "التركيز المستدام",
-    servicesSectionDescription: "ثلاث ركائز تحدد كيفية توريدنا للتغليف لعمليات أكثر خضرة.",
+    servicesSectionDescription: "حلول قابلة للتحلل وكرتون وPLA لعمليات أكثر خضرة.",
+    featuredSectionTitle: "أصناف مميزة",
+    featuredSectionDescription: "منتجات مختارة من الكتالوج جاهزة لطلبات الجملة.",
     faqSectionTitle: "الأسئلة الشائعة",
-    faqSectionDescription: "كل ما تحتاج معرفته عن طلب التغليف من ريفو قطر.",
+    faqSectionDescription: "إجابات سريعة عن طلب التغليف من ريفو قطر.",
     contactTitle: "هل لديك أسئلة أو تحتاج مساعدة؟",
-    contactDescription:
-      "فريقنا جاهز لمساعدتك في إيجاد حلول التغليف المناسبة — عروض أسعار، توريد بالجملة، وإرشاد للمنتجات.",
+    contactDescription: "أخبرنا بما تحتاجه — عروض أسعار وأحجام وإرشاد للتوريد بالجملة.",
+    viewDetailsLabel: "عرض التفاصيل",
+    availableInLabel: "متوفر بـ",
+    closeLabel: "إغلاق",
   },
 };
+
+type ProductDef = {
+  id: string;
+  imageUrl: string;
+  imageAlt: string;
+  sizes: readonly string[];
+  en: { title: string; description: string; details: string };
+  ar: { title: string; description: string; details: string };
+};
+
+const productDefs: ProductDef[] = [
+  {
+    id: "eco-range",
+    imageUrl: `${RP}/2025/01/ECO-Range-Products.webp`,
+    imageAlt: "ECO Range Products",
+    sizes: ["Hot cups 4–16 oz", "Food pails 16–32 oz", "Lunch boxes XS–L", "PLA cups & lids"],
+    en: {
+      title: "ECO Range Products",
+      description: "Compostable cups, lids, cutlery, food pails, and lunch boxes.",
+      details:
+        "Includes ECO hot cups, ripple/double wall cups, CPLA lids, corn-starch cutlery, PLA cold cups, deli containers, paper straws, and window lunch boxes.",
+    },
+    ar: {
+      title: "منتجات النطاق البيئي",
+      description: "أكواب وأغطية وأدوات مائدة ودلاء طعام وعلب غداء قابلة للتحلل.",
+      details:
+        "يشمل أكواب ساخنة، أكواب مزدوجة، أغطية CPLA، أدوات ذرة، أكواب PLA باردة، حاويات ديلي، مصاصات ورقية، وعلب غداء بنافذة.",
+    },
+  },
+  {
+    id: "bagasse",
+    imageUrl: `${RP}/2025/01/Bagasse-Products.webp`,
+    imageAlt: "Bagasse Products",
+    sizes: ["Plates 7–10″", "Bowls 250–500 ml", "Containers 12–32 oz", "Multi-comp trays"],
+    en: {
+      title: "Bagasse Products",
+      description: "Plant-fiber plates, bowls, and containers with PET lids.",
+      details:
+        "ECO bagasse plates, bowls, round/square/rect containers, hinged lids, sushi trays, souffle cups, and multi-compartment meal trays.",
+    },
+    ar: {
+      title: "منتجات الباجاس",
+      description: "أطباق وأوعية وحاويات من ألياف نباتية مع أغطية PET.",
+      details:
+        "أطباق وأوعية وحاويات دائرية ومربعة ومستطيلة، أغطية مفصلية، صواني سوشي، أكواب سوفليه، وصواني متعددة الأقسام.",
+    },
+  },
+  {
+    id: "paper-kraft",
+    imageUrl: `${RP}/2025/01/Paper-and-Kraft.webp`,
+    imageAlt: "Paper & Kraft Products",
+    sizes: ["Pizza boxes S–L", "Napkins many sizes", "Bags & pouches", "Wraps & trays"],
+    en: {
+      title: "Paper & Kraft Products",
+      description: "Boxes, cups, bags, wraps, trays, and tissue essentials.",
+      details:
+        "Containers & boxes, hot cups & carrying trays, paper bags & pouches, wraps and baking sheets, trays, and tissue products including pizza boxes and doilies.",
+    },
+    ar: {
+      title: "منتجات الورق والكرتون",
+      description: "صناديق وأكواب وأكياس ولفائف وصواني ومناديل.",
+      details:
+        "حاويات وصناديق، أكواب ساخنة وصواني حمل، أكياس ولفائف خبز، صواني، ومنتجات مناديل بما في ذلك علب البيتزا.",
+    },
+  },
+  {
+    id: "wooden",
+    imageUrl: `${RP}/2025/01/Wooden-Products.webp`,
+    imageAlt: "Wooden Products",
+    sizes: ["Skewers", "Chopsticks", "Fruit picks", "Cutlery sets"],
+    en: {
+      title: "Wooden Products",
+      description: "Bamboo skewers, chopsticks, picks, and wooden cutlery.",
+      details:
+        "Bamboo fruit picks, gun-shaped and knotted skewers, wooden chopsticks, and related natural serving accessories.",
+    },
+    ar: {
+      title: "منتجات خشبية",
+      description: "أسياخ وعيدان وأعواد وأدوات مائدة خشبية.",
+      details: "أعواد فواكه، أسياخ بامبو، عيدان خشبية، ومستلزمات تقديم طبيعية.",
+    },
+  },
+  {
+    id: "styrofoam",
+    imageUrl: `${RP}/2025/01/Styro-Foam-Products.webp`,
+    imageAlt: "Styro Foam Products",
+    sizes: ["Bowls", "Boxes", "Cups", "Plates", "Takeaway boxes"],
+    en: {
+      title: "Styro Foam Products",
+      description: "Insulated foam bowls, boxes, cups, and plates.",
+      details:
+        "Styro foam bowls, boxes, cups, plates, and food takeaway boxes for temperature-sensitive service.",
+    },
+    ar: {
+      title: "منتجات الستايروفوم",
+      description: "أوعية وصناديق وأكواب وأطباق رغوية عازلة.",
+      details: "أوعية وصناديق وأكواب وأطباق رغوية وعلب طلبات خارجية.",
+    },
+  },
+  {
+    id: "aluminium",
+    imageUrl: `${RP}/2025/01/Aluminium-Products.webp`,
+    imageAlt: "Aluminium Products",
+    sizes: ["Containers + lids", "Foils", "Platters", "Round trays"],
+    en: {
+      title: "Aluminium Products",
+      description: "Foil containers, platters, wraps, and lids.",
+      details:
+        "Aluminium containers with lids, foils, platters, burger foil wrap, and round aluminium containers for catering and bakeries.",
+    },
+    ar: {
+      title: "منتجات الألمنيوم",
+      description: "حاويات ورقائق وصواني وأغطية ألمنيوم.",
+      details: "حاويات بغطاء، رقائق، صواني تقديم، لفائف برغر، وحاويات دائرية للتموين والمخابز.",
+    },
+  },
+  {
+    id: "hygiene",
+    imageUrl: `${RP}/2025/01/Hygiene-Products.webp`,
+    imageAlt: "Hygiene Products",
+    sizes: ["Napkins 23–40 cm", "Maxi rolls 1–2 ply", "Wet tissues", "Chef hats"],
+    en: {
+      title: "Hygiene Products",
+      description: "Napkins, tissues, hats, and hygiene essentials.",
+      details:
+        "White/yellow paper napkins, maxi rolls, wet refreshing tissues, Duni napkins, forage hats, chef hats, and related hygiene supplies.",
+    },
+    ar: {
+      title: "منتجات النظافة",
+      description: "مناديل ومناديل ورقية وقبعات ومستلزمات نظافة.",
+      details:
+        "مناديل ورقية، رولات ماكسي، مناديل مبللة، مناديل دوني، قبعات طهاة، ومستلزمات نظافة.",
+    },
+  },
+  {
+    id: "cleaning",
+    imageUrl: `${RP}/2025/01/Cleaning-Products.webp`,
+    imageAlt: "Cleaning Products",
+    sizes: ["Dispensers", "Cleaners", "Dishwash", "Air freshener"],
+    en: {
+      title: "Cleaning Products",
+      description: "Dispensers, cleaners, and washroom essentials.",
+      details:
+        "Dispensers for maxi roll, napkin, hand wash, and gloves, plus cleaners, disinfectant, dishwash, rinse aid, and air fresheners.",
+    },
+    ar: {
+      title: "منتجات التنظيف",
+      description: "موزعات ومنظفات ومستلزمات دورات المياه.",
+      details: "موزعات رولات ومناديل وغسول يد، ومنظفات ومطهرات وغسيل صحون ومعطرات.",
+    },
+  },
+  {
+    id: "plastic-bags-films",
+    imageUrl: `${RP}/2025/01/Plastic-bags.webp`,
+    imageAlt: "Plastic Bags & Films",
+    sizes: ["Zipper 12×25 to 30×40 cm", "Garbage bags", "Cling film", "Shopping bags"],
+    en: {
+      title: "Plastic Bags & Films",
+      description: "Zipper bags, garbage bags, cling film, and shopping bags.",
+      details:
+        "Zipper lock bags in multiple sizes, clear/black garbage bags, clear plastic shopping bags, and cling film.",
+    },
+    ar: {
+      title: "أكياس وأفلام بلاستيكية",
+      description: "أكياس سحّاب وقمامة ونايلون تغليف وأكياس تسوق.",
+      details: "أكياس سحّاب بأحجام متعددة، أكياس قمامة، أكياس تسوق شفافة، ونايلون تغليف.",
+    },
+  },
+  {
+    id: "plastic-products",
+    imageUrl: `${RP}/2025/01/Plastic-Products.webp`,
+    imageAlt: "Plastic Products",
+    sizes: ["PET cups 10–20 oz", "Microwavable 4–48 oz", "Sushi trays", "Salad bowls"],
+    en: {
+      title: "Plastic Products",
+      description: "PET cups, microwavable containers, cutlery, and trays.",
+      details:
+        "Clear PET U-shape cups with dome/diamond/heart lids, black microwavable containers, sushi trays, salad bowls, chicken containers, and cutlery sets.",
+    },
+    ar: {
+      title: "منتجات بلاستيكية",
+      description: "أكواب PET وحاويات ميكروويف وأدوات مائدة وصواني.",
+      details:
+        "أكواب PET بأغطية قبة/ماسة/قلب، حاويات ميكروويف سوداء، صواني سوشي، أوعية سلطة، حاويات دجاج، وأطقم أدوات مائدة.",
+    },
+  },
+];
 
 export const productsByLocale: Record<
   LocaleCode,
@@ -152,220 +408,134 @@ export const productsByLocale: Record<
     details: string;
     imageUrl: string;
     imageAlt: string;
+    sizes: readonly string[];
+  }>
+> = {
+  en: productDefs.map((item) => ({
+    id: item.id,
+    imageUrl: item.imageUrl,
+    imageAlt: item.imageAlt,
+    sizes: item.sizes,
+    ...item.en,
+  })),
+  ar: productDefs.map((item) => ({
+    id: item.id,
+    imageUrl: item.imageUrl,
+    imageAlt: item.imageAlt,
+    sizes: item.sizes,
+    ...item.ar,
+  })),
+};
+
+export const featuredByLocale: Record<
+  LocaleCode,
+  ReadonlyArray<{
+    id: string;
+    title: string;
+    description: string;
+    imageUrl: string;
+    imageAlt: string;
+    sizes: readonly string[];
   }>
 > = {
   en: [
     {
-      id: "eco-range",
-      title: "ECO Range Products",
-      description:
-        "Sustainable packaging designed to lower environmental impact without compromising strength or presentation.",
-      details:
-        "Ideal for hotels and F&B brands that want greener takeaway and on-premise packaging. Includes compostable and recyclable formats suited to daily high-volume use.",
-      imageUrl:
-        "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=900&q=80",
-      imageAlt: "Recycled paper and eco-friendly packaging materials",
+      id: "white-pizza-boxes",
+      title: "White Pizza Boxes",
+      description: "Paper & kraft pizza boxes with liners and stands.",
+      imageUrl: `${RP}/2025/02/3-Compartment-Lunch-Box-1.jpg`,
+      imageAlt: "White pizza boxes",
+      sizes: ["Small 23×23 cm", "Medium 28×28 cm", "Large 33×33 cm"],
     },
     {
-      id: "bagasse",
-      title: "Bagasse Products",
-      description:
-        "Plant-fiber food packaging made from sugarcane residue — sturdy, compostable, and food-safe.",
-      details:
-        "Excellent for hot meals, clamshells, plates, and bowls. A strong alternative to conventional foam for restaurants and catering kitchens.",
-      imageUrl:
-        "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=900&q=80",
-      imageAlt: "Takeaway food packed in disposable food containers",
+      id: "white-paper-napkins",
+      title: "White Paper Napkins",
+      description: "Hospitality napkins including dispenser and interfold.",
+      imageUrl: `${RP}/2025/02/White-Paper-Napkins.jpg`,
+      imageAlt: "White paper napkins",
+      sizes: ["23×23", "30×30", "33×33", "40×40", "Dispenser", "Interfold"],
     },
     {
-      id: "paper-kraft",
-      title: "Paper & Kraft Products",
-      description:
-        "Containers, boxes, cups, bags, wraps, trays, and tissue essentials in recyclable kraft.",
-      details:
-        "Covers pizza boxes, hot cups and carrying trays, paper bags and pouches, wraps and baking sheets, trays, and related kraft formats for cafés and QSR brands.",
-      imageUrl:
-        "https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&w=900&q=80",
-      imageAlt: "Stacked kraft paper packaging boxes",
+      id: "pet-dome-cups",
+      title: "Clear PET U Shape Cup + Dome Lids",
+      description: "Clear cups with dome lids for cold drinks.",
+      imageUrl: `${RP}/2025/02/Clear-PET-U-Shape-Cup-Dome-Lids.jpg`,
+      imageAlt: "Clear PET cups with dome lids",
+      sizes: ["10 oz", "12 oz", "14 oz", "16 oz", "20 oz"],
     },
     {
-      id: "wooden",
-      title: "Wooden Products",
-      description:
-        "Natural wooden cutlery and serving items for cafés, catering, and hospitality brands.",
-      details:
-        "Spoons, forks, knives, and serving accessories that pair well with eco food packaging and premium takeaway presentation.",
-      imageUrl:
-        "https://images.unsplash.com/photo-1556911220-bff31c28d0fc?auto=format&fit=crop&w=900&q=80",
-      imageAlt: "Kitchen tools and natural serving materials",
+      id: "zipper-bags",
+      title: "Zipper Lock Bags",
+      description: "Reusable zipper bags for prep and storage.",
+      imageUrl: `${RP}/2025/02/Zipper-Lock-Bags.jpg`,
+      imageAlt: "Zipper lock bags",
+      sizes: ["12×25 cm", "19×10 cm", "22×11 cm", "27×30 cm", "30×40 cm"],
     },
     {
-      id: "styrofoam",
-      title: "Styro Foam Products",
-      description:
-        "Insulated foam packaging for hot and cold food service where temperature retention matters.",
-      details:
-        "Used widely for delivery and bulk catering when insulation and cost efficiency are priorities for high-volume kitchens.",
-      imageUrl:
-        "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&w=900&q=80",
-      imageAlt: "Insulated takeaway meal containers",
+      id: "black-microwavable-round",
+      title: "Black Microwavable Round Cont + Lids",
+      description: "Round microwavable meal containers with lids.",
+      imageUrl: `${RP}/2025/02/Black-Microwavable-Round-Cont-Lids.jpg`,
+      imageAlt: "Black microwavable round containers",
+      sizes: ["4 oz", "8 oz", "10 oz", "12 oz", "16 oz", "20 oz", "30 oz"],
     },
     {
-      id: "aluminium",
-      title: "Aluminium Products",
-      description:
-        "Foil containers and trays built for catering, bakeries, and high-volume kitchens.",
-      details:
-        "Heat-tolerant trays and containers for cooking, transport, and display — dependable for hotels, bakeries, and event catering.",
-      imageUrl:
-        "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=900&q=80",
-      imageAlt: "Kitchen prep trays and catering cookware",
-    },
-    {
-      id: "hygiene",
-      title: "Hygiene Products",
-      description:
-        "Napkins, tissues, hats, and hygiene supplies for F&B and facility operations.",
-      details:
-        "Paper napkins, maxi rolls, wet tissues, chef and forage hats, and related hygiene items that keep front-of-house and kitchen teams compliant and presentable.",
-      imageUrl:
-        "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=900&q=80",
-      imageAlt: "Clean towels and hygiene supplies",
-    },
-    {
-      id: "cleaning",
-      title: "Cleaning Products",
-      description:
-        "Dispensers and cleaning essentials that keep front-of-house and kitchens running clean.",
-      details:
-        "Includes dispenser systems for rolls, napkins, hand wash, and related accessories used in hospitality washrooms and prep areas.",
-      imageUrl:
-        "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=900&q=80",
-      imageAlt: "Professional cleaning supplies for facilities",
-    },
-    {
-      id: "plastic-bags-films",
-      title: "Plastic Bags & Films",
-      description:
-        "Zipper bags, films, and flexible packaging for storage, retail, and food prep.",
-      details:
-        "Practical formats for portioning, storage, and retail packaging — available in multiple sizes for kitchens and back-of-house teams.",
-      imageUrl:
-        "https://images.unsplash.com/photo-1610557892470-55d9e80c0bce?auto=format&fit=crop&w=900&q=80",
-      imageAlt: "Transparent plastic packaging bags",
-    },
-    {
-      id: "plastic-products",
-      title: "Plastic Products",
-      description:
-        "Cups, lids, cutlery, microwavable containers, sushi trays, and salad bowls.",
-      details:
-        "Clear PET cups with dome and heart lids, heavy-duty cutlery, black microwavable containers, sushi trays, salad bowls, and multi-compartment meal trays.",
-      imageUrl:
-        "https://images.unsplash.com/photo-1497534446932-c925b458314e?auto=format&fit=crop&w=900&q=80",
-      imageAlt: "Clear plastic cups for beverage service",
+      id: "bagasse-plates",
+      title: "ECO Bagasse Plates",
+      description: "Compostable bagasse plates for dine-in and takeaway.",
+      imageUrl: `${RP}/2025/02/eco-bagasse-plates.jpg`,
+      imageAlt: "ECO bagasse plates",
+      sizes: ["7″", "9″", "10″", "10″ 3 COMP"],
     },
   ],
   ar: [
     {
-      id: "eco-range",
-      title: "منتجات النطاق البيئي",
-      description: "تغليف مستدام يقلل الأثر البيئي دون المساس بالمتانة أو المظهر.",
-      details:
-        "مناسب للفنادق وعلامات الأغذية التي تريد تغليفاً أكثر خضرة للاستخدام اليومي وبكميات كبيرة، بما في ذلك الصيغ القابلة للتحلل وإعادة التدوير.",
-      imageUrl:
-        "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=900&q=80",
-      imageAlt: "مواد تغليف ورقية معاد تدويرها وصديقة للبيئة",
+      id: "white-pizza-boxes",
+      title: "علب بيتزا بيضاء",
+      description: "علب بيتزا ورقية مع بطانات وحوامل.",
+      imageUrl: `${RP}/2025/02/3-Compartment-Lunch-Box-1.jpg`,
+      imageAlt: "علب بيتزا بيضاء",
+      sizes: ["صغير 23×23", "وسط 28×28", "كبير 33×33"],
     },
     {
-      id: "bagasse",
-      title: "منتجات الباجاس",
-      description: "تغليف غذائي من ألياف نباتية مشتقة من مخلفات قصب السكر — متين وقابل للتحلل وآمن غذائياً.",
-      details:
-        "ممتاز للوجبات الساخنة والحاويات والأطباق والأوعية، وبديل قوي للرغوي التقليدي في المطاعم ومطابخ التموين.",
-      imageUrl:
-        "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=900&q=80",
-      imageAlt: "طعام جاهز معبأ في حاويات غذائية",
+      id: "white-paper-napkins",
+      title: "مناديل ورقية بيضاء",
+      description: "مناديل ضيافة بما في ذلك موزع وإنترفولد.",
+      imageUrl: `${RP}/2025/02/White-Paper-Napkins.jpg`,
+      imageAlt: "مناديل ورقية بيضاء",
+      sizes: ["23×23", "30×30", "33×33", "40×40", "موزع", "إنترفولد"],
     },
     {
-      id: "paper-kraft",
-      title: "منتجات الورق والكرتون",
-      description: "حاويات وصناديق وأكواب وأكياس ولفائف وصواني ومناديل من الكرتون القابل لإعادة التدوير.",
-      details:
-        "يشمل علب البيتزا وأكواب ساخنة وصواني حمل وأكياس ورقية ولفائف خبز وصواني ومستلزمات كرتونية للمقاهي والمطاعم السريعة.",
-      imageUrl:
-        "https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&w=900&q=80",
-      imageAlt: "صناديق تغليف كرتونية مكدسة",
+      id: "pet-dome-cups",
+      title: "كوب PET شفاف + غطاء قبة",
+      description: "أكواب شفافة بأغطية قبة للمشروبات الباردة.",
+      imageUrl: `${RP}/2025/02/Clear-PET-U-Shape-Cup-Dome-Lids.jpg`,
+      imageAlt: "أكواب PET شفافة بغطاء قبة",
+      sizes: ["10 oz", "12 oz", "14 oz", "16 oz", "20 oz"],
     },
     {
-      id: "wooden",
-      title: "منتجات خشبية",
-      description: "أدوات مائدة وتقديم خشبية طبيعية للمقاهي والتموين والضيافة.",
-      details:
-        "ملاعق وشوك وسكاكين ومستلزمات تقديم تتناسب مع التغليف الغذائي البيئي والعروض الفاخرة للطلبات الخارجية.",
-      imageUrl:
-        "https://images.unsplash.com/photo-1556911220-bff31c28d0fc?auto=format&fit=crop&w=900&q=80",
-      imageAlt: "أدوات مطبخ ومواد تقديم طبيعية",
+      id: "zipper-bags",
+      title: "أكياس سحّاب",
+      description: "أكياس سحّاب للتحضير والتخزين.",
+      imageUrl: `${RP}/2025/02/Zipper-Lock-Bags.jpg`,
+      imageAlt: "أكياس سحّاب",
+      sizes: ["12×25 سم", "19×10 سم", "22×11 سم", "27×30 سم", "30×40 سم"],
     },
     {
-      id: "styrofoam",
-      title: "منتجات الستايروفوم",
-      description: "تغليف رغوي عازل للخدمات الغذائية الساخنة والباردة حيث تهم المحافظة على الحرارة.",
-      details:
-        "يُستخدم على نطاق واسع للتوصيل والتموين بالجملة عندما تكون العزل والكفاءة من الأولويات للمطابخ عالية الحجم.",
-      imageUrl:
-        "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&w=900&q=80",
-      imageAlt: "حاويات وجبات معزولة للطلبات الخارجية",
+      id: "black-microwavable-round",
+      title: "حاوية ميكروويف دائرية سوداء + غطاء",
+      description: "حاويات وجبات دائرية قابلة للميكروويف.",
+      imageUrl: `${RP}/2025/02/Black-Microwavable-Round-Cont-Lids.jpg`,
+      imageAlt: "حاويات ميكروويف دائرية سوداء",
+      sizes: ["4 oz", "8 oz", "10 oz", "12 oz", "16 oz", "20 oz", "30 oz"],
     },
     {
-      id: "aluminium",
-      title: "منتجات الألمنيوم",
-      description: "حاويات وصواني ألمنيوم للمطابخ والتموين والمخابز.",
-      details:
-        "صواني وحاويات تتحمل الحرارة للطهي والنقل والعرض — موثوقة للفنادق والمخابز وتموين الفعاليات.",
-      imageUrl:
-        "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=900&q=80",
-      imageAlt: "صواني تحضير وأدوات تموين",
-    },
-    {
-      id: "hygiene",
-      title: "منتجات النظافة",
-      description: "مناديل ومناديل ورقية وقبعات ومستلزمات نظافة لقطاع الأغذية والمنشآت.",
-      details:
-        "مناديل ورقية ورولات ماكسي ومناديل مبللة وقبعات طهاة ومستلزمات نظافة تبقي فرق العمل جاهزة ومتوافقة مع معايير الضيافة.",
-      imageUrl:
-        "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=900&q=80",
-      imageAlt: "مناشف ومستلزمات نظافة نظيفة",
-    },
-    {
-      id: "cleaning",
-      title: "منتجات التنظيف",
-      description: "موزعات ومستلزمات تنظيف للمطاعم والمطابخ ومناطق الاستقبال.",
-      details:
-        "يشمل أنظمة موزعات للرولات والمناديل وغسول اليدين ومستلزمات مرتبطة بمرافق الضيافة ومناطق التحضير.",
-      imageUrl:
-        "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=900&q=80",
-      imageAlt: "مستلزمات تنظيف احترافية للمنشآت",
-    },
-    {
-      id: "plastic-bags-films",
-      title: "أكياس وأفلام بلاستيكية",
-      description: "أكياس سحّاب وأفلام وتغليف مرن للتخزين والتجزئة وتحضير الطعام.",
-      details:
-        "صيغ عملية للتقسيم والتخزين وتغليف التجزئة — بأحجام متعددة للمطابخ وفرق العمليات.",
-      imageUrl:
-        "https://images.unsplash.com/photo-1610557892470-55d9e80c0bce?auto=format&fit=crop&w=900&q=80",
-      imageAlt: "أكياس تغليف بلاستيكية شفافة",
-    },
-    {
-      id: "plastic-products",
-      title: "منتجات بلاستيكية",
-      description: "أكواب وأغطية وأدوات مائدة وحاويات قابلة للميكروويف وصواني سوشي وأوعية سلطة.",
-      details:
-        "أكواب PET شفافة مع أغطية قبة وقلب، أدوات مائدة متينة، حاويات ميكروويف سوداء، صواني سوشي، أوعية سلطة، وصواني وجبات متعددة الأقسام.",
-      imageUrl:
-        "https://images.unsplash.com/photo-1497534446932-c925b458314e?auto=format&fit=crop&w=900&q=80",
-      imageAlt: "أكواب بلاستيكية شفافة لتقديم المشروبات",
+      id: "bagasse-plates",
+      title: "أطباق باجاس بيئية",
+      description: "أطباق باجاس قابلة للتحلل للجلوس والطلبات الخارجية.",
+      imageUrl: `${RP}/2025/02/eco-bagasse-plates.jpg`,
+      imageAlt: "أطباق باجاس بيئية",
+      sizes: ["7″", "9″", "10″", "10″ 3 أقسام"],
     },
   ],
 };
@@ -379,73 +549,65 @@ export const solutionsByLocale: Record<
     details: string;
     imageUrl: string;
     imageAlt: string;
+    sizes: readonly string[];
   }>
 > = {
   en: [
     {
       id: "biodegradable",
       title: "Biodegradable Packaging",
-      description:
-        "Designed to naturally decompose, reducing waste and supporting sustainability goals.",
-      details:
-        "Choose ranges that break down more responsibly after use — suited to brands communicating eco commitments to guests and customers.",
-      imageUrl:
-        "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=1200&q=80",
-      imageAlt: "Eco packaging materials emphasizing sustainability",
+      description: "Designed to decompose and reduce waste.",
+      details: "Choose compostable bagasse and plant-based ranges for greener takeaway programs.",
+      imageUrl: `${RP}/2025/02/eco-bagasse-plates.jpg`,
+      imageAlt: "Biodegradable bagasse packaging",
+      sizes: [],
     },
     {
       id: "kraft",
       title: "Kraft Products",
-      description:
-        "Durable, versatile, recyclable options that balance quality with eco-consciousness.",
-      details:
-        "Kraft boxes, bags, wraps, and cups that present well on counters and delivery runs while remaining practical for high throughput.",
-      imageUrl:
-        "https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&w=1200&q=80",
-      imageAlt: "Kraft packaging stacked in a supply setting",
+      description: "Durable, recyclable kraft for everyday service.",
+      details: "Kraft boxes, bags, wraps, and cups that balance presentation with practicality.",
+      imageUrl: `${RP}/2025/01/Paper-and-Kraft.webp`,
+      imageAlt: "Kraft packaging range",
+      sizes: [],
     },
     {
       id: "pla",
       title: "PLA Solutions",
-      description:
-        "Plant-based packaging from renewable resources like cornstarch and sugarcane.",
-      details:
-        "PLA-style options for forward-looking F&B operators seeking renewable materials without sacrificing clarity and performance.",
-      imageUrl:
-        "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=1200&q=80",
-      imageAlt: "Plant-based food packaging for modern F&B",
+      description: "Plant-based cups, lids, and containers.",
+      details: "PLA cold cups, souffle cups, deli containers, and related renewable formats.",
+      imageUrl: `${RP}/2025/01/ECO-Range-Products.webp`,
+      imageAlt: "PLA eco packaging solutions",
+      sizes: [],
     },
   ],
   ar: [
     {
       id: "biodegradable",
       title: "تغليف قابل للتحلل",
-      description: "مصمم للتحلل الطبيعي وتقليل النفايات ودعم أهداف الاستدامة.",
-      details:
-        "اختر نطاقاً يتحلل بمسؤولية أكبر بعد الاستخدام — مناسب للعلامات التي تُظهر التزامها البيئي للضيوف والعملاء.",
-      imageUrl:
-        "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=1200&q=80",
-      imageAlt: "مواد تغليف صديقة للبيئة تبرز الاستدامة",
+      description: "مصمم للتحلل وتقليل النفايات.",
+      details: "اختر نطاقات الباجاس والنباتية لبرامج الطلبات الخارجية الأكثر خضرة.",
+      imageUrl: `${RP}/2025/02/eco-bagasse-plates.jpg`,
+      imageAlt: "تغليف باجاس قابل للتحلل",
+      sizes: [],
     },
     {
       id: "kraft",
       title: "منتجات الكرتون",
-      description: "خيارات متينة ومرنة وقابلة لإعادة التدوير توازن بين الجودة والوعي البيئي.",
-      details:
-        "علب وأكياس ولفائف وأكواب كرتونية بمظهر احترافي للاستخدام اليومي والتوصيل مع إنتاجية عالية.",
-      imageUrl:
-        "https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&w=1200&q=80",
-      imageAlt: "تغليف كرتوني مكدس في بيئة توريد",
+      description: "كرتون متين وقابل لإعادة التدوير للاستخدام اليومي.",
+      details: "علب وأكياس ولفائف وأكواب كرتونية توازن المظهر مع العملية.",
+      imageUrl: `${RP}/2025/01/Paper-and-Kraft.webp`,
+      imageAlt: "نطاق تغليف كرتوني",
+      sizes: [],
     },
     {
       id: "pla",
       title: "حلول PLA",
-      description: "تغليف نباتي من موارد متجددة مثل نشا الذرة وقصب السكر.",
-      details:
-        "خيارات شبيهة بـ PLA لمشغلي الأغذية الباحثين عن مواد متجددة دون التضحية بالوضوح والأداء.",
-      imageUrl:
-        "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=1200&q=80",
-      imageAlt: "تغليف غذائي نباتي لقطاع الأغذية الحديث",
+      description: "أكواب وأغطية وحاويات نباتية.",
+      details: "أكواب باردة وأكواب سوفليه وحاويات ديلي بصيغ متجددة.",
+      imageUrl: `${RP}/2025/01/ECO-Range-Products.webp`,
+      imageAlt: "حلول تغليف PLA",
+      sizes: [],
     },
   ],
 };
@@ -458,90 +620,75 @@ export const faqsByLocale: Record<
     {
       question: "What types of eco-friendly packaging products do you offer?",
       answer:
-        "We provide an extensive range of eco-friendly packaging, including biodegradable items that naturally decompose, durable Kraft products from recyclable paper, bagasse plant-fiber formats, and PLA-style solutions from renewable resources like cornstarch and sugarcane. Offerings also include food containers, shopping bags, aluminium trays, hygiene supplies, cleaning accessories, and specialty plastic cups, lids, and meal containers tailored for hospitality and F&B.",
+        "We supply biodegradable items, Kraft products, bagasse formats, and PLA-style solutions, plus aluminium, hygiene, cleaning, plastic bags/films, and specialty plastic cups, lids, and meal containers for hospitality and F&B.",
     },
     {
-      question: "What makes Revo Qatar's packaging environmentally friendly?",
+      question: "What makes the packaging environmentally friendly?",
       answer:
-        "Many of our ranges use renewable and biodegradable materials, helping reduce environmental impact. We focus on practical sustainable options that still meet commercial durability, food-safety, and presentation needs.",
+        "Many ranges use renewable and biodegradable materials to reduce environmental impact while meeting commercial durability needs.",
     },
     {
       question: "Do you offer customized packaging solutions?",
       answer:
-        "Yes. We collaborate with clients to source and supply packaging that aligns with brand presentation, portion sizes, and operational requirements.",
+        "Yes. We help clients match sizes, formats, and presentation to their brand and operational requirements.",
     },
     {
       question: "What industries do you cater to?",
-      answer:
-        "We serve hotels, resorts, restaurants, cafés, catering, retail, healthcare-related facilities, and other commercial operations that need reliable packaging supply.",
+      answer: "Hotels, restaurants, cafés, catering, retail, and facilities across Qatar.",
     },
     {
-      question: "Where do you deliver your products?",
-      answer:
-        "We deliver across Qatar, with responsive support for hospitality and facility clients from our base in the Industrial Area, Doha.",
+      question: "Where do you deliver?",
+      answer: "Across Qatar from our base in Industrial Area, Doha.",
     },
     {
-      question: "How can I place an order with Revo Qatar?",
-      answer:
-        "Contact us by phone at +974 7071 8232 or email info@revo.qa. Our team will guide you through product selection, quantities, and delivery.",
+      question: "How can I place an order?",
+      answer: "Call +974 7071 8232 or email info@revo.qa and our team will assist.",
     },
     {
-      question: "Are your products compliant with quality standards?",
+      question: "Are products quality compliant?",
       answer:
-        "Yes. We prioritize products that meet strict expectations for quality, durability, and environmental responsibility suitable for commercial food service and facilities.",
+        "We prioritize packaging that meets commercial expectations for quality, durability, and responsible materials.",
     },
   ],
   ar: [
     {
-      question: "ما أنواع منتجات التغليف الصديقة للبيئة التي تقدمونها؟",
+      question: "ما أنواع التغليف الصديق للبيئة التي تقدمونها؟",
       answer:
-        "نوفر مجموعة واسعة من التغليف الصديق للبيئة، بما في ذلك المنتجات القابلة للتحلل، ومنتجات الكرتون القابلة لإعادة التدوير، وصيغ الباجاس النباتية، وحلول شبيهة بـ PLA من موارد متجددة مثل نشا الذرة وقصب السكر. كما تشمل عروضنا حاويات الطعام وأكياس التسوق وصواني الألمنيوم ومستلزمات النظافة والتنظيف وأكواب وأغطية وحاويات بلاستيكية متخصصة للضيافة وقطاع الأغذية.",
+        "نوفر منتجات قابلة للتحلل وكرتون وباجاس وحلول PLA، إضافة إلى ألمنيوم ونظافة وتنظيف وأكياس/أفلام وبلاستيك متخصص للضيافة وقطاع الأغذية.",
     },
     {
-      question: "ما الذي يجعل تغليف ريفو قطر صديقاً للبيئة؟",
-      answer:
-        "كثير من نطاقاتنا يعتمد على مواد متجددة وقابلة للتحلل لتقليل الأثر البيئي، مع الحفاظ على المتانة وسلامة الغذاء والمظهر المطلوب للاستخدام التجاري.",
+      question: "ما الذي يجعل التغليف صديقاً للبيئة؟",
+      answer: "كثير من النطاقات يعتمد على مواد متجددة وقابلة للتحلل مع الحفاظ على المتانة التجارية.",
     },
     {
-      question: "هل تقدمون حلول تغليف مخصصة؟",
-      answer:
-        "نعم. نتعاون مع العملاء لتوريد تغليف يتوافق مع هوية العلامة وأحجام الحصص ومتطلبات التشغيل.",
+      question: "هل تقدمون حلولاً مخصصة؟",
+      answer: "نعم. نساعد العملاء على مطابقة الأحجام والصيغ مع متطلبات العلامة والتشغيل.",
     },
     {
       question: "ما القطاعات التي تخدمونها؟",
-      answer:
-        "نخدم الفنادق والمنتجعات والمطاعم والمقاهي والتموين والتجزئة والمنشآت الصحية وغيرها من العمليات التجارية التي تحتاج توريد تغليف موثوق.",
+      answer: "الفنادق والمطاعم والمقاهي والتموين والتجزئة والمنشآت في قطر.",
     },
     {
       question: "أين يتم التوصيل؟",
-      answer:
-        "نوصل داخل قطر، مع دعم سريع لعملاء الضيافة والمنشآت من مقرنا في المنطقة الصناعية بالدوحة.",
+      answer: "داخل قطر من مقرنا في المنطقة الصناعية بالدوحة.",
     },
     {
-      question: "كيف أطلب من ريفو قطر؟",
-      answer:
-        "تواصل معنا عبر الهاتف على +974 7071 8232 أو البريد info@revo.qa. سيرشدك فريقنا في اختيار المنتجات والكميات والتوصيل.",
+      question: "كيف أضع طلباً؟",
+      answer: "اتصل على +974 7071 8232 أو راسل info@revo.qa وسنساعدك.",
     },
     {
-      question: "هل منتجاتكم متوافقة مع معايير الجودة؟",
-      answer:
-        "نعم. نركز على منتجات تلبي توقعات صارمة للجودة والمتانة والمسؤولية البيئية ومناسبة للخدمات الغذائية والمنشآت التجارية.",
+      question: "هل المنتجات متوافقة مع معايير الجودة؟",
+      answer: "نركز على تغليف يلبي توقعات الجودة والمتانة والمواد المسؤولة للاستخدام التجاري.",
     },
   ],
 };
 
 export const inquiryTypes = ["Product", "Service"] as const;
-
 export const productOptions = productsByLocale.en.map((p) => p.title);
 export const serviceOptions = solutionsByLocale.en.map((s) => s.title);
-
-/** @deprecated use navLinksByLocale */
 export const navLinks = navLinksByLocale.en;
-/** @deprecated use productsByLocale */
 export const products = productsByLocale.en;
-/** @deprecated use solutionsByLocale */
 export const services = solutionsByLocale.en;
-/** @deprecated use faqsByLocale */
 export const faqs = faqsByLocale.en;
 export const productsSectionTitle = localeCopy.en.productsSectionTitle;
 export const aboutContent = {
