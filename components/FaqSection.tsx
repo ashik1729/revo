@@ -16,12 +16,12 @@ interface FaqSectionProps {
 export default function FaqSection({
   items = faqs,
   title = "Frequently Asked Questions",
-  description = "Everything you need to know about Realpack packaging solutions.",
+  description = "Common questions about our packaging supply and services.",
 }: FaqSectionProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="section-atmosphere py-20">
+    <section id="faq" className="section-gradient py-20">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         <SectionHeading label="FAQ" title={title} description={description} />
 
@@ -30,18 +30,18 @@ export default function FaqSection({
             const isOpen = openIndex === index;
             return (
               <ScrollReveal key={item.question} delay={index * 40} variant="up">
-                <div className="border-b border-forest/10">
+                <div className="rounded-xl border border-slate-200/80 bg-white px-5 shadow-sm">
                   <button
                     type="button"
                     className="flex w-full items-center justify-between gap-4 py-4 text-left"
                     aria-expanded={isOpen}
                     onClick={() => setOpenIndex(isOpen ? null : index)}
                   >
-                    <span className="font-display text-base font-semibold text-forest sm:text-lg">
+                    <span className="text-base font-semibold text-navy sm:text-lg">
                       {item.question}
                     </span>
                     <ChevronDown
-                      className={`h-5 w-5 shrink-0 text-leaf transition-transform duration-300 ${
+                      className={`h-5 w-5 shrink-0 text-accent transition-transform duration-300 ${
                         isOpen ? "rotate-180" : ""
                       }`}
                     />
@@ -52,7 +52,7 @@ export default function FaqSection({
                     }`}
                   >
                     <div className="overflow-hidden">
-                      <p className="pb-4 text-sm leading-relaxed text-forest/70">{item.answer}</p>
+                      <p className="pb-4 text-sm leading-relaxed text-slate-600">{item.answer}</p>
                     </div>
                   </div>
                 </div>

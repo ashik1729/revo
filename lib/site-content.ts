@@ -4,7 +4,6 @@ import {
   faqs,
   footerContent,
   heroContent,
-  locations,
   navLinks,
   products,
   productsSectionTitle,
@@ -26,12 +25,6 @@ export interface SiteContent {
     whatsapp: string;
     whatsappHref: string;
   };
-  locations: ReadonlyArray<{
-    id: string;
-    city: string;
-    country: string;
-    address: string;
-  }>;
   nav: ReadonlyArray<{ label: string; href: string }>;
   hero: {
     eyebrow: string;
@@ -79,8 +72,8 @@ function getFallbackContent(locale: SiteLocale): SiteContent {
       ? [
           { label: "الرئيسية", href: "#home" },
           { label: "المنتجات", href: "#products" },
+          { label: "الخدمات", href: "#services" },
           { label: "من نحن", href: "#about" },
-          { label: "مواقعنا", href: "#locations" },
           { label: "اتصل بنا", href: "#contact" },
         ]
       : navLinks;
@@ -90,7 +83,9 @@ function getFallbackContent(locale: SiteLocale): SiteContent {
     company: {
       name: companyInfo.name,
       tagline:
-        locale === "ar" ? "شريكك الحقيقي في التغليف" : companyInfo.tagline,
+        locale === "ar"
+          ? "حلول الضيافة وصيانة المباني التي يمكنك الوثوق بها"
+          : companyInfo.tagline,
       address: companyInfo.address,
       phone: companyInfo.phone,
       phoneHref: companyInfo.phoneHref,
@@ -99,39 +94,36 @@ function getFallbackContent(locale: SiteLocale): SiteContent {
       whatsapp: companyInfo.whatsapp,
       whatsappHref: companyInfo.whatsappHref,
     },
-    locations: [...locations],
     nav: localeAwareNav,
     hero: {
       ...heroContent,
-      eyebrow: locale === "ar" ? "تغليف صديق للبيئة" : heroContent.eyebrow,
+      eyebrow: locale === "ar" ? "تغليف الضيافة والصيانة" : heroContent.eyebrow,
       headline:
         locale === "ar"
-          ? "حلول مستدامة لغد أكثر خضرة"
+          ? "حلول متكاملة للضيافة وصيانة المباني"
           : heroContent.headline,
       subheadline:
         locale === "ar"
-          ? "شريك موثوق للتغليف لقطاعات الأغذية والتجزئة والضيافة في الإمارات وقطر والبحرين."
+          ? "متخصصون في تغليف الضيافة الصديق للبيئة وتوريد المنشآت في قطر، مع خدمات صيانة موثوقة."
           : heroContent.subheadline,
-      ctaLabel: locale === "ar" ? "تواصل معنا" : heroContent.ctaLabel,
+      ctaLabel: locale === "ar" ? "اطلب عرض سعر" : heroContent.ctaLabel,
     },
     about: {
-      title: locale === "ar" ? "عن ريالبك" : aboutContent.title,
+      title: locale === "ar" ? "عن ريفو قطر" : aboutContent.title,
       description:
         locale === "ar"
-          ? "ريالبك، ومقرها دبي، الإمارات، مزود رائد لحلول التغليف الصديقة للبيئة وفعّالة التكلفة في المنطقة، بما في ذلك المنتجات القابلة للتحلل والكرتون وPLA."
+          ? "ريفو قطر شريك موثوق للفنادق والمنشآت في قطر، نوفر تغليفاً صديقاً للبيئة ومستلزمات المنشآت وخدمات صيانة المباني."
           : aboutContent.description,
     },
-    productsSectionTitle: locale === "ar" ? "منتجاتنا" : productsSectionTitle,
-    servicesSectionTitle: locale === "ar" ? "التركيز المستدام" : "Sustainable Focus",
+    productsSectionTitle:
+      locale === "ar" ? "منتجات تغليف الضيافة" : productsSectionTitle,
+    servicesSectionTitle: locale === "ar" ? "الخدمات" : "Services",
     contact: {
-      title:
-        locale === "ar"
-          ? "هل لديك أسئلة أو تحتاج مساعدة؟"
-          : "Have questions or need assistance?",
+      title: locale === "ar" ? "تواصل معنا" : "Contact Us",
       description:
         locale === "ar"
-          ? "فريقنا جاهز لمساعدتك في إيجاد حلول التغليف المناسبة لعملك."
-          : "Our expert team is here to help you find the right packaging solutions for your business.",
+          ? "تواصل معنا لطلبات الأسعار أو الاستفسارات حول المنتجات والخدمات."
+          : "Get in touch for quotes, product inquiries, or service requests",
     },
     products: products.map((item) => ({
       id: item.id,

@@ -1,65 +1,44 @@
 export const companyInfo = {
-  name: "Realpack",
-  tagline: "Your Real Packaging Partner",
-  address: "Ras Al Khor 2, Dubai, UAE",
-  phone: "+971 52 790 6070",
-  phoneHref: "tel:+971527906070",
-  email: "info@realpackpackaging.com",
-  emailHref: "mailto:info@realpackpackaging.com",
-  whatsapp: "971527906070",
-  whatsappHref: "https://wa.me/971527906070",
+  name: "Revo Qatar",
+  tagline: "Hospitality & Building Maintenance Solutions You Can Trust",
+  address: "Industrial Area, Doha, Qatar",
+  phone: "+974 7071 8232",
+  phoneHref: "tel:+97470718232",
+  email: "info@revo.qa",
+  emailHref: "mailto:info@revo.qa",
+  whatsapp: "97470718232",
+  whatsappHref: "https://wa.me/97470718232",
 } as const;
-
-export const locations = [
-  {
-    id: "dubai",
-    city: "Dubai",
-    country: "UAE",
-    address: "Ras Al Khor 2, Dubai, UAE",
-  },
-  {
-    id: "qatar",
-    city: "Doha",
-    country: "Qatar",
-    address: "Salwa Road, Doha, Qatar",
-  },
-  {
-    id: "bahrain",
-    city: "Hidd",
-    country: "Bahrain",
-    address: "HIDD O05, Kingdom of Bahrain",
-  },
-] as const;
 
 export const navLinks = [
   { label: "Home", href: "#home" },
   { label: "Products", href: "#products" },
+  { label: "Services", href: "#services" },
   { label: "About", href: "#about" },
-  { label: "Locations", href: "#locations" },
   { label: "Contact", href: "#contact" },
 ] as const;
 
 export const heroContent = {
-  eyebrow: "Eco-Friendly Packaging",
-  headline: "Sustainable Solutions for a Greener Tomorrow",
+  eyebrow: "Hospitality Packaging & Maintenance",
+  headline: "Integrated Hospitality & Building Maintenance Solutions",
   subheadline:
-    "Trusted packaging partner for food, retail, and hospitality across the UAE, Qatar, and Bahrain.",
-  ctaLabel: "Contact Us",
+    "Specialists in eco-friendly hospitality packaging and facility supply for hotels, resorts, and businesses across Qatar — plus reliable building maintenance support.",
+  ctaLabel: "Get a Quote",
   ctaHref: "#contact",
   imageUrl:
-    "https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&w=1920&q=80",
-  imageAlt: "Stacked eco-friendly packaging cartons in a warehouse",
+    "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1920&q=80",
+  imageAlt: "Warehouse with hospitality packaging boxes and industrial supply storage",
   trustBadges: [
-    { icon: "Leaf", label: "Eco Range" },
-    { icon: "Truck", label: "Regional Supply" },
-    { icon: "Award", label: "Quality Standards" },
+    { icon: "ShieldCheck", label: "Quality Packaging" },
+    { icon: "Truck", label: "Reliable Supply" },
+    { icon: "Award", label: "Hospitality Expertise" },
   ],
 } as const;
 
 export const aboutContent = {
-  title: "About Realpack",
+  title: "About Revo Qatar",
   description:
-    "Realpack, based in Dubai, UAE, is a leading provider of eco-friendly and cost-effective packaging solutions in the region. Our range includes biodegradable, Kraft, and PLA options designed for business needs while supporting a healthier planet. Founded by packaging industry experts, we help businesses reduce their carbon footprint with sustainable, practical supply.",
+    "Revo Qatar is a trusted partner for hotels, facilities, and businesses across Qatar. We supply eco-friendly and cost-effective packaging — including biodegradable, Kraft, bagasse, aluminium, hygiene, and plastic ranges — alongside facility management supplies and professional building maintenance services.",
 } as const;
 
 export const products = [
@@ -84,7 +63,7 @@ export const products = [
   {
     id: "wooden",
     title: "Wooden Products",
-    description: "Natural wooden cutlery and serving items for cafés, catering, and takeaway brands.",
+    description: "Natural wooden cutlery and serving items for cafés, catering, and hospitality brands.",
     icon: "TreePine",
   },
   {
@@ -125,26 +104,26 @@ export const products = [
   },
 ] as const;
 
-export const productsSectionTitle = "Our Products";
+export const productsSectionTitle = "Hospitality Packaging Products";
 
 export const services = [
   {
-    id: "biodegradable",
-    title: "Biodegradable Packaging",
-    description: "Designed to naturally decompose, reducing waste and supporting sustainability goals.",
-    icon: "Recycle",
+    id: "building-maintenance",
+    title: "Building Maintenance",
+    description: "Comprehensive upkeep to keep your facilities running smoothly.",
+    icon: "Building2",
   },
   {
-    id: "kraft",
-    title: "Kraft Products",
-    description: "Durable, versatile, recyclable options that balance quality with eco-consciousness.",
-    icon: "PackageOpen",
+    id: "hvac",
+    title: "HVAC",
+    description: "Heating, ventilation, and air conditioning installation and service.",
+    icon: "AirVent",
   },
   {
-    id: "pla",
-    title: "PLA Solutions",
-    description: "Plant-based packaging from renewable resources like cornstarch and sugarcane.",
-    icon: "Sprout",
+    id: "installation",
+    title: "Installation",
+    description: "Professional installation services for equipment and systems.",
+    icon: "Settings2",
   },
 ] as const;
 
@@ -152,37 +131,31 @@ export const faqs = [
   {
     question: "What types of eco-friendly packaging products do you offer?",
     answer:
-      "We provide biodegradable items, durable Kraft products from recyclable paper, and PLA solutions made from renewable resources. Offerings include food containers, shopping bags, and customizable packaging for businesses across industries.",
+      "We supply biodegradable items, durable Kraft products from recyclable paper, bagasse and PLA-style sustainable options, plus aluminium, hygiene, cleaning, and specialty plastic packaging for hospitality and F&B.",
   },
   {
-    question: "What makes Realpack's products environmentally friendly?",
+    question: "What makes your packaging products environmentally friendly?",
     answer:
-      "Our products are made from renewable and biodegradable materials, with a focus on reducing carbon footprints and promoting sustainable practices.",
+      "Many of our ranges use renewable and biodegradable materials, helping reduce carbon footprints while meeting day-to-day operational needs.",
   },
   {
     question: "Do you offer customized packaging solutions?",
     answer:
-      "Yes. We collaborate with clients to design and create tailored packaging that aligns with unique business needs.",
+      "Yes. We work with clients to source and supply packaging that aligns with their brand and operational requirements.",
   },
   {
     question: "What industries do you cater to?",
     answer:
-      "We serve food and beverage, retail, healthcare, e-commerce, and more.",
+      "Hotels, resorts, F&B, facilities, and businesses across Qatar that need packaging supply and building maintenance support.",
   },
   {
-    question: "Where do you deliver your products?",
-    answer:
-      "We deliver across the UAE and are expanding our network across Qatar, Bahrain, and other regions.",
+    question: "Where do you deliver?",
+    answer: "We deliver across Qatar, with responsive support for hospitality and facility clients.",
   },
   {
-    question: "How can I place an order with Realpack?",
+    question: "How can I place an order with Revo Qatar?",
     answer:
-      "Contact us by phone at +971 52 790 6070 or email info@realpackpackaging.com. Our team will guide you through the process.",
-  },
-  {
-    question: "Are your products compliant with international standards?",
-    answer:
-      "Yes. Our products adhere to strict international standards for quality, durability, and environmental sustainability.",
+      "Contact us by phone at +974 7071 8232 or email info@revo.qa. Our team will guide you through the process.",
   },
 ] as const;
 
@@ -198,5 +171,5 @@ export const footerContent = {
     { label: "LinkedIn", href: "https://linkedin.com", icon: "Linkedin" },
     { label: "Instagram", href: "https://instagram.com", icon: "Instagram" },
   ],
-  copyright: "© Realpack Packaging LLC. All Rights Reserved",
+  copyright: "© 2026 Revo Qatar. All rights reserved.",
 } as const;

@@ -3,7 +3,6 @@ import TopBar from "@/components/TopBar";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import { ProductsServicesContent } from "@/components/ProductsServices";
-import Locations from "@/components/Locations";
 import FaqSection from "@/components/FaqSection";
 import ContactForm from "@/components/ContactForm";
 import WhatsAppButton from "@/components/WhatsAppButton";
@@ -32,10 +31,10 @@ export default async function LocalePage({ params }: LocalePageProps) {
 
   return (
     <>
-      <TopBar company={content.company} locationItems={content.locations} />
+      <TopBar company={content.company} />
       <Navbar navItems={content.nav} locale={locale} ctaLabel={content.hero.ctaLabel} />
       <main>
-        <Hero content={content.hero} locale={locale} brandName={content.company.name} />
+        <Hero content={content.hero} locale={locale} />
         <ProductsServicesContent
           about={content.about}
           productsList={content.products}
@@ -43,7 +42,6 @@ export default async function LocalePage({ params }: LocalePageProps) {
           productsTitle={content.productsSectionTitle}
           servicesTitle={content.servicesSectionTitle}
         />
-        <Locations items={content.locations} />
         <FaqSection items={content.faqs} />
         <ContactForm
           company={content.company}
@@ -53,12 +51,7 @@ export default async function LocalePage({ params }: LocalePageProps) {
           description={content.contact.description}
         />
       </main>
-      <Footer
-        company={content.company}
-        footer={content.footer}
-        locale={locale}
-        locationItems={content.locations}
-      />
+      <Footer company={content.company} footer={content.footer} locale={locale} />
       <WhatsAppButton company={content.company} />
     </>
   );

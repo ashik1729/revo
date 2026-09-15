@@ -21,7 +21,7 @@ interface NavbarProps {
 export default function Navbar({
   navItems = navLinks,
   locale = "en",
-  ctaLabel = "Contact Us",
+  ctaLabel = "Get a Quote",
 }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -47,24 +47,24 @@ export default function Navbar({
       <header
         className={`sticky top-0 z-50 border-b transition-all duration-500 ${
           isScrolled
-            ? "border-forest/10 bg-paper/95 shadow-sm backdrop-blur-md"
-            : "border-transparent bg-paper"
+            ? "border-slate-200/80 bg-white/95 shadow-lg shadow-navy/5 backdrop-blur-md"
+            : "border-transparent bg-white shadow-sm"
         }`}
       >
         <nav
-          className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8"
+          className="mx-auto flex max-w-7xl items-center justify-between px-4 py-5 sm:px-5 lg:px-6"
           aria-label="Main navigation"
         >
-          <Link href={`/${locale}#home`} className="flex shrink-0 items-center" onClick={closeMenu}>
-            <Logo showTagline />
+          <Link href={`/${locale}#home`} className="flex shrink-0 items-center leading-none" onClick={closeMenu}>
+            <Logo priority />
           </Link>
 
-          <ul className="hidden items-center gap-6 lg:flex">
+          <ul className="hidden items-center gap-6 md:flex">
             {navItems.map((link) => (
               <li key={link.href}>
                 <Link
                   href={resolveHref(locale, link.href)}
-                  className="nav-link py-0.5 text-sm font-medium text-forest transition-colors duration-300 hover:text-leaf"
+                  className="nav-link py-0.5 text-sm font-medium leading-none text-navy transition-colors duration-300 hover:text-accent"
                 >
                   {link.label}
                 </Link>
@@ -72,31 +72,32 @@ export default function Navbar({
             ))}
           </ul>
 
-          <div className="hidden items-center gap-3 lg:flex">
+          <div className="hidden items-center gap-2 md:flex">
             {supportedLocales.map((code) => (
               <Link
                 key={code}
                 href={`/${code}`}
-                className={`rounded px-2 py-1 text-xs font-semibold uppercase tracking-wide transition-colors ${
+                className={`rounded-md px-2 py-1 text-xs font-semibold uppercase tracking-wide transition-colors ${
                   locale === code
-                    ? "bg-forest text-white"
-                    : "text-forest/70 hover:bg-mist hover:text-forest"
+                    ? "bg-navy text-white"
+                    : "text-slate-600 hover:bg-slate-100 hover:text-navy"
                 }`}
               >
                 {localeNames[code]}
               </Link>
             ))}
-            <Link
-              href={`/${locale}#contact`}
-              className="btn-shine rounded-md bg-forest px-3.5 py-2 text-sm font-semibold text-white transition-all duration-300 hover:bg-leaf"
-            >
-              {ctaLabel}
-            </Link>
           </div>
+
+          <Link
+            href={`/${locale}#contact`}
+            className="btn-shine hidden rounded-lg bg-navy px-3 py-1.5 text-sm font-semibold leading-none text-white shadow-md shadow-navy/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-accent hover:shadow-lg md:inline-flex"
+          >
+            {ctaLabel}
+          </Link>
 
           <button
             type="button"
-            className="inline-flex items-center justify-center rounded-md p-1.5 text-forest transition-all duration-300 hover:bg-mist lg:hidden"
+            className="inline-flex items-center justify-center rounded-lg p-1.5 text-navy transition-all duration-300 hover:bg-slate-100 md:hidden"
             onClick={() => setIsOpen(true)}
             aria-label="Open navigation menu"
             aria-expanded={isOpen}
@@ -107,7 +108,7 @@ export default function Navbar({
       </header>
 
       <div
-        className={`fixed inset-0 z-[60] bg-forest/50 backdrop-blur-sm transition-opacity duration-300 lg:hidden ${
+        className={`fixed inset-0 z-[60] bg-navy/60 backdrop-blur-sm transition-opacity duration-300 md:hidden ${
           isOpen ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
         onClick={closeMenu}
@@ -115,17 +116,17 @@ export default function Navbar({
       />
 
       <aside
-        className={`fixed right-0 top-0 z-[70] flex h-full w-80 flex-col bg-paper shadow-2xl transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] lg:hidden ${
+        className={`fixed right-0 top-0 z-[70] flex h-full w-80 flex-col bg-white shadow-2xl transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] md:hidden ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
         aria-label="Mobile navigation"
         aria-hidden={!isOpen}
       >
-        <div className="flex items-center justify-between border-b border-forest/10 px-4 py-3">
-          <Logo showTagline />
+        <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3">
+          <Logo />
           <button
             type="button"
-            className="rounded-md p-2 text-forest transition-colors hover:bg-mist"
+            className="rounded-lg p-2 text-navy transition-colors hover:bg-slate-100"
             onClick={closeMenu}
             aria-label="Close navigation menu"
           >
@@ -142,19 +143,23 @@ export default function Navbar({
                 onClick={closeMenu}
                 className={`rounded-md px-3 py-2 text-sm font-semibold transition-colors ${
                   locale === code
-                    ? "bg-forest text-white"
-                    : "bg-mist text-forest hover:bg-leaf/20"
+                    ? "bg-navy text-white"
+                    : "bg-slate-100 text-slate-700 hover:bg-slate-200"
                 }`}
               >
                 {localeNames[code]}
               </Link>
             ))}
           </li>
-          {navItems.map((link) => (
-            <li key={link.href}>
+          {navItems.map((link, index) => (
+            <li
+              key={link.href}
+              className="animate-fade-in-up opacity-0-start"
+              style={{ animationDelay: `${index * 60}ms`, animationFillMode: "forwards" }}
+            >
               <Link
                 href={resolveHref(locale, link.href)}
-                className="block rounded-md px-4 py-3.5 text-base font-medium text-forest transition-all duration-300 hover:bg-mist hover:text-leaf"
+                className="block rounded-lg px-4 py-3.5 text-base font-medium text-navy transition-all duration-300 hover:translate-x-1 hover:bg-slate-50 hover:text-accent"
                 onClick={closeMenu}
               >
                 {link.label}
@@ -163,11 +168,11 @@ export default function Navbar({
           ))}
         </ul>
 
-        <div className="mt-auto border-t border-forest/10 p-4">
+        <div className="mt-auto border-t border-slate-200 p-4">
           <Link
             href={`/${locale}#contact`}
             onClick={closeMenu}
-            className="flex w-full items-center justify-center rounded-md bg-forest py-3.5 text-sm font-semibold text-white transition-colors hover:bg-leaf"
+            className="flex w-full items-center justify-center rounded-lg bg-navy py-3.5 text-sm font-semibold text-white transition-colors hover:bg-accent"
           >
             {ctaLabel}
           </Link>

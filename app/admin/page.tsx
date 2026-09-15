@@ -54,7 +54,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
     <main className="min-h-screen bg-slate-100 py-10">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 sm:px-6 lg:px-8">
         <section className="rounded-xl bg-navy p-6 text-white shadow-lg">
-          <p className="text-xs uppercase tracking-[0.18em] text-blue-200">Realpack Content Console</p>
+          <p className="text-xs uppercase tracking-[0.18em] text-blue-200">Revo Content Console</p>
           <h1 className="mt-2 text-2xl font-bold">Website Management</h1>
           <p className="mt-1 text-sm text-blue-100">
             Manage homepage content, menu, products, and services for each language.

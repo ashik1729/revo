@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { MapPin, Phone, Mail } from "lucide-react";
-import { companyInfo, footerContent, locations } from "@/data/content";
+import { companyInfo, footerContent } from "@/data/content";
 import Logo from "@/components/Logo";
 import ScrollReveal from "@/components/ScrollReveal";
 import type { SiteContent } from "@/lib/site-content";
@@ -13,7 +13,6 @@ interface FooterProps {
   company?: SiteContent["company"];
   footer?: SiteContent["footer"];
   locale?: string;
-  locationItems?: SiteContent["locations"];
 }
 
 function SocialIcon({ icon }: { icon: string }) {
@@ -38,23 +37,23 @@ function SocialIcon({ icon }: { icon: string }) {
   );
 }
 
-export default function Footer({
-  company = companyInfo,
-  footer = footerContent,
-  locale = "en",
-  locationItems = locations,
-}: FooterProps) {
+export default function Footer({ company = companyInfo, footer = footerContent, locale = "en" }: FooterProps) {
   return (
-    <footer className="relative overflow-hidden bg-forest-deep text-white">
-      <div className="relative mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="grid gap-10 md:grid-cols-3">
+    <footer className="relative overflow-hidden bg-navy text-white">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(37,99,235,0.15),transparent_60%)]" />
+
+      <div className="relative mx-auto max-w-7xl px-4 py-10 sm:px-5 lg:px-6">
+        <div className="grid gap-8 md:grid-cols-3">
           <ScrollReveal variant="up">
-            <Logo variant="footer" showTagline className="mb-4" />
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-mist">{company.tagline}</p>
+            <Logo variant="footer" className="mb-4 h-auto w-[180px]" />
+            <p className="text-lg font-semibold">{company.name}</p>
+            <p className="mt-2 max-w-xs text-sm leading-relaxed text-slate-300">
+              {company.tagline}
+            </p>
           </ScrollReveal>
 
           <ScrollReveal variant="up" delay={100}>
-            <h3 className="mb-5 text-sm font-semibold uppercase tracking-[0.15em] text-mist/80">
+            <h3 className="mb-5 text-sm font-semibold uppercase tracking-[0.15em] text-slate-400">
               Quick Links
             </h3>
             <ul className="space-y-3">
@@ -62,7 +61,7 @@ export default function Footer({
                 <li key={link.href}>
                   <Link
                     href={resolveHref(locale, link.href)}
-                    className="text-sm text-mist transition-colors duration-300 hover:text-white"
+                    className="text-sm text-slate-300 transition-all duration-300 hover:translate-x-1 hover:text-white"
                   >
                     {link.label}
                   </Link>
@@ -72,23 +71,21 @@ export default function Footer({
           </ScrollReveal>
 
           <ScrollReveal variant="up" delay={200}>
-            <h3 className="mb-5 text-sm font-semibold uppercase tracking-[0.15em] text-mist/80">
+            <h3 className="mb-5 text-sm font-semibold uppercase tracking-[0.15em] text-slate-400">
               Contact
             </h3>
-            <ul className="space-y-4 text-sm text-mist">
-              {locationItems.map((location) => (
-                <li key={location.id} className="flex items-start gap-3">
-                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-leaf" strokeWidth={1.5} aria-hidden="true" />
-                  <span>{location.address}</span>
-                </li>
-              ))}
+            <ul className="space-y-4 text-sm text-slate-300">
+              <li className="flex items-start gap-3">
+                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-accent-light" strokeWidth={1.5} aria-hidden="true" />
+                <span>{company.address}</span>
+              </li>
               <li>
                 <a
                   href={company.phoneHref}
                   className="group flex items-center gap-3 transition-colors duration-300 hover:text-white"
                   aria-label={`Call us at ${company.phone}`}
                 >
-                  <Phone className="h-4 w-4 shrink-0 text-leaf" strokeWidth={1.5} aria-hidden="true" />
+                  <Phone className="h-4 w-4 shrink-0 text-accent-light transition-transform duration-300 group-hover:scale-110" strokeWidth={1.5} aria-hidden="true" />
                   <span>{company.phone}</span>
                 </a>
               </li>
@@ -98,7 +95,7 @@ export default function Footer({
                   className="group flex items-center gap-3 transition-colors duration-300 hover:text-white"
                   aria-label={`Email us at ${company.email}`}
                 >
-                  <Mail className="h-4 w-4 shrink-0 text-leaf" strokeWidth={1.5} aria-hidden="true" />
+                  <Mail className="h-4 w-4 shrink-0 text-accent-light transition-transform duration-300 group-hover:scale-110" strokeWidth={1.5} aria-hidden="true" />
                   <span>{company.email}</span>
                 </a>
               </li>
@@ -111,7 +108,7 @@ export default function Footer({
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex h-10 w-10 items-center justify-center rounded-md bg-white/10 text-white transition-all duration-300 hover:bg-leaf"
+                  className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10 text-white transition-all duration-300 hover:-translate-y-1 hover:bg-accent hover:shadow-lg hover:shadow-accent/30"
                   aria-label={`Follow us on ${social.label}`}
                 >
                   <SocialIcon icon={social.icon} />
@@ -121,7 +118,7 @@ export default function Footer({
           </ScrollReveal>
         </div>
 
-        <div className="mt-10 border-t border-white/10 pt-6 text-center text-sm text-mist/70">
+        <div className="mt-10 border-t border-white/10 pt-6 text-center text-sm text-slate-400">
           {footer.copyright}
         </div>
       </div>

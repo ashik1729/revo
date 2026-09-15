@@ -1,38 +1,37 @@
+"use client";
+
+import { useState } from "react";
+import Image from "next/image";
 import { companyInfo } from "@/data/content";
 
 interface LogoProps {
+  width?: number;
+  height?: number;
   className?: string;
-  variant?: "default" | "footer" | "hero";
+  priority?: boolean;
+  variant?: "default" | "footer";
   companyName?: string;
-  showTagline?: boolean;
 }
 
 export default function Logo({
-  className = "",
+  width = 180,
+  height = 41,
+  className = "h-auto w-[180px]",
+  priority = false,
   variant = "default",
   companyName = companyInfo.name,
-  showTagline = false,
 }: LogoProps) {
-  const isLight = variant === "footer" || variant === "hero";
+  const [src, setSrc] = useState(variant === "footer" ? "/logo-footer.png" : "/logo.png");
 
   return (
-    <span className={`inline-flex flex-col leading-none ${className}`}>
-      <span
-        className={`font-display text-2xl font-semibold tracking-tight ${
-          isLight ? "text-white" : "text-forest"
-        }`}
-      >
-        {companyName}
-      </span>
-      {showTagline ? (
-        <span
-          className={`mt-1 text-[0.65rem] font-semibold uppercase tracking-[0.22em] ${
-            isLight ? "text-mist" : "text-leaf"
-          }`}
-        >
-          Packaging
-        </span>
-      ) : null}
-    </span>
+    <Image
+      src={src}
+      alt={`${companyName} logo`}
+      width={width}
+      height={height}
+      className={`block leading-none transition-transform duration-500 hover:scale-[1.02] ${className}`}
+      priority={priority}
+      onError={() => setSrc("/logo.svg")}
+    />
   );
 }

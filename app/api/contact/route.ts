@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import type { ContactFormData, InquiryType } from "@/lib/api/contact";
 import { getDb } from "@/lib/db";
 
-const recipientEmail = process.env.MAIL_TO || "info@realpackpackaging.com";
+const recipientEmail = process.env.MAIL_TO || "info@revo.qa";
 
 type EmailConfig = {
   host: string;
@@ -154,7 +154,7 @@ export async function POST(request: Request) {
       from: config.from,
       to: recipientEmail,
       replyTo: form.email,
-      subject: `Realpack Website Inquiry - ${form.inquiryType}`,
+      subject: `Revo Website Inquiry - ${form.inquiryType}`,
       text: toText(form),
       html: toHtml(form),
     });

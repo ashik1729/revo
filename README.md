@@ -1,28 +1,17 @@
-# Realpack Website
+# Revo Website
 
-Next.js site for [Realpack Packaging](https://realpackpackaging.com/) with:
+Next.js site for [Revo Qatar](https://revo.qa/) with:
 
 - public multilingual pages (`/en`, `/ar`)
 - admin CMS panel at `/admin`
 - optional PostgreSQL (Prisma) content database
 - SMTP email for contact form submissions
 
+Packaging product ranges are adapted from industry catalogue content (eco, bagasse, kraft, aluminium, hygiene, and more) while keeping Revo Qatar branding and services.
+
 ## 1) Setup environment variables
 
 Create `.env.local` based on `.env.example`.
-
-Required for contact email:
-
-- `SMTP_HOST`
-- `SMTP_PORT`
-- `SMTP_USER`
-- `SMTP_PASS`
-- `MAIL_FROM`
-- `MAIL_TO` (defaults to `info@realpackpackaging.com`)
-
-Optional:
-
-- `DATABASE_URL` (without it, the site uses built-in Realpack fallback content)
 
 ## 2) Setup database (optional)
 
@@ -39,17 +28,11 @@ npm run db:seed
 npm run dev
 ```
 
-Open:
-
-- Website: [http://localhost:3000](http://localhost:3000)
-- Admin CMS: [http://localhost:3000/admin](http://localhost:3000/admin)
-
 ## Staging / Production (Cloudflare)
 
-- Staging branch: `staging` → Cloudflare Worker `realpack-staging`
-- Production: `main` → Cloudflare Worker `realpack` (deploy only after approval)
+- Staging branch: `staging` → Worker `revo-staging`
+- Production: `main` → Worker `revo` (deploy only after approval)
 
 ```bash
-npm run cf:build
 npm run cf:deploy:staging
 ```
