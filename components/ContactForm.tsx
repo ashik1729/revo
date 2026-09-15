@@ -100,15 +100,16 @@ export default function ContactForm({
 
   return (
     <section id="contact" className="relative overflow-hidden bg-white py-24">
-      <div className="relative mb-14 h-56 w-full sm:h-72">
+      <div className="relative mb-14 h-64 w-full sm:h-80 lg:h-96">
         <Image
           src={bannerUrl}
           alt="Contact Revo Qatar for packaging supply"
           fill
-          className="object-cover"
+          className="object-cover object-left"
           sizes="100vw"
+          priority
         />
-        <div className="absolute inset-0 bg-navy/55" />
+        <div className="absolute inset-0 bg-gradient-to-r from-navy/35 via-navy/50 to-navy/70" />
         <div className="absolute inset-0 flex items-end">
           <div className="mx-auto w-full max-w-7xl px-4 pb-8 sm:px-6 lg:px-8">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent-light">

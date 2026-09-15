@@ -15,7 +15,7 @@ export const companyInfo = {
   whatsappHref: "https://wa.me/97470718232",
   heroImageUrl: `${RP}/2025/01/Slide-1-1.webp`,
   aboutImageUrl: "/about-revo.jpg",
-  contactBannerUrl: `${RP}/2025/01/Homepage-Banner-3.jpg`,
+  contactBannerUrl: "/contact-banner.jpg",
   contactSideImageUrl: `${RP}/2025/01/Homepage-Banner-5.jpg`,
 } as const;
 
