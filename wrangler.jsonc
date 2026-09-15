@@ -1,0 +1,46 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "main": ".open-next/worker.js",
+  "name": "realpack",
+  "compatibility_date": "2025-12-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "realpack"
+    }
+  ],
+  "images": {
+    "binding": "IMAGES"
+  },
+  "vars": {
+    "MAIL_TO": "info@realpackpackaging.com"
+  },
+  "env": {
+    "staging": {
+      "name": "realpack-staging",
+      "compatibility_date": "2025-12-01",
+      "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+      "assets": {
+        "directory": ".open-next/assets",
+        "binding": "ASSETS"
+      },
+      "services": [
+        {
+          "binding": "WORKER_SELF_REFERENCE",
+          "service": "realpack-staging"
+        }
+      ],
+      "images": {
+        "binding": "IMAGES"
+      },
+      "vars": {
+        "MAIL_TO": "info@realpackpackaging.com"
+      }
+    }
+  }
+}

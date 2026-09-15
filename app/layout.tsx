@@ -1,17 +1,23 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Fraunces, Manrope } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
+const manrope = Manrope({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-manrope",
+  display: "swap",
+});
+
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  variable: "--font-fraunces",
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Revo Qatar | Hospitality & Building Maintenance Solutions",
+  title: "Realpack | Eco-Friendly Packaging Partner",
   description:
-    "Revo Qatar provides hospitality products, facility supplies, and building maintenance services including HVAC and installation across Qatar.",
+    "Realpack provides eco-friendly packaging solutions across Dubai, Qatar, and Bahrain — biodegradable, kraft, bagasse, aluminium, hygiene, and more.",
 };
 
 export default function RootLayout({
@@ -20,8 +26,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} scroll-smooth`}>
-      <body className="min-h-screen bg-white font-sans text-slate-900 antialiased">
+    <html lang="en" className={`${manrope.variable} ${fraunces.variable} scroll-smooth`}>
+      <body className="min-h-screen bg-background font-sans text-foreground antialiased">
         {children}
       </body>
     </html>

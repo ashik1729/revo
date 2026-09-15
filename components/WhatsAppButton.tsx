@@ -1,12 +1,17 @@
 import { companyInfo } from "@/data/content";
+import type { SiteContent } from "@/lib/site-content";
 
-export default function WhatsAppButton() {
+interface WhatsAppButtonProps {
+  company?: SiteContent["company"];
+}
+
+export default function WhatsAppButton({ company = companyInfo }: WhatsAppButtonProps) {
   return (
     <a
-      href={companyInfo.whatsappHref}
+      href={company.whatsappHref}
       target="_blank"
       rel="noopener noreferrer"
-      className="animate-pulse-ring group fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg shadow-[#25D366]/30 transition-all duration-300 hover:scale-110 hover:shadow-xl hover:shadow-[#25D366]/40 focus:outline-none focus:ring-2 focus:ring-[#25D366] focus:ring-offset-2"
+      className="group fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-md bg-[#25D366] text-white shadow-lg transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#25D366] focus:ring-offset-2"
       aria-label="Chat with us on WhatsApp"
     >
       <svg

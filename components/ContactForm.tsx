@@ -15,7 +15,7 @@ import {
 } from "@/lib/api/contact";
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionHeading from "@/components/ui/SectionHeading";
-import IconBox from "@/components/ui/IconBox";
+import type { SiteContent } from "@/lib/site-content";
 
 const initialFormState: ContactFormData = {
   fullName: "",
@@ -26,16 +26,26 @@ const initialFormState: ContactFormData = {
   message: "",
 };
 
-const contactCards = [
-  { icon: MapPin, title: "Address", content: companyInfo.address, href: undefined },
-  { icon: Phone, title: "Phone", content: companyInfo.phone, href: companyInfo.phoneHref },
-  { icon: Mail, title: "Email", content: companyInfo.email, href: companyInfo.emailHref },
-] as const;
-
 const inputClass =
-  "w-full rounded-lg border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-900 outline-none transition-all duration-300 focus:border-accent focus:bg-white focus:ring-4 focus:ring-accent/10";
+  "w-full border border-forest/15 bg-white px-4 py-3 text-sm text-forest outline-none transition-all duration-300 focus:border-leaf focus:ring-4 focus:ring-leaf/10";
 
-export default function ContactForm() {
+interface ContactFormProps {
+  company?: SiteContent["company"];
+  productItems?: string[];
+  serviceItems?: string[];
+  title?: string;
+  description?: string;
+  submitLabel?: string;
+}
+
+export default function ContactForm({
+  company = companyInfo,
+  productItems = productOptions,
+  serviceItems = serviceOptions,
+  title = "Have questions or need assistance?",
+  description = "Our expert team is here to help you find the right packaging solutions for your business.",
+  submitLabel = "Submit Inquiry",
+}: ContactFormProps) {
   const [formData, setFormData] = useState<ContactFormData>(initialFormState);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [toast, setToast] = useState<{
@@ -44,9 +54,15 @@ export default function ContactForm() {
   } | null>(null);
 
   const specificOptions = useMemo(
-    () => [...(formData.inquiryType === "Product" ? productOptions : serviceOptions), "Other"],
-    [formData.inquiryType],
+    () => [...(formData.inquiryType === "Product" ? productItems : serviceItems), "Other"],
+    [formData.inquiryType, productItems, serviceItems],
   );
+
+  const contactCards = [
+    { icon: MapPin, title: "Address", content: company.address, href: undefined },
+    { icon: Phone, title: "Phone", content: company.phone, href: company.phoneHref },
+    { icon: Mail, title: "Email", content: company.email, href: company.emailHref },
+  ] as const;
 
   const handleInquiryTypeChange = (value: InquiryType) => {
     setFormData((prev) => ({
@@ -79,29 +95,19 @@ export default function ContactForm() {
   };
 
   return (
-    <section id="contact" className="section-gradient relative overflow-hidden py-24">
-      <div className="pointer-events-none absolute -left-20 bottom-0 h-72 w-72 rounded-full bg-navy/5 blur-3xl" />
-
+    <section id="contact" className="relative overflow-hidden bg-paper py-20">
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <SectionHeading
-          label="Get In Touch"
-          title="Contact Us"
-          description="Get in touch for quotes, product inquiries, or service requests"
-        />
+        <SectionHeading label="Get In Touch" title={title} description={description} />
 
-        <div className="grid gap-10 lg:grid-cols-5">
+        <div className="grid gap-12 lg:grid-cols-5">
           <ScrollReveal className="lg:col-span-3" variant="left">
-            <form
-              onSubmit={handleSubmit}
-              className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-lg shadow-navy/5 sm:p-8"
-              noValidate
-            >
+            <form onSubmit={handleSubmit} className="space-y-5" noValidate>
               {toast && (
                 <div
                   role="alert"
-                  className={`mb-6 flex animate-scale-in items-start gap-3 rounded-lg border p-4 text-sm ${
+                  className={`flex items-start gap-3 border p-4 text-sm ${
                     toast.type === "success"
-                      ? "border-green-200 bg-green-50 text-green-800"
+                      ? "border-leaf/30 bg-mist text-forest"
                       : "border-red-200 bg-red-50 text-red-800"
                   }`}
                 >
@@ -116,8 +122,8 @@ export default function ContactForm() {
 
               <div className="grid gap-5 sm:grid-cols-2">
                 <div className="sm:col-span-2">
-                  <label htmlFor="fullName" className="mb-2 block text-sm font-medium text-navy">
-                    Full Name <span className="text-accent">*</span>
+                  <label htmlFor="fullName" className="mb-2 block text-sm font-medium text-forest">
+                    Full Name <span className="text-leaf">*</span>
                   </label>
                   <input
                     id="fullName"
@@ -133,8 +139,8 @@ export default function ContactForm() {
                 </div>
 
                 <div>
-                  <label htmlFor="email" className="mb-2 block text-sm font-medium text-navy">
-                    Email <span className="text-accent">*</span>
+                  <label htmlFor="email" className="mb-2 block text-sm font-medium text-forest">
+                    Email <span className="text-leaf">*</span>
                   </label>
                   <input
                     id="email"
@@ -150,7 +156,7 @@ export default function ContactForm() {
                 </div>
 
                 <div>
-                  <label htmlFor="phone" className="mb-2 block text-sm font-medium text-navy">
+                  <label htmlFor="phone" className="mb-2 block text-sm font-medium text-forest">
                     Phone Number
                   </label>
                   <input
@@ -161,12 +167,12 @@ export default function ContactForm() {
                       setFormData((prev) => ({ ...prev, phone: e.target.value }))
                     }
                     className={inputClass}
-                    placeholder="+974 7071 8232"
+                    placeholder="+971 52 790 6070"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="inquiryType" className="mb-2 block text-sm font-medium text-navy">
+                  <label htmlFor="inquiryType" className="mb-2 block text-sm font-medium text-forest">
                     Inquiry Type
                   </label>
                   <select
@@ -186,7 +192,7 @@ export default function ContactForm() {
                 </div>
 
                 <div>
-                  <label htmlFor="specificItem" className="mb-2 block text-sm font-medium text-navy">
+                  <label htmlFor="specificItem" className="mb-2 block text-sm font-medium text-forest">
                     Specific Product / Service
                   </label>
                   <select
@@ -207,7 +213,7 @@ export default function ContactForm() {
                 </div>
 
                 <div className="sm:col-span-2">
-                  <label htmlFor="message" className="mb-2 block text-sm font-medium text-navy">
+                  <label htmlFor="message" className="mb-2 block text-sm font-medium text-forest">
                     Message
                   </label>
                   <textarea
@@ -218,7 +224,7 @@ export default function ContactForm() {
                       setFormData((prev) => ({ ...prev, message: e.target.value }))
                     }
                     className={`${inputClass} resize-y`}
-                    placeholder="Tell us about your requirements..."
+                    placeholder="Tell us about your packaging requirements..."
                   />
                 </div>
               </div>
@@ -226,9 +232,9 @@ export default function ContactForm() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="btn-shine group mt-8 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-navy px-8 py-3.5 text-sm font-semibold text-white shadow-lg shadow-navy/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-accent hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+                className="btn-shine group mt-3 inline-flex w-full items-center justify-center gap-2 rounded-md bg-forest px-8 py-3.5 text-sm font-semibold text-white transition-all duration-300 hover:bg-leaf disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
               >
-                {isSubmitting ? "Sending..." : "Submit Inquiry"}
+                {isSubmitting ? "Sending..." : submitLabel}
                 {!isSubmitting && (
                   <Send className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" strokeWidth={1.5} />
                 )}
@@ -236,29 +242,32 @@ export default function ContactForm() {
             </form>
           </ScrollReveal>
 
-          <div className="flex flex-col gap-5 lg:col-span-2">
-            {contactCards.map((card, index) => (
-              <ScrollReveal key={card.title} delay={index * 100} variant="right">
-                <article className="group flex gap-4 rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm transition-all duration-500 hover:-translate-y-1 hover:border-accent/20 hover:shadow-lg">
-                  <IconBox icon={card.icon} size="sm" />
-                  <div>
-                    <h3 className="font-semibold text-navy">{card.title}</h3>
-                    {card.href ? (
-                      <a
-                        href={card.href}
-                        className="mt-1.5 block text-sm text-slate-600 transition-colors duration-300 group-hover:text-accent"
-                      >
-                        {card.content}
-                      </a>
-                    ) : (
-                      <p className="mt-1.5 text-sm leading-relaxed text-slate-600">
-                        {card.content}
-                      </p>
-                    )}
-                  </div>
-                </article>
-              </ScrollReveal>
-            ))}
+          <div className="flex flex-col gap-8 lg:col-span-2">
+            {contactCards.map((card, index) => {
+              const Icon = card.icon;
+              return (
+                <ScrollReveal key={card.title} delay={index * 100} variant="right">
+                  <article className="flex gap-4 border-l-2 border-leaf/50 pl-4">
+                    <Icon className="mt-0.5 h-5 w-5 shrink-0 text-leaf" strokeWidth={1.5} />
+                    <div>
+                      <h3 className="font-semibold text-forest">{card.title}</h3>
+                      {card.href ? (
+                        <a
+                          href={card.href}
+                          className="mt-1.5 block text-sm text-forest/70 transition-colors duration-300 hover:text-leaf"
+                        >
+                          {card.content}
+                        </a>
+                      ) : (
+                        <p className="mt-1.5 text-sm leading-relaxed text-forest/70">
+                          {card.content}
+                        </p>
+                      )}
+                    </div>
+                  </article>
+                </ScrollReveal>
+              );
+            })}
           </div>
         </div>
       </div>

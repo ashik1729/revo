@@ -1,35 +1,38 @@
-"use client";
-
-import { useState } from "react";
-import Image from "next/image";
 import { companyInfo } from "@/data/content";
 
 interface LogoProps {
-  width?: number;
-  height?: number;
   className?: string;
-  priority?: boolean;
-  variant?: "default" | "footer";
+  variant?: "default" | "footer" | "hero";
+  companyName?: string;
+  showTagline?: boolean;
 }
 
 export default function Logo({
-  width = 180,
-  height = 41,
-  className = "h-auto w-[180px]",
-  priority = false,
+  className = "",
   variant = "default",
+  companyName = companyInfo.name,
+  showTagline = false,
 }: LogoProps) {
-  const [src, setSrc] = useState(variant === "footer" ? "/logo-footer.png" : "/logo.png");
+  const isLight = variant === "footer" || variant === "hero";
 
   return (
-    <Image
-      src={src}
-      alt={`${companyInfo.name} logo`}
-      width={width}
-      height={height}
-      className={`block leading-none transition-transform duration-500 hover:scale-[1.02] ${className}`}
-      priority={priority}
-      onError={() => setSrc(variant === "footer" ? "/logo.svg" : "/logo.svg")}
-    />
+    <span className={`inline-flex flex-col leading-none ${className}`}>
+      <span
+        className={`font-display text-2xl font-semibold tracking-tight ${
+          isLight ? "text-white" : "text-forest"
+        }`}
+      >
+        {companyName}
+      </span>
+      {showTagline ? (
+        <span
+          className={`mt-1 text-[0.65rem] font-semibold uppercase tracking-[0.22em] ${
+            isLight ? "text-mist" : "text-leaf"
+          }`}
+        >
+          Packaging
+        </span>
+      ) : null}
+    </span>
   );
 }

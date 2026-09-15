@@ -1,23 +1,6 @@
-import TopBar from "@/components/TopBar";
-import Navbar from "@/components/Navbar";
-import Hero from "@/components/Hero";
-import ProductsServices from "@/components/ProductsServices";
-import ContactForm from "@/components/ContactForm";
-import WhatsAppButton from "@/components/WhatsAppButton";
-import Footer from "@/components/Footer";
+import { redirect } from "next/navigation";
+import { defaultLocale } from "@/lib/i18n";
 
 export default function Home() {
-  return (
-    <>
-      <TopBar />
-      <Navbar />
-      <main>
-        <Hero />
-        <ProductsServices />
-        <ContactForm />
-      </main>
-      <Footer />
-      <WhatsAppButton />
-    </>
-  );
+  redirect(`/${defaultLocale}`);
 }

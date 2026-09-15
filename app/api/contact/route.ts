@@ -1,8 +1,9 @@
 import nodemailer from "nodemailer";
 import { NextResponse } from "next/server";
 import type { ContactFormData, InquiryType } from "@/lib/api/contact";
+import { getDb } from "@/lib/db";
 
-const recipientEmail = "info@revo.qa";
+const recipientEmail = process.env.MAIL_TO || "info@realpackpackaging.com";
 
 type EmailConfig = {
   host: string;
@@ -120,6 +121,24 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid form data" }, { status: 400 });
     }
 
+    const db = getDb();
+    if (db) {
+      try {
+        await db.inquiry.create({
+          data: {
+            fullName: form.fullName,
+            email: form.email,
+            phone: form.phone || null,
+            inquiryType: form.inquiryType,
+            specificItem: form.specificItem || null,
+            message: form.message || null,
+          },
+        });
+      } catch (error) {
+        console.error("Unable to store inquiry in database", error);
+      }
+    }
+
     const config = getEmailConfig();
     const transporter = nodemailer.createTransport({
       host: config.host,
@@ -135,7 +154,7 @@ export async function POST(request: Request) {
       from: config.from,
       to: recipientEmail,
       replyTo: form.email,
-      subject: `Revo Website Inquiry - ${form.inquiryType}`,
+      subject: `Realpack Website Inquiry - ${form.inquiryType}`,
       text: toText(form),
       html: toHtml(form),
     });

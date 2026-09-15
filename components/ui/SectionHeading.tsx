@@ -18,22 +18,20 @@ export default function SectionHeading({
   const alignClass = align === "center" ? "text-center mx-auto" : "text-left";
 
   return (
-    <ScrollReveal className={`mb-10 max-w-3xl ${alignClass} ${className}`}>
+    <ScrollReveal className={`mb-12 max-w-3xl ${alignClass} ${className}`}>
       {label && (
-        <span className="mb-3 inline-block text-xs font-semibold uppercase tracking-[0.2em] text-accent">
+        <span className="mb-3 inline-block text-xs font-semibold uppercase tracking-[0.22em] text-leaf">
           {label}
         </span>
       )}
-      <h2 className="text-3xl font-bold tracking-tight text-navy sm:text-4xl lg:text-[2.75rem] lg:leading-tight">
+      <h2 className="font-display text-3xl font-semibold tracking-tight text-forest sm:text-4xl">
         {title}
       </h2>
       <div
-        className={`mt-5 h-1 w-16 rounded-full bg-gradient-to-r from-navy to-accent ${
-          align === "center" ? "mx-auto" : ""
-        }`}
+        className={`mt-4 h-px w-16 bg-leaf ${align === "center" ? "mx-auto" : ""}`}
       />
       {description && (
-        <p className="mt-6 text-lg leading-relaxed text-slate-600">{description}</p>
+        <p className="mt-5 text-base leading-relaxed text-forest/70 sm:text-lg">{description}</p>
       )}
     </ScrollReveal>
   );

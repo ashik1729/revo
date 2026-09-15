@@ -1,32 +1,38 @@
 import {
-  BedDouble,
+  Leaf,
+  Wheat,
+  Package,
+  TreePine,
+  Box,
+  Layers,
+  Droplets,
   Sparkles,
-  Sofa,
-  AirVent,
-  Bath,
-  ClipboardList,
-  Warehouse,
-  Wrench,
-  Building2,
-  Settings2,
+  ShoppingBag,
+  CupSoda,
+  Recycle,
+  PackageOpen,
+  Sprout,
   type LucideIcon,
 } from "lucide-react";
 import { products, services, aboutContent, productsSectionTitle } from "@/data/content";
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionHeading from "@/components/ui/SectionHeading";
-import IconBox from "@/components/ui/IconBox";
+import type { SiteContent } from "@/lib/site-content";
 
 const iconMap: Record<string, LucideIcon> = {
-  BedDouble,
+  Leaf,
+  Wheat,
+  Package,
+  TreePine,
+  Box,
+  Layers,
+  Droplets,
   Sparkles,
-  Sofa,
-  AirVent,
-  Bath,
-  ClipboardList,
-  Warehouse,
-  Wrench,
-  Building2,
-  Settings2,
+  ShoppingBag,
+  CupSoda,
+  Recycle,
+  PackageOpen,
+  Sprout,
 };
 
 interface ItemCardProps {
@@ -37,88 +43,91 @@ interface ItemCardProps {
 }
 
 function ItemCard({ title, description, icon, delay = 0 }: ItemCardProps) {
-  const Icon = iconMap[icon] ?? BedDouble;
+  const Icon = iconMap[icon] ?? Package;
 
   return (
-    <ScrollReveal delay={delay} variant="scale">
-      <article className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-slate-200/80 bg-white p-6 shadow-sm transition-all duration-500 hover:-translate-y-1.5 hover:border-accent/25 hover:shadow-xl hover:shadow-navy/5">
-        <div className="absolute inset-x-0 top-0 h-0.5 origin-left scale-x-0 bg-gradient-to-r from-navy to-accent transition-transform duration-500 group-hover:scale-x-100" />
-        <IconBox icon={Icon} className="mb-5" />
-        <h3 className="text-base font-semibold text-navy transition-colors duration-300 group-hover:text-accent">
-          {title}
-        </h3>
-        <p className="mt-2.5 text-sm leading-relaxed text-slate-600">{description}</p>
-        <span className="mt-4 text-xs font-medium text-accent opacity-0 transition-all duration-300 group-hover:opacity-100">
-          Learn more →
-        </span>
+    <ScrollReveal delay={delay} variant="up">
+      <article className="group h-full border-b border-forest/10 pb-6 transition-colors duration-300 hover:border-leaf/40">
+        <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-md bg-mist text-forest transition-colors duration-300 group-hover:bg-leaf group-hover:text-white">
+          <Icon className="h-5 w-5" strokeWidth={1.5} />
+        </div>
+        <h3 className="font-display text-lg font-semibold text-forest">{title}</h3>
+        <p className="mt-2 text-sm leading-relaxed text-forest/70">{description}</p>
       </article>
     </ScrollReveal>
   );
 }
 
 export default function ProductsServices() {
+  return <ProductsServicesContent />;
+}
+
+interface ProductsServicesProps {
+  about?: SiteContent["about"];
+  productsList?: SiteContent["products"];
+  servicesList?: SiteContent["services"];
+  productsTitle?: string;
+  servicesTitle?: string;
+}
+
+export function ProductsServicesContent({
+  about = aboutContent,
+  productsList = products,
+  servicesList = services,
+  productsTitle = productsSectionTitle,
+  servicesTitle = "Sustainable Focus",
+}: ProductsServicesProps = {}) {
   return (
     <>
-      <section id="about" className="section-gradient relative overflow-hidden pt-20 pb-4">
-        <div className="pointer-events-none absolute right-0 top-0 h-64 w-64 rounded-full bg-accent/5 blur-3xl" />
+      <section id="products" className="section-atmosphere relative overflow-hidden py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <SectionHeading
-            label="Who We Are"
-            title={aboutContent.title}
-            description={aboutContent.description}
-            className="mb-0"
+            label="Catalogue"
+            title={productsTitle}
+            description="Eco range, bagasse, kraft, aluminium, hygiene, cleaning, and specialty packaging for F&B and retail."
           />
+
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+            {productsList.map((product, index) => (
+              <ItemCard
+                key={product.id}
+                title={product.title}
+                description={product.description}
+                icon={product.icon}
+                delay={index * 40}
+              />
+            ))}
+          </div>
         </div>
       </section>
 
-      <section id="products" className="relative bg-white pt-4 pb-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <SectionHeading
-            label="What We Offer"
-            title="Products & Services"
-            description="Comprehensive hospitality and maintenance solutions tailored to your business"
-          />
-
-          <ScrollReveal variant="up" className="mb-8 rounded-2xl border border-slate-200/80 bg-gradient-to-br from-slate-50 to-white p-6 shadow-sm sm:p-8">
-            <div className="mb-8 flex items-center gap-3">
-              <div className="h-8 w-1 rounded-full bg-gradient-to-b from-navy to-accent" />
-              <h3 className="text-2xl font-bold text-navy">{productsSectionTitle}</h3>
-            </div>
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              {products.map((product, index) => (
-                <ItemCard
-                  key={product.id}
-                  title={product.title}
-                  description={product.description}
-                  icon={product.icon}
-                  delay={index * 60}
-                />
-              ))}
-            </div>
+      <section id="about" className="relative overflow-hidden bg-forest py-20 text-white">
+        <div className="pointer-events-none absolute -right-16 top-10 h-72 w-72 rounded-full bg-leaf/20 blur-3xl" />
+        <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:px-8">
+          <ScrollReveal variant="up">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-mist">Who We Are</p>
+            <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight sm:text-4xl">
+              {about.title}
+            </h2>
+            <p className="mt-5 max-w-2xl text-base leading-relaxed text-white/80">{about.description}</p>
           </ScrollReveal>
 
-          <div id="services">
-            <ScrollReveal
-              variant="up"
-              delay={100}
-              className="rounded-2xl border border-slate-200/80 bg-gradient-to-br from-slate-50 to-white p-6 shadow-sm sm:p-8"
-            >
-              <div className="mb-8 flex items-center gap-3">
-                <div className="h-8 w-1 rounded-full bg-gradient-to-b from-navy to-accent" />
-                <h3 className="text-2xl font-bold text-navy">Services</h3>
-              </div>
-              <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                {services.map((service, index) => (
-                  <ItemCard
-                    key={service.id}
-                    title={service.title}
-                    description={service.description}
-                    icon={service.icon}
-                    delay={index * 80}
-                  />
-                ))}
-              </div>
-            </ScrollReveal>
+          <div className="grid gap-6">
+            {servicesList.map((service, index) => {
+              const Icon = iconMap[service.icon] ?? Sprout;
+              return (
+                <ScrollReveal key={service.id} delay={index * 80} variant="up">
+                  <div className="border-l-2 border-leaf/70 pl-5">
+                    <div className="mb-2 flex items-center gap-2 text-mist">
+                      <Icon className="h-4 w-4" strokeWidth={1.5} />
+                      <p className="text-xs font-semibold uppercase tracking-[0.18em]">{servicesTitle}</p>
+                    </div>
+                    <h3 className="font-display text-xl font-semibold">{service.title}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-white/75">{service.description}</p>
+                  </div>
+                </ScrollReveal>
+              );
+            })}
           </div>
         </div>
       </section>
