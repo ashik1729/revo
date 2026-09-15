@@ -9,9 +9,9 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "Revo Qatar | Hospitality & Building Maintenance Solutions",
+  title: "Revo Qatar | Eco-Friendly Packaging Partner",
   description:
-    "Revo Qatar provides eco-friendly hospitality packaging, facility supplies, and building maintenance services including HVAC and installation across Qatar.",
+    "Revo Qatar supplies eco-friendly packaging for hotels, F&B, and facilities across Qatar — biodegradable, kraft, bagasse, aluminium, hygiene, and more.",
 };
 
 export default function RootLayout({

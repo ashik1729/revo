@@ -4,11 +4,13 @@ import { db } from "@/lib/db";
 import { defaultLocale, localeNames, supportedLocales, type SiteLocale } from "@/lib/i18n";
 import { getSiteContent } from "@/lib/site-content";
 import {
+  deleteFaq,
   deleteNavItem,
   deleteProduct,
   deleteService,
   saveSiteSettings,
   saveSiteTranslation,
+  upsertFaq,
   upsertNavItem,
   upsertProduct,
   upsertService,
@@ -38,13 +40,15 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
   let navItems: Prisma.NavItemGetPayload<{ include: { translations: true } }>[] = [];
   let products: Prisma.ProductGetPayload<{ include: { translations: true } }>[] = [];
   let services: Prisma.ServiceGetPayload<{ include: { translations: true } }>[] = [];
+  let faqItems: Prisma.FaqItemGetPayload<{ include: { translations: true } }>[] = [];
 
   try {
-    [translation, navItems, products, services] = await Promise.all([
+    [translation, navItems, products, services, faqItems] = await Promise.all([
       db.siteTranslation.findUnique({ where: { locale } }),
       db.navItem.findMany({ include: { translations: true }, orderBy: { orderIndex: "asc" } }),
       db.product.findMany({ include: { translations: true }, orderBy: { orderIndex: "asc" } }),
       db.service.findMany({ include: { translations: true }, orderBy: { orderIndex: "asc" } }),
+      db.faqItem.findMany({ include: { translations: true }, orderBy: { orderIndex: "asc" } }),
     ]);
   } catch {
     dbReady = false;
@@ -57,7 +61,8 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
           <p className="text-xs uppercase tracking-[0.18em] text-blue-200">Revo Content Console</p>
           <h1 className="mt-2 text-2xl font-bold">Website Management</h1>
           <p className="mt-1 text-sm text-blue-100">
-            Manage homepage content, menu, products, and services for each language.
+            Switch locale to edit Arabic vs English content separately. Shared company fields apply to
+            all languages.
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
             {supportedLocales.map((item) => (
@@ -104,6 +109,38 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
             <label className="text-sm sm:col-span-2">
               <span className="mb-1 block font-medium text-slate-700">WhatsApp number (digits only)</span>
               <input name="whatsapp" defaultValue={content.company.whatsapp} className={inputClassName()} required />
+            </label>
+            <label className="text-sm sm:col-span-2">
+              <span className="mb-1 block font-medium text-slate-700">Hero image URL</span>
+              <input
+                name="heroImageUrl"
+                defaultValue={content.company.heroImageUrl}
+                className={inputClassName()}
+              />
+            </label>
+            <label className="text-sm sm:col-span-2">
+              <span className="mb-1 block font-medium text-slate-700">About image URL</span>
+              <input
+                name="aboutImageUrl"
+                defaultValue={content.company.aboutImageUrl}
+                className={inputClassName()}
+              />
+            </label>
+            <label className="text-sm sm:col-span-2">
+              <span className="mb-1 block font-medium text-slate-700">Contact banner URL</span>
+              <input
+                name="contactBannerUrl"
+                defaultValue={content.company.contactBannerUrl}
+                className={inputClassName()}
+              />
+            </label>
+            <label className="text-sm sm:col-span-2">
+              <span className="mb-1 block font-medium text-slate-700">Contact side image URL</span>
+              <input
+                name="contactSideImageUrl"
+                defaultValue={content.company.contactSideImageUrl}
+                className={inputClassName()}
+              />
             </label>
             <div className="sm:col-span-2">
               <button className="rounded-md bg-navy px-4 py-2 text-sm font-semibold text-white hover:bg-blue-800">
@@ -173,6 +210,56 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
                   required
                 />
               </label>
+              <label className="text-sm">
+                <span className="mb-1 block font-medium text-slate-700">Secondary CTA label</span>
+                <input
+                  name="heroSecondaryCtaLabel"
+                  defaultValue={translation?.heroSecondaryCtaLabel ?? content.hero.secondaryCtaLabel}
+                  className={inputClassName()}
+                />
+              </label>
+              <label className="text-sm">
+                <span className="mb-1 block font-medium text-slate-700">Secondary CTA href</span>
+                <input
+                  name="heroSecondaryCtaHref"
+                  defaultValue={translation?.heroSecondaryCtaHref ?? content.hero.secondaryCtaHref}
+                  className={inputClassName()}
+                />
+              </label>
+            </div>
+            <label className="text-sm">
+              <span className="mb-1 block font-medium text-slate-700">Hero image alt</span>
+              <input
+                name="heroImageAlt"
+                defaultValue={translation?.heroImageAlt ?? content.hero.imageAlt}
+                className={inputClassName()}
+              />
+            </label>
+            <div className="grid gap-4 sm:grid-cols-3">
+              <label className="text-sm">
+                <span className="mb-1 block font-medium text-slate-700">Trust badge 1</span>
+                <input
+                  name="trustBadge1"
+                  defaultValue={translation?.trustBadge1 ?? content.hero.trustBadges[0]?.label ?? ""}
+                  className={inputClassName()}
+                />
+              </label>
+              <label className="text-sm">
+                <span className="mb-1 block font-medium text-slate-700">Trust badge 2</span>
+                <input
+                  name="trustBadge2"
+                  defaultValue={translation?.trustBadge2 ?? content.hero.trustBadges[1]?.label ?? ""}
+                  className={inputClassName()}
+                />
+              </label>
+              <label className="text-sm">
+                <span className="mb-1 block font-medium text-slate-700">Trust badge 3</span>
+                <input
+                  name="trustBadge3"
+                  defaultValue={translation?.trustBadge3 ?? content.hero.trustBadges[2]?.label ?? ""}
+                  className={inputClassName()}
+                />
+              </label>
             </div>
             <label className="text-sm">
               <span className="mb-1 block font-medium text-slate-700">About title</span>
@@ -193,6 +280,59 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
                 required
               />
             </label>
+            <label className="text-sm">
+              <span className="mb-1 block font-medium text-slate-700">About extra</span>
+              <textarea
+                name="aboutExtra"
+                defaultValue={translation?.aboutExtra ?? content.about.extra}
+                className={inputClassName()}
+                rows={3}
+              />
+            </label>
+            <label className="text-sm">
+              <span className="mb-1 block font-medium text-slate-700">About image alt</span>
+              <input
+                name="aboutImageAlt"
+                defaultValue={translation?.aboutImageAlt ?? content.about.imageAlt}
+                className={inputClassName()}
+              />
+            </label>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <label className="text-sm">
+                <span className="mb-1 block font-medium text-slate-700">Vision title</span>
+                <input
+                  name="visionTitle"
+                  defaultValue={translation?.visionTitle ?? content.vision.title}
+                  className={inputClassName()}
+                />
+              </label>
+              <label className="text-sm">
+                <span className="mb-1 block font-medium text-slate-700">Mission title</span>
+                <input
+                  name="missionTitle"
+                  defaultValue={translation?.missionTitle ?? content.mission.title}
+                  className={inputClassName()}
+                />
+              </label>
+            </div>
+            <label className="text-sm">
+              <span className="mb-1 block font-medium text-slate-700">Vision text</span>
+              <textarea
+                name="visionText"
+                defaultValue={translation?.visionText ?? content.vision.text}
+                className={inputClassName()}
+                rows={2}
+              />
+            </label>
+            <label className="text-sm">
+              <span className="mb-1 block font-medium text-slate-700">Mission text</span>
+              <textarea
+                name="missionText"
+                defaultValue={translation?.missionText ?? content.mission.text}
+                className={inputClassName()}
+                rows={2}
+              />
+            </label>
             <div className="grid gap-4 sm:grid-cols-2">
               <label className="text-sm">
                 <span className="mb-1 block font-medium text-slate-700">Products section title</span>
@@ -204,7 +344,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
                 />
               </label>
               <label className="text-sm">
-                <span className="mb-1 block font-medium text-slate-700">Services section title</span>
+                <span className="mb-1 block font-medium text-slate-700">Solutions section title</span>
                 <input
                   name="servicesSectionTitle"
                   defaultValue={translation?.servicesSectionTitle ?? content.servicesSectionTitle}
@@ -213,12 +353,52 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
                 />
               </label>
             </div>
+            <label className="text-sm">
+              <span className="mb-1 block font-medium text-slate-700">Products section description</span>
+              <textarea
+                name="productsSectionDescription"
+                defaultValue={
+                  translation?.productsSectionDescription ?? content.productsSectionDescription
+                }
+                className={inputClassName()}
+                rows={2}
+              />
+            </label>
+            <label className="text-sm">
+              <span className="mb-1 block font-medium text-slate-700">Solutions section description</span>
+              <textarea
+                name="servicesSectionDescription"
+                defaultValue={
+                  translation?.servicesSectionDescription ?? content.servicesSectionDescription
+                }
+                className={inputClassName()}
+                rows={2}
+              />
+            </label>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <label className="text-sm">
+                <span className="mb-1 block font-medium text-slate-700">FAQ section title</span>
+                <input
+                  name="faqSectionTitle"
+                  defaultValue={translation?.faqSectionTitle ?? content.faqSectionTitle}
+                  className={inputClassName()}
+                />
+              </label>
+              <label className="text-sm">
+                <span className="mb-1 block font-medium text-slate-700">FAQ section description</span>
+                <input
+                  name="faqSectionDescription"
+                  defaultValue={translation?.faqSectionDescription ?? content.faqSectionDescription}
+                  className={inputClassName()}
+                />
+              </label>
+            </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <label className="text-sm">
                 <span className="mb-1 block font-medium text-slate-700">Contact title</span>
                 <input
                   name="contactTitle"
-                  defaultValue={translation?.contactTitle ?? "Contact Us"}
+                  defaultValue={translation?.contactTitle ?? content.contact.title}
                   className={inputClassName()}
                   required
                 />
@@ -227,7 +407,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
                 <span className="mb-1 block font-medium text-slate-700">Contact description</span>
                 <input
                   name="contactDescription"
-                  defaultValue={translation?.contactDescription ?? "Get in touch for quotes and inquiries."}
+                  defaultValue={translation?.contactDescription ?? content.contact.description}
                   className={inputClassName()}
                   required
                 />
@@ -322,7 +502,13 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
                     <input type="hidden" name="itemId" value={item.id} />
                     <div className="grid gap-3 sm:grid-cols-3">
                       <input name="title" defaultValue={localeEntry?.title} className={inputClassName()} required />
-                      <input name="icon" defaultValue={item.icon} placeholder="Image URL" className={inputClassName()} required />
+                      <input
+                        name="imageUrl"
+                        defaultValue={item.imageUrl}
+                        placeholder="Image URL"
+                        className={inputClassName()}
+                        required
+                      />
                       <input type="number" name="orderIndex" defaultValue={item.orderIndex} className={inputClassName()} />
                     </div>
                     <textarea
@@ -331,6 +517,13 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
                       rows={2}
                       className={inputClassName()}
                       required
+                    />
+                    <textarea
+                      name="details"
+                      defaultValue={localeEntry?.details ?? ""}
+                      rows={2}
+                      placeholder="Details"
+                      className={inputClassName()}
                     />
                     <label className="flex items-center gap-2 text-sm">
                       <input type="checkbox" name="isActive" defaultChecked={item.isActive} /> Active
@@ -355,7 +548,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
               <p className="mb-2 text-sm font-semibold text-slate-700">Add product</p>
               <div className="grid gap-3 sm:grid-cols-3">
                 <input name="title" placeholder="Product title" className={inputClassName()} required />
-                <input name="icon" placeholder="https://... image URL" className={inputClassName()} required />
+                <input name="imageUrl" placeholder="https://... image URL" className={inputClassName()} required />
                 <input type="number" name="orderIndex" defaultValue={99} className={inputClassName()} />
               </div>
               <textarea
@@ -364,6 +557,12 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
                 rows={2}
                 className={`${inputClassName()} mt-3`}
                 required
+              />
+              <textarea
+                name="details"
+                placeholder="Product details"
+                rows={2}
+                className={`${inputClassName()} mt-3`}
               />
               <label className="mt-2 flex items-center gap-2 text-sm">
                 <input type="checkbox" name="isActive" defaultChecked /> Active
@@ -376,7 +575,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
         </section>
 
         <section className={sectionClassName()}>
-          <h2 className="text-lg font-semibold text-slate-900">Services ({localeNames[locale]})</h2>
+          <h2 className="text-lg font-semibold text-slate-900">Solutions / Services ({localeNames[locale]})</h2>
           <div className="mt-4 space-y-4">
             {services.map((item) => {
               const localeEntry =
@@ -388,7 +587,13 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
                     <input type="hidden" name="itemId" value={item.id} />
                     <div className="grid gap-3 sm:grid-cols-3">
                       <input name="title" defaultValue={localeEntry?.title} className={inputClassName()} required />
-                      <input name="icon" defaultValue={item.icon} placeholder="Image URL" className={inputClassName()} required />
+                      <input
+                        name="imageUrl"
+                        defaultValue={item.imageUrl}
+                        placeholder="Image URL"
+                        className={inputClassName()}
+                        required
+                      />
                       <input type="number" name="orderIndex" defaultValue={item.orderIndex} className={inputClassName()} />
                     </div>
                     <textarea
@@ -397,6 +602,13 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
                       rows={2}
                       className={inputClassName()}
                       required
+                    />
+                    <textarea
+                      name="details"
+                      defaultValue={localeEntry?.details ?? ""}
+                      rows={2}
+                      placeholder="Details"
+                      className={inputClassName()}
                     />
                     <label className="flex items-center gap-2 text-sm">
                       <input type="checkbox" name="isActive" defaultChecked={item.isActive} /> Active
@@ -409,7 +621,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
                     <input type="hidden" name="locale" value={locale} />
                     <input type="hidden" name="itemId" value={item.id} />
                     <button className="text-xs font-semibold text-red-600 hover:text-red-700">
-                      Delete service
+                      Delete solution
                     </button>
                   </form>
                 </div>
@@ -418,24 +630,111 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
 
             <form action={upsertService} className="rounded-lg border border-dashed border-slate-300 p-4">
               <input type="hidden" name="locale" value={locale} />
-              <p className="mb-2 text-sm font-semibold text-slate-700">Add service</p>
+              <p className="mb-2 text-sm font-semibold text-slate-700">Add solution</p>
               <div className="grid gap-3 sm:grid-cols-3">
-                <input name="title" placeholder="Service title" className={inputClassName()} required />
-                <input name="icon" placeholder="https://... image URL" className={inputClassName()} required />
+                <input name="title" placeholder="Solution title" className={inputClassName()} required />
+                <input name="imageUrl" placeholder="https://... image URL" className={inputClassName()} required />
                 <input type="number" name="orderIndex" defaultValue={99} className={inputClassName()} />
               </div>
               <textarea
                 name="description"
-                placeholder="Service description"
+                placeholder="Solution description"
                 rows={2}
                 className={`${inputClassName()} mt-3`}
                 required
+              />
+              <textarea
+                name="details"
+                placeholder="Solution details"
+                rows={2}
+                className={`${inputClassName()} mt-3`}
               />
               <label className="mt-2 flex items-center gap-2 text-sm">
                 <input type="checkbox" name="isActive" defaultChecked /> Active
               </label>
               <button className="mt-3 rounded-md bg-navy px-4 py-2 text-sm font-semibold text-white hover:bg-blue-800">
-                Add Service
+                Add Solution
+              </button>
+            </form>
+          </div>
+        </section>
+
+        <section className={sectionClassName()}>
+          <h2 className="text-lg font-semibold text-slate-900">FAQ ({localeNames[locale]})</h2>
+          <div className="mt-4 space-y-4">
+            {faqItems.map((item) => {
+              const localeEntry =
+                item.translations.find((entry) => entry.locale === locale) || item.translations[0];
+              return (
+                <div key={item.id} className="rounded-lg border border-slate-200 p-4">
+                  <form action={upsertFaq} className="grid gap-3">
+                    <input type="hidden" name="locale" value={locale} />
+                    <input type="hidden" name="itemId" value={item.id} />
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      <input
+                        type="number"
+                        name="orderIndex"
+                        defaultValue={item.orderIndex}
+                        className={inputClassName()}
+                      />
+                      <label className="flex items-center gap-2 self-end text-sm">
+                        <input type="checkbox" name="isActive" defaultChecked={item.isActive} /> Active
+                      </label>
+                    </div>
+                    <input
+                      name="question"
+                      defaultValue={localeEntry?.question}
+                      placeholder="Question"
+                      className={inputClassName()}
+                      required
+                    />
+                    <textarea
+                      name="answer"
+                      defaultValue={localeEntry?.answer}
+                      rows={3}
+                      placeholder="Answer"
+                      className={inputClassName()}
+                      required
+                    />
+                    <button className="rounded-md bg-slate-900 px-3 py-2 text-xs font-semibold text-white hover:bg-black">
+                      Save
+                    </button>
+                  </form>
+                  <form action={deleteFaq} className="mt-2">
+                    <input type="hidden" name="locale" value={locale} />
+                    <input type="hidden" name="itemId" value={item.id} />
+                    <button className="text-xs font-semibold text-red-600 hover:text-red-700">
+                      Delete FAQ
+                    </button>
+                  </form>
+                </div>
+              );
+            })}
+
+            <form action={upsertFaq} className="rounded-lg border border-dashed border-slate-300 p-4">
+              <input type="hidden" name="locale" value={locale} />
+              <p className="mb-2 text-sm font-semibold text-slate-700">Add FAQ</p>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <input type="number" name="orderIndex" defaultValue={99} className={inputClassName()} />
+                <label className="flex items-center gap-2 text-sm">
+                  <input type="checkbox" name="isActive" defaultChecked /> Active
+                </label>
+              </div>
+              <input
+                name="question"
+                placeholder="Question"
+                className={`${inputClassName()} mt-3`}
+                required
+              />
+              <textarea
+                name="answer"
+                placeholder="Answer"
+                rows={3}
+                className={`${inputClassName()} mt-3`}
+                required
+              />
+              <button className="mt-3 rounded-md bg-navy px-4 py-2 text-sm font-semibold text-white hover:bg-blue-800">
+                Add FAQ
               </button>
             </form>
           </div>

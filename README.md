@@ -1,37 +1,33 @@
 # Revo Website
 
-Next.js site for [Revo Qatar](https://revo.qa/) with:
+Next.js site for [Revo Qatar](https://revo.qa/) — eco-friendly packaging supply (aligned with industry packaging catalogue content) with:
 
-- public multilingual pages (`/en`, `/ar`)
-- admin CMS panel at `/admin`
-- optional PostgreSQL (Prisma) content database
-- SMTP email for contact form submissions
+- public multilingual pages (`/en`, `/ar`) with rich packaging content
+- admin CMS at `/admin` (English + Arabic for all copy, images, products, solutions, FAQs)
+- optional PostgreSQL (Prisma)
+- SMTP contact form
 
-Packaging product ranges are adapted from industry catalogue content (eco, bagasse, kraft, aluminium, hygiene, and more) while keeping Revo Qatar branding and services.
-
-## 1) Setup environment variables
-
-Create `.env.local` based on `.env.example`.
-
-## 2) Setup database (optional)
+## Setup
 
 ```bash
 npm install
+cp .env.example .env.local
 npm run db:generate
-npm run db:migrate
+npx prisma db push
 npm run db:seed
-```
-
-## 3) Start local development
-
-```bash
 npm run dev
 ```
 
+Open:
+
+- Site: http://localhost:3000/en
+- Arabic: http://localhost:3000/ar
+- Admin: http://localhost:3000/admin?locale=en (switch to `ar` for Arabic edits)
+
 ## Staging / Production (Cloudflare)
 
-- Staging branch: `staging` → Worker `revo-staging`
-- Production: `main` → Worker `revo` (deploy only after approval)
+- Staging branch `staging` → `revo-staging`
+- Production only after approval
 
 ```bash
 npm run cf:deploy:staging

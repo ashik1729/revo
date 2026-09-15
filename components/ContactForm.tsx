@@ -36,15 +36,19 @@ interface ContactFormProps {
   title?: string;
   description?: string;
   submitLabel?: string;
+  bannerUrl?: string;
+  sideImageUrl?: string;
 }
 
 export default function ContactForm({
   company = companyInfo,
   productItems = productOptions,
   serviceItems = serviceOptions,
-  title = "Contact Us",
-  description = "Get in touch for quotes, product inquiries, or service requests",
+  title = "Have questions or need assistance?",
+  description = "Our team will help you find the right packaging solutions for your business.",
   submitLabel = "Submit Inquiry",
+  bannerUrl = companyInfo.contactBannerUrl,
+  sideImageUrl = companyInfo.contactSideImageUrl,
 }: ContactFormProps) {
   const [formData, setFormData] = useState<ContactFormData>(initialFormState);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -98,8 +102,8 @@ export default function ContactForm({
     <section id="contact" className="relative overflow-hidden bg-white py-24">
       <div className="relative mb-14 h-56 w-full sm:h-72">
         <Image
-          src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1920&q=80"
-          alt="Modern office reception ready for client meetings"
+          src={bannerUrl}
+          alt="Contact Revo Qatar for packaging supply"
           fill
           className="object-cover"
           sizes="100vw"
@@ -264,8 +268,8 @@ export default function ContactForm({
           <div className="flex flex-col gap-8 lg:col-span-2">
             <div className="relative min-h-[220px] overflow-hidden">
               <Image
-                src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1000&q=80"
-                alt="Hospitality property exterior in warm daylight"
+                src={sideImageUrl}
+                alt="Hospitality packaging partner in Qatar"
                 fill
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 40vw"

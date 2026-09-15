@@ -34,21 +34,31 @@ export default async function LocalePage({ params }: LocalePageProps) {
       <TopBar company={content.company} />
       <Navbar navItems={content.nav} locale={locale} ctaLabel={content.hero.ctaLabel} />
       <main>
-        <Hero content={content.hero} locale={locale} />
+        <Hero content={content.hero} brandName={content.company.name} locale={locale} />
         <ProductsServicesContent
           about={content.about}
+          vision={content.vision}
+          mission={content.mission}
           productsList={content.products}
           servicesList={content.services}
           productsTitle={content.productsSectionTitle}
+          productsDescription={content.productsSectionDescription}
           servicesTitle={content.servicesSectionTitle}
+          servicesDescription={content.servicesSectionDescription}
         />
-        <FaqSection items={content.faqs} />
+        <FaqSection
+          items={content.faqs}
+          title={content.faqSectionTitle}
+          description={content.faqSectionDescription}
+        />
         <ContactForm
           company={content.company}
           productItems={productTitles}
           serviceItems={serviceTitles}
           title={content.contact.title}
           description={content.contact.description}
+          bannerUrl={content.contact.bannerUrl}
+          sideImageUrl={content.contact.sideImageUrl}
         />
       </main>
       <Footer company={content.company} footer={content.footer} locale={locale} />

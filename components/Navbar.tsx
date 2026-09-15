@@ -21,7 +21,7 @@ interface NavbarProps {
 export default function Navbar({
   navItems = navLinks,
   locale = "en",
-  ctaLabel = "Get a Quote",
+  ctaLabel = "Contact Us",
 }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);

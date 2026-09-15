@@ -1,15 +1,12 @@
 import {
-  aboutContent,
   companyInfo,
-  faqs,
+  faqsByLocale,
   footerContent,
-  heroContent,
-  navLinks,
-  productImageByTitle,
-  products,
-  productsSectionTitle,
-  serviceImageByTitle,
-  services,
+  localeCopy,
+  navLinksByLocale,
+  productsByLocale,
+  solutionsByLocale,
+  type LocaleCode,
 } from "@/data/content";
 import { getDb } from "@/lib/db";
 import type { SiteLocale } from "@/lib/i18n";
@@ -26,6 +23,10 @@ export interface SiteContent {
     emailHref: string;
     whatsapp: string;
     whatsappHref: string;
+    heroImageUrl: string;
+    aboutImageUrl: string;
+    contactBannerUrl: string;
+    contactSideImageUrl: string;
   };
   nav: ReadonlyArray<{ label: string; href: string }>;
   hero: {
@@ -34,26 +35,38 @@ export interface SiteContent {
     subheadline: string;
     ctaLabel: string;
     ctaHref: string;
+    secondaryCtaLabel: string;
+    secondaryCtaHref: string;
     imageUrl: string;
     imageAlt: string;
-    trustBadges: typeof heroContent.trustBadges;
+    trustBadges: ReadonlyArray<{ label: string }>;
   };
   about: {
     title: string;
     description: string;
+    extra: string;
     imageUrl: string;
     imageAlt: string;
   };
+  vision: { title: string; text: string };
+  mission: { title: string; text: string };
   productsSectionTitle: string;
+  productsSectionDescription: string;
   servicesSectionTitle: string;
+  servicesSectionDescription: string;
+  faqSectionTitle: string;
+  faqSectionDescription: string;
   contact: {
     title: string;
     description: string;
+    bannerUrl: string;
+    sideImageUrl: string;
   };
   products: ReadonlyArray<{
     id: string;
     title: string;
     description: string;
+    details: string;
     imageUrl: string;
     imageAlt: string;
   }>;
@@ -61,6 +74,7 @@ export interface SiteContent {
     id: string;
     title: string;
     description: string;
+    details: string;
     imageUrl: string;
     imageAlt: string;
   }>;
@@ -82,48 +96,22 @@ function toWhatsappHref(whatsapp: string) {
   return compact ? `https://wa.me/${compact}` : "";
 }
 
-function resolveMedia(
-  stored: string,
-  title: string,
-  lookup: Record<string, { imageUrl: string; imageAlt: string }>,
-  fallbackAlt: string,
-) {
-  if (stored.startsWith("http")) {
-    return { imageUrl: stored, imageAlt: title };
-  }
-
-  const fromTitle = lookup[title];
-  if (fromTitle) {
-    return fromTitle;
-  }
-
-  return {
-    imageUrl:
-      "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=900&q=80",
-    imageAlt: fallbackAlt,
-  };
+function asLocale(locale: SiteLocale): LocaleCode {
+  return locale === "ar" ? "ar" : "en";
 }
 
-function getFallbackContent(locale: SiteLocale): SiteContent {
-  const localeAwareNav =
-    locale === "ar"
-      ? [
-          { label: "الرئيسية", href: "#home" },
-          { label: "المنتجات", href: "#products" },
-          { label: "الخدمات", href: "#services" },
-          { label: "من نحن", href: "#about" },
-          { label: "اتصل بنا", href: "#contact" },
-        ]
-      : navLinks;
+export function getFallbackContent(locale: SiteLocale): SiteContent {
+  const code = asLocale(locale);
+  const copy = localeCopy[code];
+  const products = productsByLocale[code];
+  const services = solutionsByLocale[code];
+  const nav = navLinksByLocale[code];
 
   return {
     locale,
     company: {
       name: companyInfo.name,
-      tagline:
-        locale === "ar"
-          ? "حلول الضيافة وصيانة المباني التي يمكنك الوثوق بها"
-          : companyInfo.tagline,
+      tagline: copy.tagline,
       address: companyInfo.address,
       phone: companyInfo.phone,
       phoneHref: companyInfo.phoneHref,
@@ -131,90 +119,92 @@ function getFallbackContent(locale: SiteLocale): SiteContent {
       emailHref: companyInfo.emailHref,
       whatsapp: companyInfo.whatsapp,
       whatsappHref: companyInfo.whatsappHref,
+      heroImageUrl: companyInfo.heroImageUrl,
+      aboutImageUrl: companyInfo.aboutImageUrl,
+      contactBannerUrl: companyInfo.contactBannerUrl,
+      contactSideImageUrl: companyInfo.contactSideImageUrl,
     },
-    nav: localeAwareNav,
+    nav,
     hero: {
-      ...heroContent,
-      eyebrow: locale === "ar" ? "تغليف الضيافة والصيانة" : heroContent.eyebrow,
-      headline:
-        locale === "ar"
-          ? "حلول متكاملة للضيافة وصيانة المباني"
-          : heroContent.headline,
-      subheadline:
-        locale === "ar"
-          ? "متخصصون في تغليف الضيافة الصديق للبيئة وتوريد المنشآت في قطر، مع خدمات صيانة موثوقة."
-          : heroContent.subheadline,
-      ctaLabel: locale === "ar" ? "اطلب عرض سعر" : heroContent.ctaLabel,
+      eyebrow: copy.heroEyebrow,
+      headline: copy.heroHeadline,
+      subheadline: copy.heroSubheadline,
+      ctaLabel: copy.heroCtaLabel,
+      ctaHref: copy.heroCtaHref,
+      secondaryCtaLabel: copy.heroSecondaryCtaLabel,
+      secondaryCtaHref: copy.heroSecondaryCtaHref,
+      imageUrl: companyInfo.heroImageUrl,
+      imageAlt: copy.heroImageAlt,
+      trustBadges: copy.trustBadges.map((label) => ({ label })),
     },
     about: {
-      title: locale === "ar" ? "عن ريفو قطر" : aboutContent.title,
-      description:
-        locale === "ar"
-          ? "ريفو قطر شريك موثوق للفنادق والمنشآت في قطر، نوفر تغليفاً صديقاً للبيئة ومستلزمات المنشآت وخدمات صيانة المباني."
-          : aboutContent.description,
-      imageUrl: aboutContent.imageUrl,
-      imageAlt: aboutContent.imageAlt,
+      title: copy.aboutTitle,
+      description: copy.aboutDescription,
+      extra: copy.aboutExtra,
+      imageUrl: companyInfo.aboutImageUrl,
+      imageAlt: copy.aboutImageAlt,
     },
-    productsSectionTitle:
-      locale === "ar" ? "منتجات تغليف الضيافة" : productsSectionTitle,
-    servicesSectionTitle: locale === "ar" ? "الخدمات" : "Services",
+    vision: { title: copy.visionTitle, text: copy.visionText },
+    mission: { title: copy.missionTitle, text: copy.missionText },
+    productsSectionTitle: copy.productsSectionTitle,
+    productsSectionDescription: copy.productsSectionDescription,
+    servicesSectionTitle: copy.servicesSectionTitle,
+    servicesSectionDescription: copy.servicesSectionDescription,
+    faqSectionTitle: copy.faqSectionTitle,
+    faqSectionDescription: copy.faqSectionDescription,
     contact: {
-      title: locale === "ar" ? "تواصل معنا" : "Contact Us",
-      description:
-        locale === "ar"
-          ? "تواصل معنا لطلبات الأسعار أو الاستفسارات حول المنتجات والخدمات."
-          : "Get in touch for quotes, product inquiries, or service requests",
+      title: copy.contactTitle,
+      description: copy.contactDescription,
+      bannerUrl: companyInfo.contactBannerUrl,
+      sideImageUrl: companyInfo.contactSideImageUrl,
     },
-    products: products.map((item) => ({
-      id: item.id,
-      title: item.title,
-      description: item.description,
-      imageUrl: item.imageUrl,
-      imageAlt: item.imageAlt,
-    })),
-    services: services.map((item) => ({
-      id: item.id,
-      title: item.title,
-      description: item.description,
-      imageUrl: item.imageUrl,
-      imageAlt: item.imageAlt,
-    })),
-    faqs: [...faqs],
+    products: products.map((item) => ({ ...item })),
+    services: services.map((item) => ({ ...item })),
+    faqs: [...faqsByLocale[code]],
     footer: {
       ...footerContent,
-      quickLinks: localeAwareNav,
+      quickLinks: nav,
+      copyright:
+        locale === "ar"
+          ? "© 2026 ريفو قطر. جميع الحقوق محفوظة."
+          : footerContent.copyright,
     },
   };
 }
 
 export async function getSiteContent(locale: SiteLocale): Promise<SiteContent> {
   const fallback = getFallbackContent(locale);
-
   const db = getDb();
   if (!db) {
     return fallback;
   }
 
   try {
-    const [settings, translation, navItems, productItems, serviceItems] = await Promise.all([
-      db.siteSettings.findUnique({ where: { id: 1 } }),
-      db.siteTranslation.findUnique({ where: { locale } }),
-      db.navItem.findMany({
-        where: { isActive: true },
-        orderBy: { orderIndex: "asc" },
-        include: { translations: true },
-      }),
-      db.product.findMany({
-        where: { isActive: true },
-        orderBy: { orderIndex: "asc" },
-        include: { translations: true },
-      }),
-      db.service.findMany({
-        where: { isActive: true },
-        orderBy: { orderIndex: "asc" },
-        include: { translations: true },
-      }),
-    ]);
+    const [settings, translation, navItems, productItems, serviceItems, faqItems] =
+      await Promise.all([
+        db.siteSettings.findUnique({ where: { id: 1 } }),
+        db.siteTranslation.findUnique({ where: { locale } }),
+        db.navItem.findMany({
+          where: { isActive: true },
+          orderBy: { orderIndex: "asc" },
+          include: { translations: true },
+        }),
+        db.product.findMany({
+          where: { isActive: true },
+          orderBy: { orderIndex: "asc" },
+          include: { translations: true },
+        }),
+        db.service.findMany({
+          where: { isActive: true },
+          orderBy: { orderIndex: "asc" },
+          include: { translations: true },
+        }),
+        db.faqItem.findMany({
+          where: { isActive: true },
+          orderBy: { orderIndex: "asc" },
+          include: { translations: true },
+        }),
+      ]);
 
     const nav =
       navItems.length > 0
@@ -227,47 +217,59 @@ export async function getSiteContent(locale: SiteLocale): Promise<SiteContent> {
           })
         : fallback.nav;
 
-    const productsData =
+    const products =
       productItems.length > 0
         ? productItems.map((item) => {
             const localeTranslation = item.translations.find((entry) => entry.locale === locale);
-            const fallbackTranslation = item.translations[0];
-            const title = localeTranslation?.title || fallbackTranslation?.title || "Product";
-            const media = resolveMedia(item.icon, title, productImageByTitle, title);
-
+            const first = item.translations[0];
+            const title = localeTranslation?.title || first?.title || "Product";
             return {
               id: item.id,
               title,
-              description:
-                localeTranslation?.description ||
-                fallbackTranslation?.description ||
-                "Description not set.",
-              imageUrl: media.imageUrl,
-              imageAlt: media.imageAlt,
+              description: localeTranslation?.description || first?.description || "",
+              details: localeTranslation?.details || first?.details || "",
+              imageUrl: item.imageUrl || fallback.products[0]?.imageUrl || "",
+              imageAlt: title,
             };
           })
         : fallback.products;
 
-    const servicesData =
+    const services =
       serviceItems.length > 0
         ? serviceItems.map((item) => {
             const localeTranslation = item.translations.find((entry) => entry.locale === locale);
-            const fallbackTranslation = item.translations[0];
-            const title = localeTranslation?.title || fallbackTranslation?.title || "Service";
-            const media = resolveMedia(item.icon, title, serviceImageByTitle, title);
-
+            const first = item.translations[0];
+            const title = localeTranslation?.title || first?.title || "Solution";
             return {
               id: item.id,
               title,
-              description:
-                localeTranslation?.description ||
-                fallbackTranslation?.description ||
-                "Description not set.",
-              imageUrl: media.imageUrl,
-              imageAlt: media.imageAlt,
+              description: localeTranslation?.description || first?.description || "",
+              details: localeTranslation?.details || first?.details || "",
+              imageUrl: item.imageUrl || fallback.services[0]?.imageUrl || "",
+              imageAlt: title,
             };
           })
         : fallback.services;
+
+    const faqs =
+      faqItems.length > 0
+        ? faqItems.map((item) => {
+            const localeTranslation = item.translations.find((entry) => entry.locale === locale);
+            const first = item.translations[0];
+            return {
+              question: localeTranslation?.question || first?.question || "",
+              answer: localeTranslation?.answer || first?.answer || "",
+            };
+          })
+        : fallback.faqs;
+
+    const trustBadges = [
+      translation?.trustBadge1,
+      translation?.trustBadge2,
+      translation?.trustBadge3,
+    ]
+      .filter((value): value is string => Boolean(value && value.trim()))
+      .map((label) => ({ label }));
 
     return {
       ...fallback,
@@ -283,32 +285,62 @@ export async function getSiteContent(locale: SiteLocale): Promise<SiteContent> {
         whatsappHref: settings?.whatsapp
           ? toWhatsappHref(settings.whatsapp)
           : fallback.company.whatsappHref,
+        heroImageUrl: settings?.heroImageUrl || fallback.company.heroImageUrl,
+        aboutImageUrl: settings?.aboutImageUrl || fallback.company.aboutImageUrl,
+        contactBannerUrl: settings?.contactBannerUrl || fallback.company.contactBannerUrl,
+        contactSideImageUrl:
+          settings?.contactSideImageUrl || fallback.company.contactSideImageUrl,
       },
       nav,
       hero: {
-        ...fallback.hero,
         eyebrow: translation?.heroEyebrow || fallback.hero.eyebrow,
         headline: translation?.heroHeadline || fallback.hero.headline,
         subheadline: translation?.heroSubheadline || fallback.hero.subheadline,
         ctaLabel: translation?.heroCtaLabel || fallback.hero.ctaLabel,
         ctaHref: translation?.heroCtaHref || fallback.hero.ctaHref,
+        secondaryCtaLabel:
+          translation?.heroSecondaryCtaLabel || fallback.hero.secondaryCtaLabel,
+        secondaryCtaHref:
+          translation?.heroSecondaryCtaHref || fallback.hero.secondaryCtaHref,
+        imageUrl: settings?.heroImageUrl || fallback.hero.imageUrl,
+        imageAlt: translation?.heroImageAlt || fallback.hero.imageAlt,
+        trustBadges: trustBadges.length > 0 ? trustBadges : fallback.hero.trustBadges,
       },
       about: {
         title: translation?.aboutTitle || fallback.about.title,
         description: translation?.aboutDescription || fallback.about.description,
-        imageUrl: fallback.about.imageUrl,
-        imageAlt: fallback.about.imageAlt,
+        extra: translation?.aboutExtra || fallback.about.extra,
+        imageUrl: settings?.aboutImageUrl || fallback.about.imageUrl,
+        imageAlt: translation?.aboutImageAlt || fallback.about.imageAlt,
+      },
+      vision: {
+        title: translation?.visionTitle || fallback.vision.title,
+        text: translation?.visionText || fallback.vision.text,
+      },
+      mission: {
+        title: translation?.missionTitle || fallback.mission.title,
+        text: translation?.missionText || fallback.mission.text,
       },
       productsSectionTitle:
         translation?.productsSectionTitle || fallback.productsSectionTitle,
+      productsSectionDescription:
+        translation?.productsSectionDescription || fallback.productsSectionDescription,
       servicesSectionTitle:
         translation?.servicesSectionTitle || fallback.servicesSectionTitle,
+      servicesSectionDescription:
+        translation?.servicesSectionDescription || fallback.servicesSectionDescription,
+      faqSectionTitle: translation?.faqSectionTitle || fallback.faqSectionTitle,
+      faqSectionDescription:
+        translation?.faqSectionDescription || fallback.faqSectionDescription,
       contact: {
         title: translation?.contactTitle || fallback.contact.title,
         description: translation?.contactDescription || fallback.contact.description,
+        bannerUrl: settings?.contactBannerUrl || fallback.contact.bannerUrl,
+        sideImageUrl: settings?.contactSideImageUrl || fallback.contact.sideImageUrl,
       },
-      products: productsData,
-      services: servicesData,
+      products,
+      services,
+      faqs,
       footer: {
         ...fallback.footer,
         quickLinks: nav,
