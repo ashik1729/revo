@@ -39,7 +39,30 @@
         "binding": "IMAGES"
       },
       "vars": {
-        "MAIL_TO": "info@revo.qa"
+        "MAIL_TO": "info@revo.qa",
+        "DESIGN_VARIANT": "v1"
+      }
+    },
+    "design": {
+      "name": "revo-design",
+      "compatibility_date": "2025-12-01",
+      "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+      "assets": {
+        "directory": ".open-next/assets",
+        "binding": "ASSETS"
+      },
+      "services": [
+        {
+          "binding": "WORKER_SELF_REFERENCE",
+          "service": "revo-design"
+        }
+      ],
+      "images": {
+        "binding": "IMAGES"
+      },
+      "vars": {
+        "MAIL_TO": "info@revo.qa",
+        "DESIGN_VARIANT": "v2"
       }
     }
   }

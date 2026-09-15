@@ -7,6 +7,8 @@ import FaqSection from "@/components/FaqSection";
 import ContactForm from "@/components/ContactForm";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import Footer from "@/components/Footer";
+import DesignHome from "@/components/v2/DesignHome";
+import { getDesignVariant } from "@/lib/design";
 import { getSiteContent } from "@/lib/site-content";
 import { isSupportedLocale, supportedLocales, type SiteLocale } from "@/lib/i18n";
 
@@ -26,6 +28,12 @@ export default async function LocalePage({ params }: LocalePageProps) {
   }
 
   const content = await getSiteContent(locale as SiteLocale);
+  const variant = getDesignVariant();
+
+  if (variant === "v2") {
+    return <DesignHome content={content} locale={locale as SiteLocale} />;
+  }
+
   const productTitles = content.products.map((item) => item.title);
   const serviceTitles = content.services.map((item) => item.title);
 
