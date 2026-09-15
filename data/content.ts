@@ -14,7 +14,7 @@ export const companyInfo = {
   whatsapp: "97470718232",
   whatsappHref: "https://wa.me/97470718232",
   heroImageUrl: `${RP}/2025/01/Slide-1-1.webp`,
-  aboutImageUrl: `${RP}/2025/01/Homepage-Banner-2.jpg`,
+  aboutImageUrl: "/about-revo.jpg",
   contactBannerUrl: `${RP}/2025/01/Homepage-Banner-3.jpg`,
   contactSideImageUrl: `${RP}/2025/01/Homepage-Banner-5.jpg`,
 } as const;
@@ -153,7 +153,7 @@ export const localeCopy: Record<
       "Revo Qatar supplies eco-friendly and cost-effective packaging for businesses across Qatar — biodegradable, Kraft, bagasse, aluminium, hygiene, cleaning, and specialty plastic ranges.",
     aboutExtra:
       "We help hotels, restaurants, retail, and facilities choose practical sustainable packaging with reliable local supply from Industrial Area, Doha.",
-    aboutImageAlt: "Packaging supply banner",
+    aboutImageAlt: "Greener tomorrows — sustainable packaging solutions",
     visionTitle: "Our Vision",
     visionText:
       "To lead packaging supply in Qatar toward a more sustainable future with innovative, renewable solutions.",
@@ -190,7 +190,7 @@ export const localeCopy: Record<
       "توفر ريفو قطر تغليفاً صديقاً للبيئة وفعّال التكلفة للشركات في قطر — قابل للتحلل، كرتون، باجاس، ألمنيوم، نظافة، تنظيف، وبلاستيك متخصص.",
     aboutExtra:
       "نساعد الفنادق والمطاعم والتجزئة والمنشآت على اختيار تغليف مستدام عملي مع توريد محلي موثوق من المنطقة الصناعية بالدوحة.",
-    aboutImageAlt: "بانر توريد التغليف",
+    aboutImageAlt: "غدٌ أكثر خضرة — حلول تغليف مستدامة",
     visionTitle: "رؤيتنا",
     visionText: "قيادة توريد التغليف في قطر نحو مستقبل أكثر استدامة بحلول مبتكرة ومتجددة.",
     missionTitle: "رسالتنا",

@@ -44,13 +44,14 @@ export function ProductsServicesContent({
     <>
       <section id="about" className="relative overflow-hidden bg-slate-50">
         <div className="grid lg:grid-cols-2">
-          <div className="relative min-h-[320px] lg:min-h-[520px]">
+          <div className="relative min-h-[320px] bg-white lg:min-h-[520px]">
             <Image
               src={about.imageUrl}
               alt={about.imageAlt}
               fill
-              className="object-cover"
+              className="object-contain object-center p-4 sm:p-6"
               sizes="(max-width: 1024px) 100vw, 50vw"
+              priority
             />
           </div>
           <div className="flex items-center px-4 py-16 sm:px-8 lg:px-14 lg:py-20">
