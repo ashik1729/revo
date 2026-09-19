@@ -72,6 +72,7 @@ export async function saveSiteSettings(formData: FormData) {
 }
 
 export async function saveSiteTranslation(formData: FormData) {
+  await requireAdmin();
   const locale = getLocale(formData.get("locale"));
 
   const payload = {
@@ -115,6 +116,7 @@ export async function saveSiteTranslation(formData: FormData) {
 }
 
 export async function upsertNavItem(formData: FormData) {
+  await requireAdmin();
   const locale = getLocale(formData.get("locale"));
   const navId = str(formData, "navId");
   const href = str(formData, "href", "#");
@@ -141,6 +143,7 @@ export async function upsertNavItem(formData: FormData) {
 }
 
 export async function deleteNavItem(formData: FormData) {
+  await requireAdmin();
   const locale = getLocale(formData.get("locale"));
   const navId = str(formData, "navId");
   if (navId) await db.navItem.delete({ where: { id: navId } });
@@ -148,6 +151,7 @@ export async function deleteNavItem(formData: FormData) {
 }
 
 export async function upsertProduct(formData: FormData) {
+  await requireAdmin();
   const locale = getLocale(formData.get("locale"));
   const itemId = str(formData, "itemId");
   const imageUrl = str(formData, "imageUrl");
@@ -176,6 +180,7 @@ export async function upsertProduct(formData: FormData) {
 }
 
 export async function deleteProduct(formData: FormData) {
+  await requireAdmin();
   const locale = getLocale(formData.get("locale"));
   const itemId = str(formData, "itemId");
   if (itemId) await db.product.delete({ where: { id: itemId } });
@@ -183,6 +188,7 @@ export async function deleteProduct(formData: FormData) {
 }
 
 export async function upsertService(formData: FormData) {
+  await requireAdmin();
   const locale = getLocale(formData.get("locale"));
   const itemId = str(formData, "itemId");
   const imageUrl = str(formData, "imageUrl");
@@ -211,6 +217,7 @@ export async function upsertService(formData: FormData) {
 }
 
 export async function deleteService(formData: FormData) {
+  await requireAdmin();
   const locale = getLocale(formData.get("locale"));
   const itemId = str(formData, "itemId");
   if (itemId) await db.service.delete({ where: { id: itemId } });
@@ -218,6 +225,7 @@ export async function deleteService(formData: FormData) {
 }
 
 export async function upsertFaq(formData: FormData) {
+  await requireAdmin();
   const locale = getLocale(formData.get("locale"));
   const itemId = str(formData, "itemId");
   const question = str(formData, "question");
@@ -244,6 +252,7 @@ export async function upsertFaq(formData: FormData) {
 }
 
 export async function deleteFaq(formData: FormData) {
+  await requireAdmin();
   const locale = getLocale(formData.get("locale"));
   const itemId = str(formData, "itemId");
   if (itemId) await db.faqItem.delete({ where: { id: itemId } });
