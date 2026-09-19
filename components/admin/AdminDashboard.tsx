@@ -18,6 +18,8 @@ import {
   Images,
   Star,
   Share2,
+  Search,
+  BarChart3,
 } from "lucide-react";
 import type { CmsCatalogItem, CmsDocument } from "@/lib/cms-store";
 import type { SiteLocale } from "@/lib/i18n";
@@ -26,6 +28,8 @@ import { logoutAdmin } from "@/app/admin/login/actions";
 import {
   saveCompany,
   saveLocaleCopy,
+  saveLocaleSeo,
+  saveSeoGlobal,
   upsertHeroSlide,
   deleteHeroSlide,
   upsertNavItem,
@@ -63,7 +67,9 @@ type SectionId =
   | "featured"
   | "solutions"
   | "faqs"
-  | "footer";
+  | "footer"
+  | "seo"
+  | "analytics";
 
 const nav = [
   { id: "overview" as const, label: "Overview", icon: LayoutDashboard },
@@ -76,6 +82,8 @@ const nav = [
   { id: "solutions" as const, label: "Solutions", icon: Sparkles },
   { id: "faqs" as const, label: "FAQs", icon: HelpCircle },
   { id: "footer" as const, label: "Footer", icon: Share2 },
+  { id: "seo" as const, label: "SEO", icon: Search },
+  { id: "analytics" as const, label: "Analytics", icon: BarChart3 },
 ];
 
 interface AdminDashboardProps {
@@ -90,6 +98,8 @@ export default function AdminDashboard({ locale, doc, cmsRemote }: AdminDashboar
 
   const bundle = doc.locales[locale];
   const company = doc.company;
+  const seoGlobal = doc.seo;
+  const localeSeo = bundle.seo;
 
   const stats = [
     { label: "Slides", value: bundle.heroSlides.length, tone: "bg-sky-50 text-sky-700" },
@@ -516,7 +526,7 @@ export default function AdminDashboard({ locale, doc, cmsRemote }: AdminDashboar
                           />
                         </Field>
                       </div>
-                      <Field label="Hero image alt">
+                      <Field label="Hero SEO image alt">
                         <input
                           name="heroImageAlt"
                           defaultValue={bundle.heroImageAlt}
@@ -579,7 +589,7 @@ export default function AdminDashboard({ locale, doc, cmsRemote }: AdminDashboar
                           rows={3}
                         />
                       </Field>
-                      <Field label="About image alt">
+                      <Field label="About SEO image alt">
                         <input
                           name="aboutImageAlt"
                           defaultValue={bundle.aboutImageAlt}
@@ -799,7 +809,7 @@ export default function AdminDashboard({ locale, doc, cmsRemote }: AdminDashboar
                                   label="Slide image"
                                   defaultValue={slide.imageUrl}
                                 />
-                                <Field label="Image alt">
+                                <Field label="SEO image alt">
                                   <input
                                     name="imageAlt"
                                     defaultValue={slide.imageAlt}
@@ -854,7 +864,7 @@ export default function AdminDashboard({ locale, doc, cmsRemote }: AdminDashboar
                     <ImageUploader name="imageUrl" label="Slide image" />
                   </div>
                   <div className="grid gap-3 sm:grid-cols-2">
-                    <input name="imageAlt" placeholder="Image alt" className={adminInput} />
+                    <input name="imageAlt" placeholder="SEO image alt" className={adminInput} />
                     <input name="eyebrow" placeholder="Eyebrow" className={adminInput} />
                     <input name="headline" placeholder="Headline" className={adminInput} required />
                   </div>
@@ -1203,6 +1213,286 @@ export default function AdminDashboard({ locale, doc, cmsRemote }: AdminDashboar
                 </p>
               </section>
             ) : null}
+
+            {section === "seo" ? (
+              <section className="space-y-4">
+                <form
+                  action={saveLocaleSeo}
+                  className="rounded-3xl border border-slate-200/80 bg-white p-5 shadow-sm sm:p-7"
+                >
+                  <input type="hidden" name="locale" value={locale} />
+                  <PanelHeader
+                    title={`Page SEO · ${localeNames[locale]}`}
+                    description="Qatar-focused titles, descriptions and Open Graph for this language. Helps Revo Trading rank for packaging searches in Doha."
+                  />
+                  <div className="mt-5 grid gap-4 sm:grid-cols-2">
+                    <Field label="Meta title" className="sm:col-span-2">
+                      <input
+                        name="metaTitle"
+                        defaultValue={localeSeo.metaTitle}
+                        className={adminInput}
+                        required
+                      />
+                    </Field>
+                    <Field label="Meta description" className="sm:col-span-2">
+                      <textarea
+                        name="metaDescription"
+                        defaultValue={localeSeo.metaDescription}
+                        rows={3}
+                        className={adminTextarea}
+                        required
+                      />
+                    </Field>
+                    <Field label="Meta keywords (comma-separated)" className="sm:col-span-2">
+                      <textarea
+                        name="metaKeywords"
+                        defaultValue={localeSeo.metaKeywords}
+                        rows={2}
+                        className={adminTextarea}
+                      />
+                    </Field>
+                    <Field label="Open Graph title">
+                      <input
+                        name="ogTitle"
+                        defaultValue={localeSeo.ogTitle}
+                        className={adminInput}
+                      />
+                    </Field>
+                    <Field label="Twitter title">
+                      <input
+                        name="twitterTitle"
+                        defaultValue={localeSeo.twitterTitle}
+                        className={adminInput}
+                      />
+                    </Field>
+                    <Field label="Open Graph description" className="sm:col-span-2">
+                      <textarea
+                        name="ogDescription"
+                        defaultValue={localeSeo.ogDescription}
+                        rows={2}
+                        className={adminTextarea}
+                      />
+                    </Field>
+                    <Field label="Twitter description" className="sm:col-span-2">
+                      <textarea
+                        name="twitterDescription"
+                        defaultValue={localeSeo.twitterDescription}
+                        rows={2}
+                        className={adminTextarea}
+                      />
+                    </Field>
+                    <Field label="OG / share image URL" className="sm:col-span-2">
+                      <ImageUploader
+                        name="ogImageUrl"
+                        label="OG image"
+                        defaultValue={localeSeo.ogImageUrl}
+                      />
+                    </Field>
+                    <Field label="OG image alt" className="sm:col-span-2">
+                      <input
+                        name="ogImageAlt"
+                        defaultValue={localeSeo.ogImageAlt}
+                        className={adminInput}
+                      />
+                    </Field>
+                    <Field label="Local business description (JSON-LD)" className="sm:col-span-2">
+                      <textarea
+                        name="localBusinessDescription"
+                        defaultValue={localeSeo.localBusinessDescription}
+                        rows={2}
+                        className={adminTextarea}
+                      />
+                    </Field>
+                  </div>
+
+                  <h4 className="mt-8 text-sm font-semibold text-slate-800">
+                    Section SEO (structured data)
+                  </h4>
+                  <p className="mt-1 text-xs text-slate-500">
+                    Used in rich results / schema for About, Products, Featured, Solutions, FAQ and
+                    Contact.
+                  </p>
+                  <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                    {(
+                      [
+                        ["aboutSeoTitle", "About SEO title", localeSeo.aboutSeoTitle],
+                        ["aboutSeoDescription", "About SEO description", localeSeo.aboutSeoDescription],
+                        ["productsSeoTitle", "Products SEO title", localeSeo.productsSeoTitle],
+                        [
+                          "productsSeoDescription",
+                          "Products SEO description",
+                          localeSeo.productsSeoDescription,
+                        ],
+                        ["featuredSeoTitle", "Featured SEO title", localeSeo.featuredSeoTitle],
+                        [
+                          "featuredSeoDescription",
+                          "Featured SEO description",
+                          localeSeo.featuredSeoDescription,
+                        ],
+                        ["solutionsSeoTitle", "Solutions SEO title", localeSeo.solutionsSeoTitle],
+                        [
+                          "solutionsSeoDescription",
+                          "Solutions SEO description",
+                          localeSeo.solutionsSeoDescription,
+                        ],
+                        ["faqSeoTitle", "FAQ SEO title", localeSeo.faqSeoTitle],
+                        ["faqSeoDescription", "FAQ SEO description", localeSeo.faqSeoDescription],
+                        ["contactSeoTitle", "Contact SEO title", localeSeo.contactSeoTitle],
+                        [
+                          "contactSeoDescription",
+                          "Contact SEO description",
+                          localeSeo.contactSeoDescription,
+                        ],
+                      ] as const
+                    ).map(([name, label, value]) => (
+                      <Field
+                        key={name}
+                        label={label}
+                        className={name.includes("Description") ? "sm:col-span-2" : undefined}
+                      >
+                        {name.includes("Description") ? (
+                          <textarea
+                            name={name}
+                            defaultValue={value}
+                            rows={2}
+                            className={adminTextarea}
+                          />
+                        ) : (
+                          <input name={name} defaultValue={value} className={adminInput} />
+                        )}
+                      </Field>
+                    ))}
+                  </div>
+                  <div className="mt-6">
+                    <SaveButton>Save SEO</SaveButton>
+                  </div>
+                </form>
+              </section>
+            ) : null}
+
+            {section === "analytics" ? (
+              <section className="space-y-4">
+                <form
+                  action={saveSeoGlobal}
+                  className="rounded-3xl border border-slate-200/80 bg-white p-5 shadow-sm sm:p-7"
+                >
+                  <input type="hidden" name="locale" value={locale} />
+                  <PanelHeader
+                    title="Analytics & local SEO settings"
+                    description="Google Analytics, Tag Manager, Search Console and Qatar business geo data. Shared across EN and AR."
+                  />
+                  <div className="mt-5 grid gap-4 sm:grid-cols-2">
+                    <Field label="Site URL">
+                      <input
+                        name="siteUrl"
+                        defaultValue={seoGlobal.siteUrl}
+                        placeholder="https://revo.qa"
+                        className={adminInput}
+                        required
+                      />
+                    </Field>
+                    <Field label="Indexing">
+                      <select
+                        name="robotsIndex"
+                        defaultValue={seoGlobal.robotsIndex ? "true" : "false"}
+                        className={adminInput}
+                      >
+                        <option value="true">Allow Google to index</option>
+                        <option value="false">Noindex (hide from search)</option>
+                      </select>
+                    </Field>
+                    <Field label="Google Analytics 4 ID">
+                      <input
+                        name="googleAnalyticsId"
+                        defaultValue={seoGlobal.googleAnalyticsId}
+                        placeholder="G-XXXXXXXXXX"
+                        className={adminInput}
+                      />
+                    </Field>
+                    <Field label="Google Tag Manager ID">
+                      <input
+                        name="googleTagManagerId"
+                        defaultValue={seoGlobal.googleTagManagerId}
+                        placeholder="GTM-XXXXXXX"
+                        className={adminInput}
+                      />
+                    </Field>
+                    <Field label="Search Console verification" className="sm:col-span-2">
+                      <input
+                        name="searchConsoleVerification"
+                        defaultValue={seoGlobal.searchConsoleVerification}
+                        placeholder="google-site-verification content value"
+                        className={adminInput}
+                      />
+                    </Field>
+                    <Field label="Default OG image" className="sm:col-span-2">
+                      <ImageUploader
+                        name="defaultOgImageUrl"
+                        label="Default share image"
+                        defaultValue={seoGlobal.defaultOgImageUrl}
+                      />
+                    </Field>
+                    <Field label="Schema business type">
+                      <input
+                        name="businessType"
+                        defaultValue={seoGlobal.businessType}
+                        placeholder="Store"
+                        className={adminInput}
+                      />
+                    </Field>
+                    <Field label="Price range">
+                      <input
+                        name="priceRange"
+                        defaultValue={seoGlobal.priceRange}
+                        placeholder="$$"
+                        className={adminInput}
+                      />
+                    </Field>
+                    <Field label="Geo region">
+                      <input
+                        name="geoRegion"
+                        defaultValue={seoGlobal.geoRegion}
+                        placeholder="QA"
+                        className={adminInput}
+                      />
+                    </Field>
+                    <Field label="Geo placename">
+                      <input
+                        name="geoPlacename"
+                        defaultValue={seoGlobal.geoPlacename}
+                        placeholder="Doha, Qatar"
+                        className={adminInput}
+                      />
+                    </Field>
+                    <Field label="Latitude">
+                      <input
+                        name="latitude"
+                        defaultValue={seoGlobal.latitude}
+                        className={adminInput}
+                      />
+                    </Field>
+                    <Field label="Longitude">
+                      <input
+                        name="longitude"
+                        defaultValue={seoGlobal.longitude}
+                        className={adminInput}
+                      />
+                    </Field>
+                    <Field label="Opening hours" className="sm:col-span-2">
+                      <input
+                        name="openingHours"
+                        defaultValue={seoGlobal.openingHours}
+                        placeholder="Mo-Th 08:00-18:00, Su 08:00-18:00"
+                        className={adminInput}
+                      />
+                    </Field>
+                  </div>
+                  <div className="mt-6">
+                    <SaveButton>Save analytics settings</SaveButton>
+                  </div>
+                </form>
+              </section>
+            ) : null}
           </main>
         </div>
       </div>
@@ -1277,7 +1567,7 @@ function CatalogCardsSection({
                         label="Item image"
                         defaultValue={item.imageUrl}
                       />
-                      <Field label="Image alt">
+                      <Field label="SEO image alt">
                         <input
                           name="imageAlt"
                           defaultValue={item.imageAlt}
@@ -1355,7 +1645,7 @@ function CatalogCardsSection({
         </div>
         <div className="grid gap-3 sm:grid-cols-2">
           <input name="title" placeholder="Title" className={adminInput} required />
-          <input name="imageAlt" placeholder="Image alt" className={adminInput} />
+          <input name="imageAlt" placeholder="SEO image alt" className={adminInput} />
         </div>
         <textarea
           name="description"

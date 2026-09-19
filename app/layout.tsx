@@ -16,9 +16,13 @@ const notoArabic = Noto_Sans_Arabic({
 });
 
 export const metadata: Metadata = {
-  title: "Revo Trading | Eco-Friendly Packaging Partner",
+  title: {
+    default: "Revo Trading | Eco-Friendly Packaging in Qatar",
+    template: "%s",
+  },
   description:
-    "Revo Trading supplies eco-friendly packaging for hotels, F&B, and facilities across Qatar — biodegradable, kraft, bagasse, aluminium, hygiene, and more.",
+    "Revo Trading supplies eco-friendly packaging for hotels, F&B, and facilities across Qatar.",
+  metadataBase: new URL("https://revo.qa"),
 };
 
 export default function RootLayout({

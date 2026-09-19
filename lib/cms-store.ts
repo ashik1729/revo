@@ -12,6 +12,12 @@ import {
 import type { SiteLocale } from "@/lib/i18n";
 import type { CatalogItem, SiteContent } from "@/lib/site-content";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
+import {
+  defaultLocaleSeo,
+  defaultSeoGlobal,
+  type CmsLocaleSeo,
+  type CmsSeoGlobal,
+} from "@/lib/seo-defaults";
 
 export type CmsHeroSlide = {
   id: string;
@@ -99,6 +105,7 @@ export type CmsLocaleBundle = {
   services: CmsCatalogItem[];
   faqs: CmsFaqItem[];
   socialLinks: CmsSocialLink[];
+  seo: CmsLocaleSeo;
 };
 
 export type CmsCompany = {
@@ -116,6 +123,7 @@ export type CmsCompany = {
 export type CmsDocument = {
   version: 1;
   company: CmsCompany;
+  seo: CmsSeoGlobal;
   locales: Record<SiteLocale, CmsLocaleBundle>;
 };
 
@@ -238,6 +246,7 @@ function localeBundle(locale: SiteLocale): CmsLocaleBundle {
       href: item.href,
       icon: item.icon,
     })),
+    seo: defaultLocaleSeo(locale),
   };
 }
 
@@ -255,9 +264,46 @@ export function buildCmsDocumentFromFallback(): CmsDocument {
       contactBannerUrl: companyInfo.contactBannerUrl,
       contactSideImageUrl: companyInfo.contactSideImageUrl,
     },
+    seo: defaultSeoGlobal(),
     locales: {
       en: localeBundle("en"),
       ar: localeBundle("ar"),
+    },
+  };
+}
+
+export function normalizeCmsDocument(input: CmsDocument): CmsDocument {
+  const fallback = buildCmsDocumentFromFallback();
+  return {
+    ...fallback,
+    ...input,
+    company: { ...fallback.company, ...(input.company || {}) },
+    seo: { ...fallback.seo, ...(input.seo || {}) },
+    locales: {
+      en: {
+        ...fallback.locales.en,
+        ...(input.locales?.en || {}),
+        seo: { ...fallback.locales.en.seo, ...(input.locales?.en?.seo || {}) },
+        heroSlides: input.locales?.en?.heroSlides || fallback.locales.en.heroSlides,
+        nav: input.locales?.en?.nav || fallback.locales.en.nav,
+        products: input.locales?.en?.products || fallback.locales.en.products,
+        featured: input.locales?.en?.featured || fallback.locales.en.featured,
+        services: input.locales?.en?.services || fallback.locales.en.services,
+        faqs: input.locales?.en?.faqs || fallback.locales.en.faqs,
+        socialLinks: input.locales?.en?.socialLinks || fallback.locales.en.socialLinks,
+      },
+      ar: {
+        ...fallback.locales.ar,
+        ...(input.locales?.ar || {}),
+        seo: { ...fallback.locales.ar.seo, ...(input.locales?.ar?.seo || {}) },
+        heroSlides: input.locales?.ar?.heroSlides || fallback.locales.ar.heroSlides,
+        nav: input.locales?.ar?.nav || fallback.locales.ar.nav,
+        products: input.locales?.ar?.products || fallback.locales.ar.products,
+        featured: input.locales?.ar?.featured || fallback.locales.ar.featured,
+        services: input.locales?.ar?.services || fallback.locales.ar.services,
+        faqs: input.locales?.ar?.faqs || fallback.locales.ar.faqs,
+        socialLinks: input.locales?.ar?.socialLinks || fallback.locales.ar.socialLinks,
+      },
     },
   };
 }
@@ -303,7 +349,7 @@ export async function readCmsDocument(): Promise<CmsDocument> {
     return seeded;
   }
   try {
-    return JSON.parse(raw) as CmsDocument;
+    return normalizeCmsDocument(JSON.parse(raw) as CmsDocument);
   } catch {
     return buildCmsDocumentFromFallback();
   }
@@ -311,7 +357,7 @@ export async function readCmsDocument(): Promise<CmsDocument> {
 
 export async function writeCmsDocument(doc: CmsDocument) {
   const kv = await getKv();
-  await kv.put(CMS_KEY, JSON.stringify(doc));
+  await kv.put(CMS_KEY, JSON.stringify(normalizeCmsDocument(doc)));
 }
 
 export async function resetCmsDocument() {
@@ -346,8 +392,9 @@ function mapCatalog(items: CmsCatalogItem[]): CatalogItem[] {
 }
 
 export function siteContentFromCms(doc: CmsDocument, locale: SiteLocale): SiteContent {
-  const bundle = doc.locales[locale] || doc.locales.en;
-  const company = doc.company;
+  const normalized = normalizeCmsDocument(doc);
+  const bundle = normalized.locales[locale] || normalized.locales.en;
+  const company = normalized.company;
   const slides = [...bundle.heroSlides];
   const activeNav = bundle.nav
     .filter((item) => item.isActive)
@@ -438,6 +485,10 @@ export function siteContentFromCms(doc: CmsDocument, locale: SiteLocale): SiteCo
         icon: item.icon,
       })),
       copyright: bundle.copyright,
+    },
+    seo: {
+      ...normalized.seo,
+      ...bundle.seo,
     },
   };
 }

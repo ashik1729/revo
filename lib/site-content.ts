@@ -12,6 +12,8 @@ import {
 } from "@/data/content";
 import { readCmsDocument, siteContentFromCms } from "@/lib/cms-store";
 import type { SiteLocale } from "@/lib/i18n";
+import { defaultLocaleSeo, defaultSeoGlobal } from "@/lib/seo-defaults";
+import type { CmsLocaleSeo, CmsSeoGlobal } from "@/lib/seo-defaults";
 
 export interface CatalogItem {
   id: string;
@@ -97,6 +99,7 @@ export interface SiteContent {
     socialLinks: ReadonlyArray<{ label: string; href: string; icon: string }>;
     copyright: string;
   };
+  seo: CmsSeoGlobal & CmsLocaleSeo;
 }
 
 function toPhoneHref(phone: string) {
@@ -195,6 +198,10 @@ export function getFallbackContent(locale: SiteLocale): SiteContent {
         locale === "ar"
           ? "© 2026 ريفو للتجارة. جميع الحقوق محفوظة."
           : footerContent.copyright,
+    },
+    seo: {
+      ...defaultSeoGlobal(),
+      ...defaultLocaleSeo(locale),
     },
   };
 }

@@ -46,6 +46,8 @@ function revalidateAll(locale: SiteLocale) {
   revalidatePath("/en");
   revalidatePath("/ar");
   revalidatePath("/admin");
+  revalidatePath("/sitemap.xml");
+  revalidatePath("/robots.txt");
 }
 
 async function mutate(locale: SiteLocale, updater: (doc: CmsDocument) => void) {
@@ -292,6 +294,57 @@ export async function resetCmsToDefaults(formData: FormData) {
   const locale = getLocale(formData.get("locale"));
   await resetCmsDocument();
   revalidateAll(locale);
+}
+
+export async function saveSeoGlobal(formData: FormData) {
+  const locale = getLocale(formData.get("locale"));
+  await mutate(locale, (doc) => {
+    doc.seo = {
+      siteUrl: str(formData, "siteUrl", "https://revo.qa"),
+      googleAnalyticsId: str(formData, "googleAnalyticsId"),
+      googleTagManagerId: str(formData, "googleTagManagerId"),
+      searchConsoleVerification: str(formData, "searchConsoleVerification"),
+      defaultOgImageUrl: str(formData, "defaultOgImageUrl"),
+      robotsIndex: parseBool(formData.get("robotsIndex")),
+      businessType: str(formData, "businessType", "Store"),
+      geoRegion: str(formData, "geoRegion", "QA"),
+      geoPlacename: str(formData, "geoPlacename", "Doha, Qatar"),
+      latitude: str(formData, "latitude"),
+      longitude: str(formData, "longitude"),
+      priceRange: str(formData, "priceRange", "$$"),
+      openingHours: str(formData, "openingHours"),
+    };
+  });
+}
+
+export async function saveLocaleSeo(formData: FormData) {
+  const locale = getLocale(formData.get("locale"));
+  await mutate(locale, (doc) => {
+    doc.locales[locale].seo = {
+      metaTitle: str(formData, "metaTitle"),
+      metaDescription: str(formData, "metaDescription"),
+      metaKeywords: str(formData, "metaKeywords"),
+      ogTitle: str(formData, "ogTitle"),
+      ogDescription: str(formData, "ogDescription"),
+      ogImageUrl: str(formData, "ogImageUrl"),
+      ogImageAlt: str(formData, "ogImageAlt"),
+      twitterTitle: str(formData, "twitterTitle"),
+      twitterDescription: str(formData, "twitterDescription"),
+      localBusinessDescription: str(formData, "localBusinessDescription"),
+      aboutSeoTitle: str(formData, "aboutSeoTitle"),
+      aboutSeoDescription: str(formData, "aboutSeoDescription"),
+      productsSeoTitle: str(formData, "productsSeoTitle"),
+      productsSeoDescription: str(formData, "productsSeoDescription"),
+      featuredSeoTitle: str(formData, "featuredSeoTitle"),
+      featuredSeoDescription: str(formData, "featuredSeoDescription"),
+      solutionsSeoTitle: str(formData, "solutionsSeoTitle"),
+      solutionsSeoDescription: str(formData, "solutionsSeoDescription"),
+      faqSeoTitle: str(formData, "faqSeoTitle"),
+      faqSeoDescription: str(formData, "faqSeoDescription"),
+      contactSeoTitle: str(formData, "contactSeoTitle"),
+      contactSeoDescription: str(formData, "contactSeoDescription"),
+    };
+  });
 }
 
 // Back-compat aliases used by older imports

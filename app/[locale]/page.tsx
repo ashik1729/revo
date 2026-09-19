@@ -8,6 +8,7 @@ import ContactForm from "@/components/ContactForm";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import Footer from "@/components/Footer";
 import DesignHome from "@/components/v2/DesignHome";
+import SeoJsonLd from "@/components/SeoJsonLd";
 import { getDesignVariant } from "@/lib/design";
 import { getSiteContent } from "@/lib/site-content";
 import { isSupportedLocale, supportedLocales, type SiteLocale } from "@/lib/i18n";
@@ -31,7 +32,12 @@ export default async function LocalePage({ params }: LocalePageProps) {
   const variant = getDesignVariant();
 
   if (variant === "v2") {
-    return <DesignHome content={content} locale={locale as SiteLocale} />;
+    return (
+      <>
+        <SeoJsonLd content={content} />
+        <DesignHome content={content} locale={locale as SiteLocale} />
+      </>
+    );
   }
 
   const productTitles = content.products.map((item) => item.title);
@@ -39,6 +45,7 @@ export default async function LocalePage({ params }: LocalePageProps) {
 
   return (
     <>
+      <SeoJsonLd content={content} />
       <TopBar company={content.company} />
       <Navbar navItems={content.nav} locale={locale} ctaLabel={content.hero.ctaLabel} />
       <main>
