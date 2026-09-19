@@ -2,7 +2,14 @@
 
 import { revalidatePath } from "next/cache";
 import { db } from "@/lib/db";
+import { isAdminAuthenticated } from "@/lib/admin-auth";
 import { defaultLocale, isSupportedLocale, type SiteLocale } from "@/lib/i18n";
+
+async function requireAdmin() {
+  if (!(await isAdminAuthenticated())) {
+    throw new Error("Unauthorized");
+  }
+}
 
 function getLocale(input: FormDataEntryValue | null): SiteLocale {
   if (typeof input === "string" && isSupportedLocale(input)) {
@@ -31,6 +38,7 @@ function revalidateLocale(locale: SiteLocale) {
 }
 
 export async function saveSiteSettings(formData: FormData) {
+  await requireAdmin();
   const locale = getLocale(formData.get("locale"));
 
   await db.siteSettings.upsert({

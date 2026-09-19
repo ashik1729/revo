@@ -1,11 +1,11 @@
-/** Realpack CDN image helpers */
+/** Packaging catalogue CDN image helpers */
 const RP = "https://realpackpackaging.com/wp-content/uploads";
 
 export type LocaleCode = "en" | "ar";
 
 export const companyInfo = {
-  name: "Revo Qatar",
-  tagline: "Your Real Packaging Partner in Qatar",
+  name: "Revo Trading",
+  tagline: "Your Trusted Packaging Partner in Qatar",
   address: "Industrial Area, Doha, Qatar",
   phone: "+974 7071 8232",
   phoneHref: "tel:+97470718232",
@@ -166,7 +166,7 @@ export const localeCopy: Record<
   }
 > = {
   en: {
-    tagline: "Your Real Packaging Partner in Qatar",
+    tagline: "Your Trusted Packaging Partner in Qatar",
     heroEyebrow: "Eco-Friendly Packaging",
     heroHeadline: "Sustainable Solutions for a Greener Tomorrow",
     heroSubheadline:
@@ -177,9 +177,9 @@ export const localeCopy: Record<
     heroSecondaryCtaHref: "#products",
     heroImageAlt: "Eco-friendly packaging banner",
     trustBadges: ["Eco Range", "Bulk Supply", "Qatar Delivery"],
-    aboutTitle: "About Revo Qatar",
+    aboutTitle: "About Revo Trading",
     aboutDescription:
-      "Revo Qatar supplies eco-friendly and cost-effective packaging for businesses across Qatar — biodegradable, Kraft, bagasse, aluminium, hygiene, cleaning, and specialty plastic ranges.",
+      "Revo Trading supplies eco-friendly and cost-effective packaging for businesses across Qatar — biodegradable, Kraft, bagasse, aluminium, hygiene, cleaning, and specialty plastic ranges.",
     aboutExtra:
       "We help hotels, restaurants, retail, and facilities choose practical sustainable packaging with reliable local supply from Industrial Area, Doha.",
     aboutImageAlt: "Greener tomorrows — sustainable packaging solutions",
@@ -196,7 +196,7 @@ export const localeCopy: Record<
     featuredSectionTitle: "Popular Items",
     featuredSectionDescription: "Selected packaging lines from our catalogue, ready for bulk enquiry.",
     faqSectionTitle: "Frequently Asked Questions",
-    faqSectionDescription: "Quick answers about ordering packaging with Revo Qatar.",
+    faqSectionDescription: "Quick answers about ordering packaging with Revo Trading.",
     contactTitle: "Have questions or need assistance?",
     contactDescription: "Tell us what you need — quotes, sizes, and bulk supply guidance.",
     viewDetailsLabel: "View details",
@@ -204,7 +204,7 @@ export const localeCopy: Record<
     closeLabel: "Close",
   },
   ar: {
-    tagline: "شريكك الحقيقي في التغليف في قطر",
+    tagline: "شريكك الموثوق للتغليف في قطر",
     heroEyebrow: "تغليف صديق للبيئة",
     heroHeadline: "حلول مستدامة لغد أكثر خضرة",
     heroSubheadline: "شريك موثوق للتغليف للفنادق وقطاع الأغذية والمنشآت في قطر.",
@@ -214,9 +214,9 @@ export const localeCopy: Record<
     heroSecondaryCtaHref: "#products",
     heroImageAlt: "بانر تغليف صديق للبيئة",
     trustBadges: ["نطاق بيئي", "توريد بالجملة", "توصيل داخل قطر"],
-    aboutTitle: "عن ريفو قطر",
+    aboutTitle: "عن ريفو للتجارة",
     aboutDescription:
-      "توفر ريفو قطر تغليفاً صديقاً للبيئة وفعّال التكلفة للشركات في قطر — قابل للتحلل، كرتون، باجاس، ألمنيوم، نظافة، تنظيف، وبلاستيك متخصص.",
+      "توفر ريفو للتجارة تغليفاً صديقاً للبيئة وفعّال التكلفة للشركات في قطر — قابل للتحلل، كرتون، باجاس، ألمنيوم، نظافة، تنظيف، وبلاستيك متخصص.",
     aboutExtra:
       "نساعد الفنادق والمطاعم والتجزئة والمنشآت على اختيار تغليف مستدام عملي مع توريد محلي موثوق من المنطقة الصناعية بالدوحة.",
     aboutImageAlt: "غدٌ أكثر خضرة — حلول تغليف مستدامة",
@@ -232,7 +232,7 @@ export const localeCopy: Record<
     featuredSectionTitle: "أصناف مميزة",
     featuredSectionDescription: "منتجات مختارة من الكتالوج جاهزة لطلبات الجملة.",
     faqSectionTitle: "الأسئلة الشائعة",
-    faqSectionDescription: "إجابات سريعة عن طلب التغليف من ريفو قطر.",
+    faqSectionDescription: "إجابات سريعة عن طلب التغليف من ريفو للتجارة.",
     contactTitle: "هل لديك أسئلة أو تحتاج مساعدة؟",
     contactDescription: "أخبرنا بما تحتاجه — عروض أسعار وأحجام وإرشاد للتوريد بالجملة.",
     viewDetailsLabel: "عرض التفاصيل",
@@ -743,5 +743,5 @@ export const footerContent = {
     { label: "LinkedIn", href: "https://linkedin.com", icon: "Linkedin" },
     { label: "Instagram", href: "https://instagram.com", icon: "Instagram" },
   ],
-  copyright: "© 2026 Revo Qatar. All rights reserved.",
+  copyright: "© 2026 Revo Trading. All rights reserved.",
 } as const;

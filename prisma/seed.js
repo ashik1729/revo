@@ -3,7 +3,7 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 const companySettings = {
-  companyName: "Revo Qatar",
+  companyName: "Revo Trading",
   address: "Industrial Area, Doha, Qatar",
   phone: "+974 7071 8232",
   email: "info@revo.qa",
@@ -20,11 +20,11 @@ const companySettings = {
 
 const translations = {
   en: {
-    tagline: "Your Real Packaging Partner in Qatar",
+    tagline: "Your Trusted Packaging Partner in Qatar",
     heroEyebrow: "Eco-Friendly Packaging",
     heroHeadline: "Sustainable Solutions for a Greener Tomorrow",
     heroSubheadline:
-      "Revo Qatar supplies eco-friendly and cost-effective packaging for hotels, restaurants, retail, and facilities across Qatar — biodegradable, Kraft, bagasse, aluminium, hygiene, and specialty ranges backed by reliable delivery.",
+      "Revo Trading supplies eco-friendly and cost-effective packaging for hotels, restaurants, retail, and facilities across Qatar — biodegradable, Kraft, bagasse, aluminium, hygiene, and specialty ranges backed by reliable delivery.",
     heroCtaLabel: "Contact Us",
     heroCtaHref: "#contact",
     heroSecondaryCtaLabel: "Browse Products",
@@ -33,9 +33,9 @@ const translations = {
     trustBadge1: "Eco Range",
     trustBadge2: "Bulk Supply",
     trustBadge3: "Qatar Delivery",
-    aboutTitle: "About Revo Qatar",
+    aboutTitle: "About Revo Trading",
     aboutDescription:
-      "Revo Qatar is a trusted packaging partner for businesses across Qatar. We provide an extensive range of high-quality eco-friendly products — including biodegradable, Kraft, bagasse, PLA-style plant-based options, aluminium, hygiene, cleaning, and specialty plastic ranges — designed for daily commercial use while supporting a healthier planet.",
+      "Revo Trading is a trusted packaging partner for businesses across Qatar. We provide an extensive range of high-quality eco-friendly products — including biodegradable, Kraft, bagasse, PLA-style plant-based options, aluminium, hygiene, cleaning, and specialty plastic ranges — designed for daily commercial use while supporting a healthier planet.",
     aboutExtra:
       "Founded with deep packaging and hospitality supply experience, we help hotels, F&B operators, retailers, and facilities reduce their carbon footprint with practical, accessible sustainable packaging. From food containers and shopping bags to customizable solutions, our team guides you to the right range for your operations.",
     aboutImageAlt: "Organized warehouse shelves with packaged goods ready for supply",
@@ -52,17 +52,17 @@ const translations = {
     servicesSectionDescription:
       "Three pillars that define how we source and supply packaging for a greener operation.",
     faqSectionTitle: "Frequently Asked Questions",
-    faqSectionDescription: "Everything you need to know about ordering packaging with Revo Qatar.",
+    faqSectionDescription: "Everything you need to know about ordering packaging with Revo Trading.",
     contactTitle: "Have questions or need assistance?",
     contactDescription:
       "Our team will help you find the right packaging solutions for your business — quotes, bulk supply, and product guidance.",
   },
   ar: {
-    tagline: "شريكك الحقيقي في التغليف في قطر",
+    tagline: "شريكك الموثوق للتغليف في قطر",
     heroEyebrow: "تغليف صديق للبيئة",
     heroHeadline: "حلول مستدامة لغد أكثر خضرة",
     heroSubheadline:
-      "توفر ريفو قطر تغليفاً صديقاً للبيئة وفعّال التكلفة للفنادق والمطاعم والتجزئة والمنشآت في قطر — بما في ذلك المنتجات القابلة للتحلل والكرتون والباجاس والألمنيوم ومستلزمات النظافة، مع توريد موثوق.",
+      "توفر ريفو للتجارة تغليفاً صديقاً للبيئة وفعّال التكلفة للفنادق والمطاعم والتجزئة والمنشآت في قطر — بما في ذلك المنتجات القابلة للتحلل والكرتون والباجاس والألمنيوم ومستلزمات النظافة، مع توريد موثوق.",
     heroCtaLabel: "تواصل معنا",
     heroCtaHref: "#contact",
     heroSecondaryCtaLabel: "تصفح المنتجات",
@@ -71,9 +71,9 @@ const translations = {
     trustBadge1: "نطاق بيئي",
     trustBadge2: "توريد بالجملة",
     trustBadge3: "توصيل داخل قطر",
-    aboutTitle: "عن ريفو قطر",
+    aboutTitle: "عن ريفو للتجارة",
     aboutDescription:
-      "ريفو قطر شريك موثوق في التغليف للشركات في قطر. نوفر مجموعة واسعة من المنتجات عالية الجودة الصديقة للبيئة — بما في ذلك القابلة للتحلل والكرتون والباجاس وخيارات نباتية شبيهة بـ PLA والألمنيوم والنظافة والتنظيف والبلاستيك المتخصص — للاستخدام التجاري اليومي مع دعم بيئة أكثر صحة.",
+      "ريفو للتجارة شريك موثوق في التغليف للشركات في قطر. نوفر مجموعة واسعة من المنتجات عالية الجودة الصديقة للبيئة — بما في ذلك القابلة للتحلل والكرتون والباجاس وخيارات نباتية شبيهة بـ PLA والألمنيوم والنظافة والتنظيف والبلاستيك المتخصص — للاستخدام التجاري اليومي مع دعم بيئة أكثر صحة.",
     aboutExtra:
       "بخبرة في توريد التغليف والضيافة، نساعد الفنادق وقطاع الأغذية والتجزئة والمنشآت على تقليل البصمة الكربونية عبر حلول تغليف عملية ومستدامة. من حاويات الطعام وأكياس التسوق إلى الحلول المخصصة، يرشدك فريقنا إلى النطاق المناسب لعملياتك.",
     aboutImageAlt: "رفوف مستودع منظمة تحتوي على بضائع معبأة جاهزة للتوريد",
@@ -89,7 +89,7 @@ const translations = {
     servicesSectionTitle: "التركيز المستدام",
     servicesSectionDescription: "ثلاث ركائز تحدد كيفية توريدنا للتغليف لعمليات أكثر خضرة.",
     faqSectionTitle: "الأسئلة الشائعة",
-    faqSectionDescription: "كل ما تحتاج معرفته عن طلب التغليف من ريفو قطر.",
+    faqSectionDescription: "كل ما تحتاج معرفته عن طلب التغليف من ريفو للتجارة.",
     contactTitle: "هل لديك أسئلة أو تحتاج مساعدة؟",
     contactDescription:
       "فريقنا جاهز لمساعدتك في إيجاد حلول التغليف المناسبة — عروض أسعار، توريد بالجملة، وإرشاد للمنتجات.",
@@ -341,12 +341,12 @@ const faqData = [
   },
   {
     en: {
-      question: "What makes Revo Qatar's packaging environmentally friendly?",
+      question: "What makes Revo Trading's packaging environmentally friendly?",
       answer:
         "Many of our ranges use renewable and biodegradable materials, helping reduce environmental impact. We focus on practical sustainable options that still meet commercial durability, food-safety, and presentation needs.",
     },
     ar: {
-      question: "ما الذي يجعل تغليف ريفو قطر صديقاً للبيئة؟",
+      question: "ما الذي يجعل تغليف ريفو للتجارة صديقاً للبيئة؟",
       answer:
         "كثير من نطاقاتنا يعتمد على مواد متجددة وقابلة للتحلل لتقليل الأثر البيئي، مع الحفاظ على المتانة وسلامة الغذاء والمظهر المطلوب للاستخدام التجاري.",
     },
@@ -355,12 +355,12 @@ const faqData = [
     en: {
       question: "Do you offer customized packaging solutions?",
       answer:
-        "Yes. We collaborate with clients to source and supply packaging that aligns with brand presentation, portion sizes, and operational requirements. Contact Revo Qatar at +974 7071 8232 or info@revo.qa to discuss your needs.",
+        "Yes. We collaborate with clients to source and supply packaging that aligns with brand presentation, portion sizes, and operational requirements. Contact Revo Trading at +974 7071 8232 or info@revo.qa to discuss your needs.",
     },
     ar: {
       question: "هل تقدمون حلول تغليف مخصصة؟",
       answer:
-        "نعم. نتعاون مع العملاء لتوريد تغليف يتوافق مع هوية العلامة وأحجام الحصص ومتطلبات التشغيل. تواصل مع ريفو قطر على +974 7071 8232 أو info@revo.qa لمناقشة احتياجاتك.",
+        "نعم. نتعاون مع العملاء لتوريد تغليف يتوافق مع هوية العلامة وأحجام الحصص ومتطلبات التشغيل. تواصل مع ريفو للتجارة على +974 7071 8232 أو info@revo.qa لمناقشة احتياجاتك.",
     },
   },
   {
@@ -389,12 +389,12 @@ const faqData = [
   },
   {
     en: {
-      question: "How can I place an order with Revo Qatar?",
+      question: "How can I place an order with Revo Trading?",
       answer:
         "Contact us by phone at +974 7071 8232, WhatsApp 97470718232, or email info@revo.qa. Our team will guide you through product selection, quantities, and delivery.",
     },
     ar: {
-      question: "كيف أطلب من ريفو قطر؟",
+      question: "كيف أطلب من ريفو للتجارة؟",
       answer:
         "تواصل معنا عبر الهاتف على +974 7071 8232 أو واتساب 97470718232 أو البريد info@revo.qa. سيرشدك فريقنا في اختيار المنتجات والكميات والتوصيل.",
     },

@@ -1,6 +1,6 @@
 # Revo Website
 
-Next.js site for [Revo Qatar](https://revo.qa/) — eco-friendly packaging supply (aligned with industry packaging catalogue content) with:
+Next.js site for [Revo Trading](https://revo.qa/) — eco-friendly packaging supply (aligned with industry packaging catalogue content) with:
 
 - public multilingual pages (`/en`, `/ar`) with rich packaging content
 - admin CMS at `/admin` (English + Arabic for all copy, images, products, solutions, FAQs)

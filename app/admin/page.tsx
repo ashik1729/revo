@@ -1,6 +1,9 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import type { Prisma, SiteTranslation } from "@prisma/client";
 import { db } from "@/lib/db";
+import { isAdminAuthenticated } from "@/lib/admin-auth";
+import { logoutAdmin } from "@/app/admin/login/actions";
 import { defaultLocale, localeNames, supportedLocales, type SiteLocale } from "@/lib/i18n";
 import { getSiteContent } from "@/lib/site-content";
 import {
@@ -29,6 +32,10 @@ function inputClassName() {
 }
 
 export default async function AdminPage({ searchParams }: AdminPageProps) {
+  if (!(await isAdminAuthenticated())) {
+    redirect("/admin/login");
+  }
+
   const params = await searchParams;
   const locale = (params.locale && supportedLocales.includes(params.locale as SiteLocale)
     ? params.locale
@@ -58,12 +65,26 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
     <main className="min-h-screen bg-slate-100 py-10">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 sm:px-6 lg:px-8">
         <section className="rounded-xl bg-navy p-6 text-white shadow-lg">
-          <p className="text-xs uppercase tracking-[0.18em] text-blue-200">Revo Content Console</p>
-          <h1 className="mt-2 text-2xl font-bold">Website Management</h1>
-          <p className="mt-1 text-sm text-blue-100">
-            Switch locale to edit Arabic vs English content separately. Shared company fields apply to
-            all languages.
-          </p>
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <p className="text-xs uppercase tracking-[0.18em] text-blue-200">
+                Revo Trading Content Console
+              </p>
+              <h1 className="mt-2 text-2xl font-bold">Website Management</h1>
+              <p className="mt-1 text-sm text-blue-100">
+                Switch locale to edit Arabic vs English content separately. Shared company fields apply
+                to all languages.
+              </p>
+            </div>
+            <form action={logoutAdmin}>
+              <button
+                type="submit"
+                className="rounded-md bg-white/10 px-3 py-1.5 text-sm font-semibold text-white transition hover:bg-white/20"
+              >
+                Log out
+              </button>
+            </form>
+          </div>
           <div className="mt-4 flex flex-wrap gap-2">
             {supportedLocales.map((item) => (
               <Link

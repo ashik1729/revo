@@ -193,7 +193,7 @@ export function getFallbackContent(locale: SiteLocale): SiteContent {
       quickLinks: nav,
       copyright:
         locale === "ar"
-          ? "© 2026 ريفو قطر. جميع الحقوق محفوظة."
+          ? "© 2026 ريفو للتجارة. جميع الحقوق محفوظة."
           : footerContent.copyright,
     },
   };

@@ -103,7 +103,7 @@ export default function ContactForm({
       <div className="relative mb-14 h-64 w-full sm:h-80 lg:h-96">
         <Image
           src={bannerUrl}
-          alt="Contact Revo Qatar for packaging supply"
+          alt="Contact Revo Trading for packaging supply"
           fill
           className="object-cover object-left"
           sizes="100vw"

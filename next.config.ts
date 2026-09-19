@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   env: {
-    DESIGN_VARIANT: process.env.DESIGN_VARIANT || "v1",
+    DESIGN_VARIANT: process.env.DESIGN_VARIANT || "v2",
   },
   images: {
     remotePatterns: [

@@ -248,7 +248,7 @@ export default function ContactV2({
           </div>
           <div className="overflow-hidden rounded-2xl border border-slate-100">
             <iframe
-              title="Revo Qatar location"
+              title="Revo Trading location"
               src="https://maps.google.com/maps?q=Industrial%20Area%20Doha%20Qatar&t=&z=13&ie=UTF8&iwloc=&output=embed"
               className="h-48 w-full border-0"
               loading="lazy"

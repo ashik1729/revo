@@ -40,7 +40,7 @@
       },
       "vars": {
         "MAIL_TO": "info@revo.qa",
-        "DESIGN_VARIANT": "v1"
+        "DESIGN_VARIANT": "v2"
       }
     },
     "design": {
