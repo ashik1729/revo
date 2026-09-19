@@ -19,6 +19,8 @@ import {
   upsertService,
 } from "@/app/admin/actions";
 
+export const dynamic = "force-dynamic";
+
 type AdminPageProps = {
   searchParams: Promise<{ locale?: string }>;
 };

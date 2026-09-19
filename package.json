@@ -14,7 +14,7 @@
     "cf:preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "cf:deploy:staging": "opennextjs-cloudflare build && opennextjs-cloudflare deploy --env staging",
     "cf:deploy:design": "opennextjs-cloudflare build && opennextjs-cloudflare deploy --env design",
-    "cf:deploy:production": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "cf:deploy:production": "opennextjs-cloudflare build && opennextjs-cloudflare deploy -- --env=\"\"",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
   },
   "dependencies": {

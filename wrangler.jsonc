@@ -18,8 +18,14 @@
     "binding": "IMAGES"
   },
   "vars": {
-    "MAIL_TO": "info@revo.qa"
+    "MAIL_TO": "info@revo.qa",
+    "DESIGN_VARIANT": "v2"
   },
+  "routes": [
+    { "pattern": "revo.qa/*", "zone_name": "revo.qa" },
+    { "pattern": "www.revo.qa/*", "zone_name": "revo.qa" }
+  ],
+  "workers_dev": true,
   "env": {
     "staging": {
       "name": "revo-staging",
