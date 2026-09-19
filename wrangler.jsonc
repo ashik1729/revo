@@ -24,6 +24,12 @@
       "preview_id": "2bf685a2971e48a686bbec74f26cf842"
     }
   ],
+  "r2_buckets": [
+    {
+      "binding": "MEDIA_BUCKET",
+      "bucket_name": "revo-media"
+    }
+  ],
   "vars": {
     "MAIL_TO": "info@revo.qa",
     "DESIGN_VARIANT": "v2",
@@ -59,6 +65,12 @@
           "preview_id": "2bf685a2971e48a686bbec74f26cf842"
         }
       ],
+      "r2_buckets": [
+        {
+          "binding": "MEDIA_BUCKET",
+          "bucket_name": "revo-media"
+        }
+      ],
       "vars": {
         "MAIL_TO": "info@revo.qa",
         "DESIGN_VARIANT": "v2",
@@ -87,6 +99,12 @@
           "binding": "CMS_KV",
           "id": "ffc317897c624d8f9cd459a5e83e637e",
           "preview_id": "2bf685a2971e48a686bbec74f26cf842"
+        }
+      ],
+      "r2_buckets": [
+        {
+          "binding": "MEDIA_BUCKET",
+          "bucket_name": "revo-media"
         }
       ],
       "vars": {

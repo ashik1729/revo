@@ -51,6 +51,7 @@ import {
   adminInput,
   adminTextarea,
 } from "@/components/admin/ui";
+import ImageUploader from "@/components/admin/ImageUploader";
 
 type SectionId =
   | "overview"
@@ -401,34 +402,34 @@ export default function AdminDashboard({ locale, doc, cmsRemote }: AdminDashboar
                       required
                     />
                   </Field>
-                  <Field label="Hero image URL" className="sm:col-span-2">
-                    <input
+                  <div className="sm:col-span-2">
+                    <ImageUploader
                       name="heroImageUrl"
+                      label="Hero / default banner image"
                       defaultValue={company.heroImageUrl}
-                      className={adminInput}
                     />
-                  </Field>
-                  <Field label="About image URL" className="sm:col-span-2">
-                    <input
+                  </div>
+                  <div className="sm:col-span-2">
+                    <ImageUploader
                       name="aboutImageUrl"
+                      label="About section image"
                       defaultValue={company.aboutImageUrl}
-                      className={adminInput}
                     />
-                  </Field>
-                  <Field label="Contact banner URL" className="sm:col-span-2">
-                    <input
+                  </div>
+                  <div className="sm:col-span-2">
+                    <ImageUploader
                       name="contactBannerUrl"
+                      label="Contact banner image"
                       defaultValue={company.contactBannerUrl}
-                      className={adminInput}
                     />
-                  </Field>
-                  <Field label="Contact side image URL" className="sm:col-span-2">
-                    <input
+                  </div>
+                  <div className="sm:col-span-2">
+                    <ImageUploader
                       name="contactSideImageUrl"
+                      label="Contact side image"
                       defaultValue={company.contactSideImageUrl}
-                      className={adminInput}
                     />
-                  </Field>
+                  </div>
                   <div className="sm:col-span-2 pt-2">
                     <SaveButton>Save company info</SaveButton>
                   </div>
@@ -779,6 +780,7 @@ export default function AdminDashboard({ locale, doc, cmsRemote }: AdminDashboar
                                   src={slide.imageUrl}
                                   alt={slide.imageAlt || slide.headline}
                                   fill
+                                  unoptimized
                                   className="object-cover"
                                   sizes="160px"
                                 />
@@ -792,14 +794,11 @@ export default function AdminDashboard({ locale, doc, cmsRemote }: AdminDashboar
                               <form action={upsertHeroSlide} className="grid gap-3">
                                 <input type="hidden" name="locale" value={locale} />
                                 <input type="hidden" name="itemId" value={slide.id} />
-                                <Field label="Image URL">
-                                  <input
-                                    name="imageUrl"
-                                    defaultValue={slide.imageUrl}
-                                    className={adminInput}
-                                    required
-                                  />
-                                </Field>
+                                <ImageUploader
+                                  name="imageUrl"
+                                  label="Slide image"
+                                  defaultValue={slide.imageUrl}
+                                />
                                 <Field label="Image alt">
                                   <input
                                     name="imageAlt"
@@ -851,13 +850,10 @@ export default function AdminDashboard({ locale, doc, cmsRemote }: AdminDashboar
                 >
                   <input type="hidden" name="locale" value={locale} />
                   <p className="mb-4 text-sm font-semibold text-slate-800">Add hero slide</p>
+                  <div className="mb-3">
+                    <ImageUploader name="imageUrl" label="Slide image" />
+                  </div>
                   <div className="grid gap-3 sm:grid-cols-2">
-                    <input
-                      name="imageUrl"
-                      placeholder="https://... image URL"
-                      className={adminInput}
-                      required
-                    />
                     <input name="imageAlt" placeholder="Image alt" className={adminInput} />
                     <input name="eyebrow" placeholder="Eyebrow" className={adminInput} />
                     <input name="headline" placeholder="Headline" className={adminInput} required />
@@ -1254,6 +1250,7 @@ function CatalogCardsSection({
                         src={item.imageUrl}
                         alt={item.imageAlt || item.title}
                         fill
+                        unoptimized
                         className="object-contain p-3"
                         sizes="140px"
                       />
@@ -1275,14 +1272,11 @@ function CatalogCardsSection({
                           required
                         />
                       </Field>
-                      <Field label="Image URL">
-                        <input
-                          name="imageUrl"
-                          defaultValue={item.imageUrl}
-                          className={adminInput}
-                          required
-                        />
-                      </Field>
+                      <ImageUploader
+                        name="imageUrl"
+                        label="Item image"
+                        defaultValue={item.imageUrl}
+                      />
                       <Field label="Image alt">
                         <input
                           name="imageAlt"
@@ -1356,14 +1350,11 @@ function CatalogCardsSection({
       >
         <input type="hidden" name="locale" value={locale} />
         <p className="mb-4 text-sm font-semibold text-slate-800">{addLabel}</p>
-        <div className="grid gap-3 sm:grid-cols-3">
+        <div className="mb-3">
+          <ImageUploader name="imageUrl" label="Item image" />
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2">
           <input name="title" placeholder="Title" className={adminInput} required />
-          <input
-            name="imageUrl"
-            placeholder="https://... image URL"
-            className={adminInput}
-            required
-          />
           <input name="imageAlt" placeholder="Image alt" className={adminInput} />
         </div>
         <textarea
