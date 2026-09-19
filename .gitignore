@@ -46,3 +46,7 @@ next-env.d.ts
 .wrangler-dry/
 .open-next/
 
+
+.tmp-*.json
+.tmp-cms*.json
+
