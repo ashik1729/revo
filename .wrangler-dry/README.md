@@ -1,1 +1,0 @@
-This folder contains the built output assets for the worker "revo" generated at 2026-09-19T16:10:15.237Z.
