@@ -15,8 +15,13 @@ export default async function AdminLoginPage({ searchParams }: LoginPageProps) {
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-slate-100 px-4">
-      <form action={loginAdmin} className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-8 shadow-lg">
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-600">Revo Trading</p>
+      <form
+        action={loginAdmin}
+        className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-8 shadow-lg"
+      >
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-600">
+          Revo Trading
+        </p>
         <h1 className="mt-2 text-2xl font-bold text-navy">Admin Login</h1>
         <p className="mt-2 text-sm text-slate-600">
           Sign in to manage website content in English and Arabic.
@@ -29,12 +34,24 @@ export default async function AdminLoginPage({ searchParams }: LoginPageProps) {
         ) : null}
 
         <label className="mt-6 block text-sm">
+          <span className="mb-1 block font-medium text-slate-700">Username</span>
+          <input
+            type="text"
+            name="username"
+            required
+            autoComplete="username"
+            autoFocus
+            className="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+          />
+        </label>
+
+        <label className="mt-4 block text-sm">
           <span className="mb-1 block font-medium text-slate-700">Password</span>
           <input
             type="password"
             name="password"
             required
-            autoFocus
+            autoComplete="current-password"
             className="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
           />
         </label>

@@ -191,7 +191,7 @@ export default function ContactForm({
                       setFormData((prev) => ({ ...prev, phone: e.target.value }))
                     }
                     className={inputClass}
-                    placeholder="+974 7071 8232"
+                    placeholder="+974 30423043"
                   />
                 </div>
 

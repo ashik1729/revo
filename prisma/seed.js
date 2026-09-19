@@ -5,9 +5,9 @@ const prisma = new PrismaClient();
 const companySettings = {
   companyName: "Revo Trading",
   address: "Industrial Area, Doha, Qatar",
-  phone: "+974 7071 8232",
+  phone: "+974 30423043",
   email: "info@revo.qa",
-  whatsapp: "97470718232",
+  whatsapp: "97430423043",
   heroImageUrl:
     "https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&w=1920&q=80",
   aboutImageUrl:
@@ -355,12 +355,12 @@ const faqData = [
     en: {
       question: "Do you offer customized packaging solutions?",
       answer:
-        "Yes. We collaborate with clients to source and supply packaging that aligns with brand presentation, portion sizes, and operational requirements. Contact Revo Trading at +974 7071 8232 or info@revo.qa to discuss your needs.",
+        "Yes. We collaborate with clients to source and supply packaging that aligns with brand presentation, portion sizes, and operational requirements. Contact Revo Trading at +974 30423043 or info@revo.qa to discuss your needs.",
     },
     ar: {
       question: "هل تقدمون حلول تغليف مخصصة؟",
       answer:
-        "نعم. نتعاون مع العملاء لتوريد تغليف يتوافق مع هوية العلامة وأحجام الحصص ومتطلبات التشغيل. تواصل مع ريفو للتجارة على +974 7071 8232 أو info@revo.qa لمناقشة احتياجاتك.",
+        "نعم. نتعاون مع العملاء لتوريد تغليف يتوافق مع هوية العلامة وأحجام الحصص ومتطلبات التشغيل. تواصل مع ريفو للتجارة على +974 30423043 أو info@revo.qa لمناقشة احتياجاتك.",
     },
   },
   {
@@ -379,24 +379,24 @@ const faqData = [
     en: {
       question: "Where do you deliver your products?",
       answer:
-        "We deliver across Qatar, with responsive support for hospitality and facility clients from our base in the Industrial Area, Doha. Call +974 7071 8232 for delivery timelines.",
+        "We deliver across Qatar, with responsive support for hospitality and facility clients from our base in the Industrial Area, Doha. Call +974 30423043 for delivery timelines.",
     },
     ar: {
       question: "أين يتم التوصيل؟",
       answer:
-        "نوصل داخل قطر، مع دعم سريع لعملاء الضيافة والمنشآت من مقرنا في المنطقة الصناعية بالدوحة. اتصل على +974 7071 8232 لمواعيد التوصيل.",
+        "نوصل داخل قطر، مع دعم سريع لعملاء الضيافة والمنشآت من مقرنا في المنطقة الصناعية بالدوحة. اتصل على +974 30423043 لمواعيد التوصيل.",
     },
   },
   {
     en: {
       question: "How can I place an order with Revo Trading?",
       answer:
-        "Contact us by phone at +974 7071 8232, WhatsApp 97470718232, or email info@revo.qa. Our team will guide you through product selection, quantities, and delivery.",
+        "Contact us by phone at +974 30423043, WhatsApp 97430423043, or email info@revo.qa. Our team will guide you through product selection, quantities, and delivery.",
     },
     ar: {
       question: "كيف أطلب من ريفو للتجارة؟",
       answer:
-        "تواصل معنا عبر الهاتف على +974 7071 8232 أو واتساب 97470718232 أو البريد info@revo.qa. سيرشدك فريقنا في اختيار المنتجات والكميات والتوصيل.",
+        "تواصل معنا عبر الهاتف على +974 30423043 أو واتساب 97430423043 أو البريد info@revo.qa. سيرشدك فريقنا في اختيار المنتجات والكميات والتوصيل.",
     },
   },
   {

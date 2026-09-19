@@ -19,7 +19,8 @@
   },
   "vars": {
     "MAIL_TO": "info@revo.qa",
-    "DESIGN_VARIANT": "v2"
+    "DESIGN_VARIANT": "v2",
+    "ADMIN_USERNAME": "admin"
   },
   "routes": [
     { "pattern": "revo.qa/*", "zone_name": "revo.qa" },
@@ -46,7 +47,8 @@
       },
       "vars": {
         "MAIL_TO": "info@revo.qa",
-        "DESIGN_VARIANT": "v2"
+        "DESIGN_VARIANT": "v2",
+        "ADMIN_USERNAME": "admin"
       }
     },
     "design": {
@@ -68,7 +70,8 @@
       },
       "vars": {
         "MAIL_TO": "info@revo.qa",
-        "DESIGN_VARIANT": "v2"
+        "DESIGN_VARIANT": "v2",
+        "ADMIN_USERNAME": "admin"
       }
     }
   }

@@ -19,21 +19,26 @@ function safeEqual(a: string, b: string) {
   return mismatch === 0;
 }
 
+export function getAdminUsername() {
+  return process.env.ADMIN_USERNAME || "admin";
+}
+
 export function getAdminPassword() {
   return process.env.ADMIN_PASSWORD || "";
 }
 
-export async function adminSessionCookieValue(password: string) {
-  return sha256Hex(`revo-admin:${password}`);
+export async function adminSessionCookieValue(username: string, password: string) {
+  return sha256Hex(`revo-admin:${username}:${password}`);
 }
 
 export async function isAdminAuthenticated() {
+  const username = getAdminUsername();
   const password = getAdminPassword();
   if (!password) return false;
   const jar = await cookies();
   const token = jar.get(COOKIE_NAME)?.value;
   if (!token) return false;
-  const expected = await adminSessionCookieValue(password);
+  const expected = await adminSessionCookieValue(username, password);
   return safeEqual(token, expected);
 }
 

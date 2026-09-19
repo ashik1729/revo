@@ -7,12 +7,12 @@ export const companyInfo = {
   name: "Revo Trading",
   tagline: "Your Trusted Packaging Partner in Qatar",
   address: "Industrial Area, Doha, Qatar",
-  phone: "+974 7071 8232",
-  phoneHref: "tel:+97470718232",
+  phone: "+974 30423043",
+  phoneHref: "tel:+97430423043",
   email: "info@revo.qa",
   emailHref: "mailto:info@revo.qa",
-  whatsapp: "97470718232",
-  whatsappHref: "https://wa.me/97470718232",
+  whatsapp: "97430423043",
+  whatsappHref: "https://wa.me/97430423043",
   heroImageUrl: `${RP}/2025/01/Slide-1-1.webp`,
   aboutImageUrl: "/about-revo.jpg",
   contactBannerUrl: "/contact-banner.jpg",
@@ -671,7 +671,7 @@ export const faqsByLocale: Record<
     },
     {
       question: "How can I place an order?",
-      answer: "Call +974 7071 8232 or email info@revo.qa and our team will assist.",
+      answer: "Call +974 30423043 or email info@revo.qa and our team will assist.",
     },
     {
       question: "Are products quality compliant?",
@@ -703,7 +703,7 @@ export const faqsByLocale: Record<
     },
     {
       question: "كيف أضع طلباً؟",
-      answer: "اتصل على +974 7071 8232 أو راسل info@revo.qa وسنساعدك.",
+      answer: "اتصل على +974 30423043 أو راسل info@revo.qa وسنساعدك.",
     },
     {
       question: "هل المنتجات متوافقة مع معايير الجودة؟",
