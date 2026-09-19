@@ -2,6 +2,8 @@ import type { MetadataRoute } from "next";
 import { readCmsDocument } from "@/lib/cms-store";
 import { supportedLocales } from "@/lib/i18n";
 
+export const dynamic = "force-dynamic";
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const doc = await readCmsDocument();
   const siteUrl = (doc.seo?.siteUrl || "https://revo.qa").replace(/\/$/, "");

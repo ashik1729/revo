@@ -1,6 +1,8 @@
 import type { MetadataRoute } from "next";
 import { readCmsDocument } from "@/lib/cms-store";
 
+export const dynamic = "force-dynamic";
+
 export default async function robots(): Promise<MetadataRoute.Robots> {
   const doc = await readCmsDocument();
   const siteUrl = (doc.seo?.siteUrl || "https://revo.qa").replace(/\/$/, "");

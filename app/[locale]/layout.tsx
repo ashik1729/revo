@@ -5,6 +5,8 @@ import { isSupportedLocale, type SiteLocale } from "@/lib/i18n";
 import { getSiteContent } from "@/lib/site-content";
 import { buildPageMetadata } from "@/lib/seo";
 
+export const dynamic = "force-dynamic";
+
 interface LocaleLayoutProps {
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
