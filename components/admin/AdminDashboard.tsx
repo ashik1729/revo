@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, type ReactNode } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -15,22 +15,32 @@ import {
   ExternalLink,
   X,
   Navigation,
+  Images,
+  Star,
+  Share2,
 } from "lucide-react";
-import type { SiteContent } from "@/lib/site-content";
+import type { CmsCatalogItem, CmsDocument } from "@/lib/cms-store";
 import type { SiteLocale } from "@/lib/i18n";
 import { localeNames, supportedLocales } from "@/lib/i18n";
 import { logoutAdmin } from "@/app/admin/login/actions";
 import {
-  deleteFaq,
-  deleteNavItem,
-  deleteProduct,
-  deleteService,
-  saveSiteSettings,
-  saveSiteTranslation,
-  upsertFaq,
+  saveCompany,
+  saveLocaleCopy,
+  upsertHeroSlide,
+  deleteHeroSlide,
   upsertNavItem,
+  deleteNavItem,
   upsertProduct,
+  deleteProduct,
+  upsertFeatured,
+  deleteFeatured,
   upsertService,
+  deleteService,
+  upsertFaq,
+  deleteFaq,
+  upsertSocialLink,
+  deleteSocialLink,
+  resetCmsToDefaults,
 } from "@/app/admin/actions";
 import {
   DangerButton,
@@ -42,117 +52,83 @@ import {
   adminTextarea,
 } from "@/components/admin/ui";
 
-export type AdminNavItem = {
-  id: string;
-  href: string;
-  orderIndex: number;
-  isActive: boolean;
-  label: string;
-};
-
-export type AdminCatalogItem = {
-  id: string;
-  imageUrl: string;
-  orderIndex: number;
-  isActive: boolean;
-  title: string;
-  description: string;
-  details: string;
-};
-
-export type AdminFaqItem = {
-  id: string;
-  orderIndex: number;
-  isActive: boolean;
-  question: string;
-  answer: string;
-};
-
-export type AdminTranslation = {
-  tagline: string;
-  heroEyebrow: string;
-  heroHeadline: string;
-  heroSubheadline: string;
-  heroCtaLabel: string;
-  heroCtaHref: string;
-  heroSecondaryCtaLabel: string;
-  heroSecondaryCtaHref: string;
-  heroImageAlt: string;
-  trustBadge1: string;
-  trustBadge2: string;
-  trustBadge3: string;
-  aboutTitle: string;
-  aboutDescription: string;
-  aboutExtra: string;
-  aboutImageAlt: string;
-  visionTitle: string;
-  visionText: string;
-  missionTitle: string;
-  missionText: string;
-  productsSectionTitle: string;
-  productsSectionDescription: string;
-  servicesSectionTitle: string;
-  servicesSectionDescription: string;
-  faqSectionTitle: string;
-  faqSectionDescription: string;
-  contactTitle: string;
-  contactDescription: string;
-};
-
 type SectionId =
   | "overview"
   | "company"
   | "content"
+  | "slides"
   | "menu"
   | "products"
+  | "featured"
   | "solutions"
-  | "faqs";
+  | "faqs"
+  | "footer";
 
 const nav = [
   { id: "overview" as const, label: "Overview", icon: LayoutDashboard },
   { id: "company" as const, label: "Company", icon: Building2 },
   { id: "content" as const, label: "Page Copy", icon: FileText },
+  { id: "slides" as const, label: "Hero Slides", icon: Images },
   { id: "menu" as const, label: "Navigation", icon: Navigation },
   { id: "products" as const, label: "Products", icon: Package },
+  { id: "featured" as const, label: "Featured", icon: Star },
   { id: "solutions" as const, label: "Solutions", icon: Sparkles },
   { id: "faqs" as const, label: "FAQs", icon: HelpCircle },
+  { id: "footer" as const, label: "Footer", icon: Share2 },
 ];
 
 interface AdminDashboardProps {
   locale: SiteLocale;
-  content: SiteContent;
-  dbReady: boolean;
-  translation: AdminTranslation;
-  navItems: AdminNavItem[];
-  products: AdminCatalogItem[];
-  services: AdminCatalogItem[];
-  faqs: AdminFaqItem[];
+  doc: CmsDocument;
+  cmsRemote: boolean;
 }
 
-export default function AdminDashboard({
-  locale,
-  content,
-  dbReady,
-  translation,
-  navItems,
-  products,
-  services,
-  faqs,
-}: AdminDashboardProps) {
+export default function AdminDashboard({ locale, doc, cmsRemote }: AdminDashboardProps) {
   const [section, setSection] = useState<SectionId>("overview");
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const stats = useMemo(
-    () => [
-      { label: "Products", value: products.length || content.products.length, tone: "bg-blue-50 text-blue-700" },
-      { label: "Solutions", value: services.length || content.services.length, tone: "bg-emerald-50 text-emerald-700" },
-      { label: "FAQs", value: faqs.length || content.faqs.length, tone: "bg-violet-50 text-violet-700" },
-      { label: "Menu links", value: navItems.length || content.nav.length, tone: "bg-amber-50 text-amber-700" },
-    ],
-    [products, services, faqs, navItems, content],
-  );
+  const bundle = doc.locales[locale];
+  const company = doc.company;
+
+  const stats = [
+    { label: "Slides", value: bundle.heroSlides.length, tone: "bg-sky-50 text-sky-700" },
+    { label: "Products", value: bundle.products.length, tone: "bg-blue-50 text-blue-700" },
+    { label: "Featured", value: bundle.featured.length, tone: "bg-amber-50 text-amber-700" },
+    { label: "Solutions", value: bundle.services.length, tone: "bg-emerald-50 text-emerald-700" },
+    { label: "FAQs", value: bundle.faqs.length, tone: "bg-violet-50 text-violet-700" },
+    { label: "Menu links", value: bundle.nav.length, tone: "bg-orange-50 text-orange-700" },
+  ];
 
   const activeLabel = nav.find((item) => item.id === section)?.label ?? "Overview";
+
+  function selectSection(id: SectionId) {
+    setSection(id);
+    setMobileOpen(false);
+  }
+
+  const sidebarNav = (
+    <nav className="flex-1 space-y-1 px-3 py-4">
+      {nav.map((item) => {
+        const Icon = item.icon;
+        const active = section === item.id;
+        return (
+          <button
+            key={item.id}
+            type="button"
+            onClick={() => selectSection(item.id)}
+            className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition ${
+              active
+                ? "bg-white text-[#0b1f5c] shadow-sm"
+                : "text-blue-100 hover:bg-white/10 hover:text-white"
+            }`}
+          >
+            <Icon className="h-4 w-4" />
+            {item.label}
+          </button>
+        );
+      })}
+    </nav>
+  );
 
   return (
     <div className="min-h-screen bg-[#f4f6fb] text-slate-900">
@@ -166,27 +142,7 @@ export default function AdminDashboard({
             <p className="mt-1 text-xs text-blue-100/80">Manage site content & catalogue</p>
           </div>
 
-          <nav className="flex-1 space-y-1 px-3 py-4">
-            {nav.map((item) => {
-              const Icon = item.icon;
-              const active = section === item.id;
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => setSection(item.id)}
-                  className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition ${
-                    active
-                      ? "bg-white text-[#0b1f5c] shadow-sm"
-                      : "text-blue-100 hover:bg-white/10 hover:text-white"
-                  }`}
-                >
-                  <Icon className="h-4 w-4" />
-                  {item.label}
-                </button>
-              );
-            })}
-          </nav>
+          {sidebarNav}
 
           <div className="space-y-2 border-t border-white/10 p-4">
             <Link
@@ -220,32 +176,15 @@ export default function AdminDashboard({
             <div className="absolute inset-y-0 left-0 flex w-72 flex-col bg-[#0b1f5c] text-white shadow-2xl">
               <div className="flex items-center justify-between border-b border-white/10 px-4 py-4">
                 <p className="font-semibold">Content Studio</p>
-                <button type="button" onClick={() => setMobileOpen(false)} className="rounded-lg p-2 hover:bg-white/10">
+                <button
+                  type="button"
+                  onClick={() => setMobileOpen(false)}
+                  className="rounded-lg p-2 hover:bg-white/10"
+                >
                   <X className="h-5 w-5" />
                 </button>
               </div>
-              <nav className="flex-1 space-y-1 p-3">
-                {nav.map((item) => {
-                  const Icon = item.icon;
-                  const active = section === item.id;
-                  return (
-                    <button
-                      key={item.id}
-                      type="button"
-                      onClick={() => {
-                        setSection(item.id);
-                        setMobileOpen(false);
-                      }}
-                      className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium ${
-                        active ? "bg-white text-[#0b1f5c]" : "text-blue-100 hover:bg-white/10"
-                      }`}
-                    >
-                      <Icon className="h-4 w-4" />
-                      {item.label}
-                    </button>
-                  );
-                })}
-              </nav>
+              {sidebarNav}
             </div>
           </div>
         ) : null}
@@ -290,19 +229,23 @@ export default function AdminDashboard({
           </header>
 
           <main className="flex-1 px-4 py-6 sm:px-6 lg:px-8">
-            {!dbReady ? (
-              <div className="mb-6 rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm text-amber-900">
-                Database is not connected yet. The dashboard shows live fallback content. Connect
-                `DATABASE_URL`, migrate, and seed to enable saving edits.
-              </div>
-            ) : null}
-
             {section === "overview" ? (
               <div className="space-y-6">
                 <div className="rounded-3xl bg-gradient-to-br from-[#0b1f5c] via-[#12307a] to-[#1d4ed8] p-6 text-white shadow-lg shadow-blue-900/10 sm:p-8">
-                  <p className="text-sm text-blue-100">Welcome back</p>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <p className="text-sm text-blue-100">Welcome back</p>
+                    <span
+                      className={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-semibold ${
+                        cmsRemote
+                          ? "bg-emerald-400/20 text-emerald-100 ring-1 ring-emerald-300/40"
+                          : "bg-amber-400/20 text-amber-100 ring-1 ring-amber-300/40"
+                      }`}
+                    >
+                      {cmsRemote ? "Cloud KV connected" : "Local memory store"}
+                    </span>
+                  </div>
                   <h3 className="mt-2 max-w-2xl text-2xl font-semibold tracking-tight sm:text-3xl">
-                    Manage {content.company.name} website content
+                    Manage {company.name} website content
                   </h3>
                   <p className="mt-3 max-w-2xl text-sm text-blue-100/90">
                     Editing language: <strong>{localeNames[locale]}</strong>. Switch EN/AR above, then
@@ -326,7 +269,7 @@ export default function AdminDashboard({
                   </div>
                 </div>
 
-                <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                   {stats.map((stat) => (
                     <div
                       key={stat.label}
@@ -338,7 +281,9 @@ export default function AdminDashboard({
                       <p className="mt-3 text-3xl font-semibold tracking-tight text-slate-900">
                         {stat.value}
                       </p>
-                      <span className={`mt-3 inline-flex rounded-full px-2.5 py-1 text-[11px] font-semibold ${stat.tone}`}>
+                      <span
+                        className={`mt-3 inline-flex rounded-full px-2.5 py-1 text-[11px] font-semibold ${stat.tone}`}
+                      >
                         {localeNames[locale]} catalogue
                       </span>
                     </div>
@@ -351,35 +296,58 @@ export default function AdminDashboard({
                     <dl className="space-y-3 text-sm">
                       <div className="flex justify-between gap-4">
                         <dt className="text-slate-500">Name</dt>
-                        <dd className="font-medium text-slate-900">{content.company.name}</dd>
+                        <dd className="font-medium text-slate-900">{company.name}</dd>
                       </div>
                       <div className="flex justify-between gap-4">
                         <dt className="text-slate-500">Phone</dt>
-                        <dd className="font-medium text-slate-900">{content.company.phone}</dd>
+                        <dd className="font-medium text-slate-900">{company.phone}</dd>
                       </div>
                       <div className="flex justify-between gap-4">
                         <dt className="text-slate-500">Email</dt>
-                        <dd className="font-medium text-slate-900">{content.company.email}</dd>
+                        <dd className="font-medium text-slate-900">{company.email}</dd>
                       </div>
                       <div className="flex justify-between gap-4">
                         <dt className="text-slate-500">Address</dt>
-                        <dd className="text-right font-medium text-slate-900">{content.company.address}</dd>
+                        <dd className="text-right font-medium text-slate-900">{company.address}</dd>
                       </div>
                     </dl>
                   </div>
+
                   <div className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm">
-                    <PanelHeader title="Quick tips" description="Keep content bilingual and scannable" />
-                    <ul className="space-y-3 text-sm text-slate-600">
+                    <PanelHeader
+                      title="CMS storage"
+                      description={
+                        cmsRemote
+                          ? "Edits persist in Cloudflare KV."
+                          : "Edits are stored in process memory until KV is available."
+                      }
+                    />
+                    <ul className="mb-5 space-y-3 text-sm text-slate-600">
                       <li className="rounded-xl bg-slate-50 px-4 py-3">
-                        Switch language before editing page copy, products, and FAQs.
+                        Switch language before editing page copy, slides, products, and FAQs.
                       </li>
                       <li className="rounded-xl bg-slate-50 px-4 py-3">
-                        Use short card blurbs; put long specs in the details field for popups.
+                        Company phone/email and image URLs are shared across both languages.
                       </li>
                       <li className="rounded-xl bg-slate-50 px-4 py-3">
-                        Company phone/email are shared across both languages.
+                        Copyright text lives under Page Copy; social icons are under Footer.
                       </li>
                     </ul>
+                    <form
+                      action={resetCmsToDefaults}
+                      onSubmit={(event) => {
+                        if (
+                          !window.confirm(
+                            "Reset all CMS content to defaults? This cannot be undone.",
+                          )
+                        ) {
+                          event.preventDefault();
+                        }
+                      }}
+                    >
+                      <input type="hidden" name="locale" value={locale} />
+                      <DangerButton>Reset CMS to defaults</DangerButton>
+                    </form>
                   </div>
                 </div>
               </div>
@@ -391,40 +359,73 @@ export default function AdminDashboard({
                   title="Company settings"
                   description="Shared across English and Arabic"
                 />
-                <form action={saveSiteSettings} className="grid gap-4 sm:grid-cols-2">
+                <form action={saveCompany} className="grid gap-4 sm:grid-cols-2">
                   <input type="hidden" name="locale" value={locale} />
                   <Field label="Company name">
-                    <input name="companyName" defaultValue={content.company.name} className={adminInput} required />
+                    <input
+                      name="companyName"
+                      defaultValue={company.name}
+                      className={adminInput}
+                      required
+                    />
                   </Field>
                   <Field label="Address">
-                    <input name="address" defaultValue={content.company.address} className={adminInput} required />
+                    <input
+                      name="address"
+                      defaultValue={company.address}
+                      className={adminInput}
+                      required
+                    />
                   </Field>
                   <Field label="Phone">
-                    <input name="phone" defaultValue={content.company.phone} className={adminInput} required />
+                    <input
+                      name="phone"
+                      defaultValue={company.phone}
+                      className={adminInput}
+                      required
+                    />
                   </Field>
                   <Field label="Email">
-                    <input name="email" defaultValue={content.company.email} className={adminInput} required />
+                    <input
+                      name="email"
+                      defaultValue={company.email}
+                      className={adminInput}
+                      required
+                    />
                   </Field>
                   <Field label="WhatsApp (digits only)" className="sm:col-span-2">
-                    <input name="whatsapp" defaultValue={content.company.whatsapp} className={adminInput} required />
+                    <input
+                      name="whatsapp"
+                      defaultValue={company.whatsapp}
+                      className={adminInput}
+                      required
+                    />
                   </Field>
                   <Field label="Hero image URL" className="sm:col-span-2">
-                    <input name="heroImageUrl" defaultValue={content.company.heroImageUrl} className={adminInput} />
+                    <input
+                      name="heroImageUrl"
+                      defaultValue={company.heroImageUrl}
+                      className={adminInput}
+                    />
                   </Field>
                   <Field label="About image URL" className="sm:col-span-2">
-                    <input name="aboutImageUrl" defaultValue={content.company.aboutImageUrl} className={adminInput} />
+                    <input
+                      name="aboutImageUrl"
+                      defaultValue={company.aboutImageUrl}
+                      className={adminInput}
+                    />
                   </Field>
                   <Field label="Contact banner URL" className="sm:col-span-2">
                     <input
                       name="contactBannerUrl"
-                      defaultValue={content.company.contactBannerUrl}
+                      defaultValue={company.contactBannerUrl}
                       className={adminInput}
                     />
                   </Field>
                   <Field label="Contact side image URL" className="sm:col-span-2">
                     <input
                       name="contactSideImageUrl"
-                      defaultValue={content.company.contactSideImageUrl}
+                      defaultValue={company.contactSideImageUrl}
                       className={adminInput}
                     />
                   </Field>
@@ -439,29 +440,44 @@ export default function AdminDashboard({
               <section className="rounded-3xl border border-slate-200/80 bg-white p-5 shadow-sm sm:p-7">
                 <PanelHeader
                   title={`Page copy · ${localeNames[locale]}`}
-                  description="Hero, about, vision/mission, section titles, and contact intro"
+                  description="Hero defaults, about, section titles, UI labels, and contact intro"
                 />
-                <form action={saveSiteTranslation} className="grid gap-5">
+                <form action={saveLocaleCopy} className="grid gap-5">
                   <input type="hidden" name="locale" value={locale} />
 
                   <div className="rounded-2xl bg-slate-50 p-4 sm:p-5">
                     <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-slate-500">
-                      Hero
+                      Hero defaults
                     </h3>
                     <div className="grid gap-4">
                       <Field label="Tagline">
-                        <input name="tagline" defaultValue={translation.tagline} className={adminInput} required />
+                        <input
+                          name="tagline"
+                          defaultValue={bundle.tagline}
+                          className={adminInput}
+                          required
+                        />
                       </Field>
                       <Field label="Eyebrow">
-                        <input name="heroEyebrow" defaultValue={translation.heroEyebrow} className={adminInput} required />
+                        <input
+                          name="heroEyebrow"
+                          defaultValue={bundle.heroEyebrow}
+                          className={adminInput}
+                          required
+                        />
                       </Field>
                       <Field label="Headline">
-                        <input name="heroHeadline" defaultValue={translation.heroHeadline} className={adminInput} required />
+                        <input
+                          name="heroHeadline"
+                          defaultValue={bundle.heroHeadline}
+                          className={adminInput}
+                          required
+                        />
                       </Field>
                       <Field label="Subheadline">
                         <textarea
                           name="heroSubheadline"
-                          defaultValue={translation.heroSubheadline}
+                          defaultValue={bundle.heroSubheadline}
                           className={adminTextarea}
                           rows={3}
                           required
@@ -469,38 +485,64 @@ export default function AdminDashboard({
                       </Field>
                       <div className="grid gap-4 sm:grid-cols-2">
                         <Field label="Primary CTA label">
-                          <input name="heroCtaLabel" defaultValue={translation.heroCtaLabel} className={adminInput} required />
+                          <input
+                            name="heroCtaLabel"
+                            defaultValue={bundle.heroCtaLabel}
+                            className={adminInput}
+                            required
+                          />
                         </Field>
                         <Field label="Primary CTA href">
-                          <input name="heroCtaHref" defaultValue={translation.heroCtaHref} className={adminInput} required />
+                          <input
+                            name="heroCtaHref"
+                            defaultValue={bundle.heroCtaHref}
+                            className={adminInput}
+                            required
+                          />
                         </Field>
                         <Field label="Secondary CTA label">
                           <input
                             name="heroSecondaryCtaLabel"
-                            defaultValue={translation.heroSecondaryCtaLabel}
+                            defaultValue={bundle.heroSecondaryCtaLabel}
                             className={adminInput}
                           />
                         </Field>
                         <Field label="Secondary CTA href">
                           <input
                             name="heroSecondaryCtaHref"
-                            defaultValue={translation.heroSecondaryCtaHref}
+                            defaultValue={bundle.heroSecondaryCtaHref}
                             className={adminInput}
                           />
                         </Field>
                       </div>
                       <Field label="Hero image alt">
-                        <input name="heroImageAlt" defaultValue={translation.heroImageAlt} className={adminInput} />
+                        <input
+                          name="heroImageAlt"
+                          defaultValue={bundle.heroImageAlt}
+                          className={adminInput}
+                        />
                       </Field>
                       <div className="grid gap-4 sm:grid-cols-3">
                         <Field label="Trust badge 1">
-                          <input name="trustBadge1" defaultValue={translation.trustBadge1} className={adminInput} />
+                          <input
+                            name="trustBadge1"
+                            defaultValue={bundle.trustBadge1}
+                            className={adminInput}
+                          />
                         </Field>
                         <Field label="Trust badge 2">
-                          <input name="trustBadge2" defaultValue={translation.trustBadge2} className={adminInput} />
+                          <input
+                            name="trustBadge2"
+                            defaultValue={bundle.trustBadge2}
+                            className={adminInput}
+                          />
                         </Field>
                         <Field label="Trust badge 3">
-                          <input name="trustBadge3" defaultValue={translation.trustBadge3} className={adminInput} />
+                          <input
+                            name="trustBadge3"
+                            defaultValue={bundle.trustBadge3}
+                            className={adminInput}
+                          />
                         </Field>
                       </div>
                     </div>
@@ -508,53 +550,85 @@ export default function AdminDashboard({
 
                   <div className="rounded-2xl bg-slate-50 p-4 sm:p-5">
                     <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-slate-500">
-                      About & vision
+                      About
                     </h3>
                     <div className="grid gap-4">
                       <Field label="About title">
-                        <input name="aboutTitle" defaultValue={translation.aboutTitle} className={adminInput} required />
+                        <input
+                          name="aboutTitle"
+                          defaultValue={bundle.aboutTitle}
+                          className={adminInput}
+                          required
+                        />
                       </Field>
                       <Field label="About description">
                         <textarea
                           name="aboutDescription"
-                          defaultValue={translation.aboutDescription}
+                          defaultValue={bundle.aboutDescription}
                           className={adminTextarea}
                           rows={3}
                           required
                         />
                       </Field>
                       <Field label="About extra">
-                        <textarea name="aboutExtra" defaultValue={translation.aboutExtra} className={adminTextarea} rows={3} />
+                        <textarea
+                          name="aboutExtra"
+                          defaultValue={bundle.aboutExtra}
+                          className={adminTextarea}
+                          rows={3}
+                        />
                       </Field>
                       <Field label="About image alt">
-                        <input name="aboutImageAlt" defaultValue={translation.aboutImageAlt} className={adminInput} />
+                        <input
+                          name="aboutImageAlt"
+                          defaultValue={bundle.aboutImageAlt}
+                          className={adminInput}
+                        />
                       </Field>
                       <div className="grid gap-4 sm:grid-cols-2">
                         <Field label="Vision title">
-                          <input name="visionTitle" defaultValue={translation.visionTitle} className={adminInput} />
+                          <input
+                            name="visionTitle"
+                            defaultValue={bundle.visionTitle}
+                            className={adminInput}
+                          />
                         </Field>
                         <Field label="Mission title">
-                          <input name="missionTitle" defaultValue={translation.missionTitle} className={adminInput} />
+                          <input
+                            name="missionTitle"
+                            defaultValue={bundle.missionTitle}
+                            className={adminInput}
+                          />
                         </Field>
                       </div>
                       <Field label="Vision text">
-                        <textarea name="visionText" defaultValue={translation.visionText} className={adminTextarea} rows={2} />
+                        <textarea
+                          name="visionText"
+                          defaultValue={bundle.visionText}
+                          className={adminTextarea}
+                          rows={2}
+                        />
                       </Field>
                       <Field label="Mission text">
-                        <textarea name="missionText" defaultValue={translation.missionText} className={adminTextarea} rows={2} />
+                        <textarea
+                          name="missionText"
+                          defaultValue={bundle.missionText}
+                          className={adminTextarea}
+                          rows={2}
+                        />
                       </Field>
                     </div>
                   </div>
 
                   <div className="rounded-2xl bg-slate-50 p-4 sm:p-5">
                     <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-slate-500">
-                      Sections & contact
+                      Sections
                     </h3>
                     <div className="grid gap-4 sm:grid-cols-2">
                       <Field label="Products section title">
                         <input
                           name="productsSectionTitle"
-                          defaultValue={translation.productsSectionTitle}
+                          defaultValue={bundle.productsSectionTitle}
                           className={adminInput}
                           required
                         />
@@ -562,7 +636,7 @@ export default function AdminDashboard({
                       <Field label="Solutions section title">
                         <input
                           name="servicesSectionTitle"
-                          defaultValue={translation.servicesSectionTitle}
+                          defaultValue={bundle.servicesSectionTitle}
                           className={adminInput}
                           required
                         />
@@ -570,7 +644,7 @@ export default function AdminDashboard({
                       <Field label="Products section description" className="sm:col-span-2">
                         <textarea
                           name="productsSectionDescription"
-                          defaultValue={translation.productsSectionDescription}
+                          defaultValue={bundle.productsSectionDescription}
                           className={adminTextarea}
                           rows={2}
                         />
@@ -578,28 +652,95 @@ export default function AdminDashboard({
                       <Field label="Solutions section description" className="sm:col-span-2">
                         <textarea
                           name="servicesSectionDescription"
-                          defaultValue={translation.servicesSectionDescription}
+                          defaultValue={bundle.servicesSectionDescription}
                           className={adminTextarea}
                           rows={2}
                         />
                       </Field>
+                      <Field label="Featured section title">
+                        <input
+                          name="featuredSectionTitle"
+                          defaultValue={bundle.featuredSectionTitle}
+                          className={adminInput}
+                        />
+                      </Field>
+                      <Field label="Featured section description">
+                        <input
+                          name="featuredSectionDescription"
+                          defaultValue={bundle.featuredSectionDescription}
+                          className={adminInput}
+                        />
+                      </Field>
                       <Field label="FAQ section title">
-                        <input name="faqSectionTitle" defaultValue={translation.faqSectionTitle} className={adminInput} />
+                        <input
+                          name="faqSectionTitle"
+                          defaultValue={bundle.faqSectionTitle}
+                          className={adminInput}
+                        />
                       </Field>
                       <Field label="FAQ section description">
                         <input
                           name="faqSectionDescription"
-                          defaultValue={translation.faqSectionDescription}
+                          defaultValue={bundle.faqSectionDescription}
                           className={adminInput}
                         />
                       </Field>
+                    </div>
+                  </div>
+
+                  <div className="rounded-2xl bg-slate-50 p-4 sm:p-5">
+                    <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-slate-500">
+                      UI labels
+                    </h3>
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <Field label="View details label">
+                        <input
+                          name="viewDetailsLabel"
+                          defaultValue={bundle.viewDetailsLabel}
+                          className={adminInput}
+                        />
+                      </Field>
+                      <Field label="Available in label">
+                        <input
+                          name="availableInLabel"
+                          defaultValue={bundle.availableInLabel}
+                          className={adminInput}
+                        />
+                      </Field>
+                      <Field label="Close label">
+                        <input
+                          name="closeLabel"
+                          defaultValue={bundle.closeLabel}
+                          className={adminInput}
+                        />
+                      </Field>
+                      <Field label="Copyright">
+                        <input
+                          name="copyright"
+                          defaultValue={bundle.copyright}
+                          className={adminInput}
+                        />
+                      </Field>
+                    </div>
+                  </div>
+
+                  <div className="rounded-2xl bg-slate-50 p-4 sm:p-5">
+                    <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-slate-500">
+                      Contact
+                    </h3>
+                    <div className="grid gap-4 sm:grid-cols-2">
                       <Field label="Contact title">
-                        <input name="contactTitle" defaultValue={translation.contactTitle} className={adminInput} required />
+                        <input
+                          name="contactTitle"
+                          defaultValue={bundle.contactTitle}
+                          className={adminInput}
+                          required
+                        />
                       </Field>
                       <Field label="Contact description">
                         <input
                           name="contactDescription"
-                          defaultValue={translation.contactDescription}
+                          defaultValue={bundle.contactDescription}
                           className={adminInput}
                           required
                         />
@@ -612,68 +753,230 @@ export default function AdminDashboard({
               </section>
             ) : null}
 
-            {section === "menu" ? (
-              <CatalogListSection
-                title={`Navigation · ${localeNames[locale]}`}
-                description="Header menu links and order"
-                emptyTitle="No menu items in database"
-                emptyDescription="Fallback nav is used on the site until you add items here."
-                items={navItems}
-                locale={locale}
-                renderItem={(item) => (
-                  <div key={item.id} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-                    <form action={upsertNavItem} className="grid gap-3 sm:grid-cols-4">
-                      <input type="hidden" name="locale" value={locale} />
-                      <input type="hidden" name="navId" value={item.id} />
-                      <Field label="Label">
-                        <input name="label" defaultValue={item.label} className={adminInput} required />
-                      </Field>
-                      <Field label="Href">
-                        <input name="href" defaultValue={item.href} className={adminInput} required />
-                      </Field>
-                      <Field label="Order">
-                        <input type="number" name="orderIndex" defaultValue={item.orderIndex} className={adminInput} />
-                      </Field>
-                      <label className="flex items-end gap-2 pb-2 text-sm font-medium text-slate-700">
-                        <input type="checkbox" name="isActive" defaultChecked={item.isActive} className="rounded" />
-                        Active
-                      </label>
-                      <div className="sm:col-span-4">
-                        <SaveButton>Save link</SaveButton>
-                      </div>
-                    </form>
-                    <form action={deleteNavItem} className="mt-2">
-                      <input type="hidden" name="locale" value={locale} />
-                      <input type="hidden" name="navId" value={item.id} />
-                      <DangerButton>Delete</DangerButton>
-                    </form>
+            {section === "slides" ? (
+              <section className="space-y-4">
+                <div className="rounded-3xl border border-slate-200/80 bg-white p-5 shadow-sm sm:p-7">
+                  <PanelHeader
+                    title={`Hero slides · ${localeNames[locale]}`}
+                    description="Carousel slides shown in the homepage hero"
+                  />
+                  {bundle.heroSlides.length === 0 ? (
+                    <EmptyState
+                      title="No hero slides yet"
+                      description="Add a slide below. Fallback hero copy is used until slides exist."
+                    />
+                  ) : (
+                    <div className="space-y-4">
+                      {bundle.heroSlides.map((slide) => (
+                        <div
+                          key={slide.id}
+                          className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50/60"
+                        >
+                          <div className="grid sm:grid-cols-[160px_1fr]">
+                            <div className="relative min-h-[140px] bg-white">
+                              {slide.imageUrl ? (
+                                <Image
+                                  src={slide.imageUrl}
+                                  alt={slide.imageAlt || slide.headline}
+                                  fill
+                                  className="object-cover"
+                                  sizes="160px"
+                                />
+                              ) : (
+                                <div className="flex h-full items-center justify-center text-xs text-slate-400">
+                                  No image
+                                </div>
+                              )}
+                            </div>
+                            <div className="p-4">
+                              <form action={upsertHeroSlide} className="grid gap-3">
+                                <input type="hidden" name="locale" value={locale} />
+                                <input type="hidden" name="itemId" value={slide.id} />
+                                <Field label="Image URL">
+                                  <input
+                                    name="imageUrl"
+                                    defaultValue={slide.imageUrl}
+                                    className={adminInput}
+                                    required
+                                  />
+                                </Field>
+                                <Field label="Image alt">
+                                  <input
+                                    name="imageAlt"
+                                    defaultValue={slide.imageAlt}
+                                    className={adminInput}
+                                  />
+                                </Field>
+                                <Field label="Eyebrow">
+                                  <input
+                                    name="eyebrow"
+                                    defaultValue={slide.eyebrow}
+                                    className={adminInput}
+                                  />
+                                </Field>
+                                <Field label="Headline">
+                                  <input
+                                    name="headline"
+                                    defaultValue={slide.headline}
+                                    className={adminInput}
+                                    required
+                                  />
+                                </Field>
+                                <Field label="Subheadline">
+                                  <textarea
+                                    name="subheadline"
+                                    defaultValue={slide.subheadline}
+                                    rows={2}
+                                    className={adminTextarea}
+                                  />
+                                </Field>
+                                <SaveButton>Save slide</SaveButton>
+                              </form>
+                              <form action={deleteHeroSlide} className="mt-2">
+                                <input type="hidden" name="locale" value={locale} />
+                                <input type="hidden" name="itemId" value={slide.id} />
+                                <DangerButton>Delete slide</DangerButton>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <form
+                  action={upsertHeroSlide}
+                  className="rounded-3xl border border-dashed border-slate-300 bg-white p-5 shadow-sm sm:p-7"
+                >
+                  <input type="hidden" name="locale" value={locale} />
+                  <p className="mb-4 text-sm font-semibold text-slate-800">Add hero slide</p>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <input
+                      name="imageUrl"
+                      placeholder="https://... image URL"
+                      className={adminInput}
+                      required
+                    />
+                    <input name="imageAlt" placeholder="Image alt" className={adminInput} />
+                    <input name="eyebrow" placeholder="Eyebrow" className={adminInput} />
+                    <input name="headline" placeholder="Headline" className={adminInput} required />
                   </div>
-                )}
-                addForm={
-                  <form action={upsertNavItem} className="rounded-2xl border border-dashed border-slate-300 bg-slate-50/80 p-5">
-                    <input type="hidden" name="locale" value={locale} />
-                    <p className="mb-3 text-sm font-semibold text-slate-800">Add menu item</p>
-                    <div className="grid gap-3 sm:grid-cols-4">
-                      <input name="label" placeholder="Label" className={adminInput} required />
-                      <input name="href" placeholder="#section" className={adminInput} required />
-                      <input type="number" name="orderIndex" defaultValue={99} className={adminInput} />
-                      <label className="flex items-center gap-2 text-sm font-medium text-slate-700">
-                        <input type="checkbox" name="isActive" defaultChecked className="rounded" /> Active
-                      </label>
+                  <textarea
+                    name="subheadline"
+                    placeholder="Subheadline"
+                    rows={2}
+                    className={`${adminTextarea} mt-3`}
+                  />
+                  <div className="mt-4">
+                    <SaveButton>Add slide</SaveButton>
+                  </div>
+                </form>
+              </section>
+            ) : null}
+
+            {section === "menu" ? (
+              <section className="space-y-4">
+                <div className="rounded-3xl border border-slate-200/80 bg-white p-5 shadow-sm sm:p-7">
+                  <PanelHeader
+                    title={`Navigation · ${localeNames[locale]}`}
+                    description="Header menu links and order"
+                  />
+                  {bundle.nav.length === 0 ? (
+                    <EmptyState
+                      title="No menu items yet"
+                      description="Fallback nav is used on the site until you add items here."
+                    />
+                  ) : (
+                    <div className="space-y-4">
+                      {bundle.nav.map((item) => (
+                        <div
+                          key={item.id}
+                          className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
+                        >
+                          <form action={upsertNavItem} className="grid gap-3 sm:grid-cols-4">
+                            <input type="hidden" name="locale" value={locale} />
+                            <input type="hidden" name="itemId" value={item.id} />
+                            <Field label="Label">
+                              <input
+                                name="label"
+                                defaultValue={item.label}
+                                className={adminInput}
+                                required
+                              />
+                            </Field>
+                            <Field label="Href">
+                              <input
+                                name="href"
+                                defaultValue={item.href}
+                                className={adminInput}
+                                required
+                              />
+                            </Field>
+                            <Field label="Order">
+                              <input
+                                type="number"
+                                name="orderIndex"
+                                defaultValue={item.orderIndex}
+                                className={adminInput}
+                              />
+                            </Field>
+                            <label className="flex items-end gap-2 pb-2 text-sm font-medium text-slate-700">
+                              <input
+                                type="checkbox"
+                                name="isActive"
+                                defaultChecked={item.isActive}
+                                className="rounded"
+                              />
+                              Active
+                            </label>
+                            <div className="sm:col-span-4">
+                              <SaveButton>Save link</SaveButton>
+                            </div>
+                          </form>
+                          <form action={deleteNavItem} className="mt-2">
+                            <input type="hidden" name="locale" value={locale} />
+                            <input type="hidden" name="itemId" value={item.id} />
+                            <DangerButton>Delete</DangerButton>
+                          </form>
+                        </div>
+                      ))}
                     </div>
-                    <div className="mt-4">
-                      <SaveButton>Add menu item</SaveButton>
-                    </div>
-                  </form>
-                }
-              />
+                  )}
+                </div>
+
+                <form
+                  action={upsertNavItem}
+                  className="rounded-3xl border border-dashed border-slate-300 bg-white p-5 shadow-sm sm:p-7"
+                >
+                  <input type="hidden" name="locale" value={locale} />
+                  <p className="mb-3 text-sm font-semibold text-slate-800">Add menu item</p>
+                  <div className="grid gap-3 sm:grid-cols-4">
+                    <input name="label" placeholder="Label" className={adminInput} required />
+                    <input name="href" placeholder="#section" className={adminInput} required />
+                    <input
+                      type="number"
+                      name="orderIndex"
+                      defaultValue={99}
+                      className={adminInput}
+                    />
+                    <label className="flex items-center gap-2 text-sm font-medium text-slate-700">
+                      <input type="checkbox" name="isActive" defaultChecked className="rounded" />{" "}
+                      Active
+                    </label>
+                  </div>
+                  <div className="mt-4">
+                    <SaveButton>Add menu item</SaveButton>
+                  </div>
+                </form>
+              </section>
             ) : null}
 
             {section === "products" ? (
               <CatalogCardsSection
                 title={`Products · ${localeNames[locale]}`}
                 description="Category cards shown on the homepage catalogue"
-                items={products}
+                items={bundle.products}
                 locale={locale}
                 upsertAction={upsertProduct}
                 deleteAction={deleteProduct}
@@ -681,11 +984,23 @@ export default function AdminDashboard({
               />
             ) : null}
 
+            {section === "featured" ? (
+              <CatalogCardsSection
+                title={`Featured · ${localeNames[locale]}`}
+                description="Highlighted catalogue cards"
+                items={bundle.featured}
+                locale={locale}
+                upsertAction={upsertFeatured}
+                deleteAction={deleteFeatured}
+                addLabel="Add featured item"
+              />
+            ) : null}
+
             {section === "solutions" ? (
               <CatalogCardsSection
                 title={`Solutions · ${localeNames[locale]}`}
                 description="Sustainable focus / solution cards"
-                items={services}
+                items={bundle.services}
                 locale={locale}
                 upsertAction={upsertService}
                 deleteAction={deleteService}
@@ -700,15 +1015,18 @@ export default function AdminDashboard({
                     title={`FAQs · ${localeNames[locale]}`}
                     description="Accordion questions shown near the contact section"
                   />
-                  {faqs.length === 0 ? (
+                  {bundle.faqs.length === 0 ? (
                     <EmptyState
-                      title="No FAQs in database"
+                      title="No FAQs yet"
                       description="Fallback FAQs are used until you add entries here."
                     />
                   ) : (
                     <div className="space-y-4">
-                      {faqs.map((item) => (
-                        <div key={item.id} className="rounded-2xl border border-slate-200 bg-slate-50/60 p-4">
+                      {bundle.faqs.map((item) => (
+                        <div
+                          key={item.id}
+                          className="rounded-2xl border border-slate-200 bg-slate-50/60 p-4"
+                        >
                           <form action={upsertFaq} className="grid gap-3">
                             <input type="hidden" name="locale" value={locale} />
                             <input type="hidden" name="itemId" value={item.id} />
@@ -722,12 +1040,22 @@ export default function AdminDashboard({
                                 />
                               </Field>
                               <label className="flex items-end gap-2 pb-2 text-sm font-medium text-slate-700">
-                                <input type="checkbox" name="isActive" defaultChecked={item.isActive} className="rounded" />
+                                <input
+                                  type="checkbox"
+                                  name="isActive"
+                                  defaultChecked={item.isActive}
+                                  className="rounded"
+                                />
                                 Active
                               </label>
                             </div>
                             <Field label="Question">
-                              <input name="question" defaultValue={item.question} className={adminInput} required />
+                              <input
+                                name="question"
+                                defaultValue={item.question}
+                                className={adminInput}
+                                required
+                              />
                             </Field>
                             <Field label="Answer">
                               <textarea
@@ -751,16 +1079,30 @@ export default function AdminDashboard({
                   )}
                 </div>
 
-                <form action={upsertFaq} className="rounded-3xl border border-dashed border-slate-300 bg-white p-5 shadow-sm sm:p-7">
+                <form
+                  action={upsertFaq}
+                  className="rounded-3xl border border-dashed border-slate-300 bg-white p-5 shadow-sm sm:p-7"
+                >
                   <input type="hidden" name="locale" value={locale} />
                   <p className="mb-4 text-sm font-semibold text-slate-800">Add FAQ</p>
                   <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
-                    <input type="number" name="orderIndex" defaultValue={99} className={adminInput} />
+                    <input
+                      type="number"
+                      name="orderIndex"
+                      defaultValue={99}
+                      className={adminInput}
+                    />
                     <label className="flex items-center gap-2 text-sm font-medium text-slate-700">
-                      <input type="checkbox" name="isActive" defaultChecked className="rounded" /> Active
+                      <input type="checkbox" name="isActive" defaultChecked className="rounded" />{" "}
+                      Active
                     </label>
                   </div>
-                  <input name="question" placeholder="Question" className={`${adminInput} mt-3`} required />
+                  <input
+                    name="question"
+                    placeholder="Question"
+                    className={`${adminInput} mt-3`}
+                    required
+                  />
                   <textarea
                     name="answer"
                     placeholder="Answer"
@@ -774,43 +1116,101 @@ export default function AdminDashboard({
                 </form>
               </section>
             ) : null}
+
+            {section === "footer" ? (
+              <section className="space-y-4">
+                <div className="rounded-3xl border border-slate-200/80 bg-white p-5 shadow-sm sm:p-7">
+                  <PanelHeader
+                    title={`Social links · ${localeNames[locale]}`}
+                    description="Footer social icons. Copyright text is edited under Page Copy."
+                  />
+                  {bundle.socialLinks.length === 0 ? (
+                    <EmptyState
+                      title="No social links yet"
+                      description="Add Facebook, LinkedIn, or Instagram links below."
+                    />
+                  ) : (
+                    <div className="space-y-4">
+                      {bundle.socialLinks.map((item) => (
+                        <div
+                          key={item.id}
+                          className="rounded-2xl border border-slate-200 bg-slate-50/60 p-4"
+                        >
+                          <form action={upsertSocialLink} className="grid gap-3 sm:grid-cols-3">
+                            <input type="hidden" name="locale" value={locale} />
+                            <input type="hidden" name="itemId" value={item.id} />
+                            <Field label="Label">
+                              <input
+                                name="label"
+                                defaultValue={item.label}
+                                className={adminInput}
+                                required
+                              />
+                            </Field>
+                            <Field label="Href">
+                              <input
+                                name="href"
+                                defaultValue={item.href}
+                                className={adminInput}
+                                required
+                              />
+                            </Field>
+                            <Field label="Icon">
+                              <select name="icon" defaultValue={item.icon} className={adminInput}>
+                                <option value="Facebook">Facebook</option>
+                                <option value="Linkedin">Linkedin</option>
+                                <option value="Instagram">Instagram</option>
+                              </select>
+                            </Field>
+                            <div className="sm:col-span-3">
+                              <SaveButton>Save link</SaveButton>
+                            </div>
+                          </form>
+                          <form action={deleteSocialLink} className="mt-2">
+                            <input type="hidden" name="locale" value={locale} />
+                            <input type="hidden" name="itemId" value={item.id} />
+                            <DangerButton>Delete</DangerButton>
+                          </form>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <form
+                  action={upsertSocialLink}
+                  className="rounded-3xl border border-dashed border-slate-300 bg-white p-5 shadow-sm sm:p-7"
+                >
+                  <input type="hidden" name="locale" value={locale} />
+                  <p className="mb-3 text-sm font-semibold text-slate-800">Add social link</p>
+                  <div className="grid gap-3 sm:grid-cols-3">
+                    <input name="label" placeholder="Label" className={adminInput} required />
+                    <input
+                      name="href"
+                      placeholder="https://..."
+                      className={adminInput}
+                      required
+                    />
+                    <select name="icon" defaultValue="Instagram" className={adminInput}>
+                      <option value="Facebook">Facebook</option>
+                      <option value="Linkedin">Linkedin</option>
+                      <option value="Instagram">Instagram</option>
+                    </select>
+                  </div>
+                  <div className="mt-4">
+                    <SaveButton>Add social link</SaveButton>
+                  </div>
+                </form>
+
+                <p className="rounded-2xl border border-slate-200/80 bg-white px-5 py-4 text-sm text-slate-500 shadow-sm">
+                  Copyright text is managed in Page Copy → UI labels.
+                </p>
+              </section>
+            ) : null}
           </main>
         </div>
       </div>
     </div>
-  );
-}
-
-function CatalogListSection({
-  title,
-  description,
-  emptyTitle,
-  emptyDescription,
-  items,
-  renderItem,
-  addForm,
-}: {
-  title: string;
-  description: string;
-  emptyTitle: string;
-  emptyDescription: string;
-  items: AdminNavItem[];
-  locale: SiteLocale;
-  renderItem: (item: AdminNavItem) => ReactNode;
-  addForm: ReactNode;
-}) {
-  return (
-    <section className="space-y-4">
-      <div className="rounded-3xl border border-slate-200/80 bg-white p-5 shadow-sm sm:p-7">
-        <PanelHeader title={title} description={description} />
-        {items.length === 0 ? (
-          <EmptyState title={emptyTitle} description={emptyDescription} />
-        ) : (
-          <div className="space-y-4">{items.map(renderItem)}</div>
-        )}
-      </div>
-      {addForm}
-    </section>
   );
 }
 
@@ -825,7 +1225,7 @@ function CatalogCardsSection({
 }: {
   title: string;
   description: string;
-  items: AdminCatalogItem[];
+  items: CmsCatalogItem[];
   locale: SiteLocale;
   upsertAction: (formData: FormData) => Promise<void>;
   deleteAction: (formData: FormData) => Promise<void>;
@@ -837,7 +1237,7 @@ function CatalogCardsSection({
         <PanelHeader title={title} description={description} />
         {items.length === 0 ? (
           <EmptyState
-            title="No catalogue items in database"
+            title="No catalogue items yet"
             description="Fallback catalogue content is shown on the site until you add items here."
           />
         ) : (
@@ -852,7 +1252,7 @@ function CatalogCardsSection({
                     {item.imageUrl ? (
                       <Image
                         src={item.imageUrl}
-                        alt={item.title}
+                        alt={item.imageAlt || item.title}
                         fill
                         className="object-contain p-3"
                         sizes="140px"
@@ -868,10 +1268,27 @@ function CatalogCardsSection({
                       <input type="hidden" name="locale" value={locale} />
                       <input type="hidden" name="itemId" value={item.id} />
                       <Field label="Title">
-                        <input name="title" defaultValue={item.title} className={adminInput} required />
+                        <input
+                          name="title"
+                          defaultValue={item.title}
+                          className={adminInput}
+                          required
+                        />
                       </Field>
                       <Field label="Image URL">
-                        <input name="imageUrl" defaultValue={item.imageUrl} className={adminInput} required />
+                        <input
+                          name="imageUrl"
+                          defaultValue={item.imageUrl}
+                          className={adminInput}
+                          required
+                        />
+                      </Field>
+                      <Field label="Image alt">
+                        <input
+                          name="imageAlt"
+                          defaultValue={item.imageAlt}
+                          className={adminInput}
+                        />
                       </Field>
                       <Field label="Short description">
                         <textarea
@@ -890,6 +1307,15 @@ function CatalogCardsSection({
                           className={adminTextarea}
                         />
                       </Field>
+                      <Field label="Sizes (one per line)">
+                        <textarea
+                          name="sizesText"
+                          defaultValue={item.sizesText}
+                          rows={3}
+                          placeholder="One size per line"
+                          className={adminTextarea}
+                        />
+                      </Field>
                       <div className="flex flex-wrap items-center gap-3">
                         <Field label="Order" className="w-28">
                           <input
@@ -900,7 +1326,12 @@ function CatalogCardsSection({
                           />
                         </Field>
                         <label className="mt-6 flex items-center gap-2 text-sm font-medium text-slate-700">
-                          <input type="checkbox" name="isActive" defaultChecked={item.isActive} className="rounded" />
+                          <input
+                            type="checkbox"
+                            name="isActive"
+                            defaultChecked={item.isActive}
+                            className="rounded"
+                          />
                           Active
                         </label>
                       </div>
@@ -927,8 +1358,13 @@ function CatalogCardsSection({
         <p className="mb-4 text-sm font-semibold text-slate-800">{addLabel}</p>
         <div className="grid gap-3 sm:grid-cols-3">
           <input name="title" placeholder="Title" className={adminInput} required />
-          <input name="imageUrl" placeholder="https://... image URL" className={adminInput} required />
-          <input type="number" name="orderIndex" defaultValue={99} className={adminInput} />
+          <input
+            name="imageUrl"
+            placeholder="https://... image URL"
+            className={adminInput}
+            required
+          />
+          <input name="imageAlt" placeholder="Image alt" className={adminInput} />
         </div>
         <textarea
           name="description"
@@ -943,9 +1379,23 @@ function CatalogCardsSection({
           rows={2}
           className={`${adminTextarea} mt-3`}
         />
-        <label className="mt-3 flex items-center gap-2 text-sm font-medium text-slate-700">
-          <input type="checkbox" name="isActive" defaultChecked className="rounded" /> Active
-        </label>
+        <textarea
+          name="sizesText"
+          placeholder="One size per line"
+          rows={3}
+          className={`${adminTextarea} mt-3`}
+        />
+        <div className="mt-3 flex flex-wrap items-center gap-3">
+          <input
+            type="number"
+            name="orderIndex"
+            defaultValue={99}
+            className={`${adminInput} w-28`}
+          />
+          <label className="flex items-center gap-2 text-sm font-medium text-slate-700">
+            <input type="checkbox" name="isActive" defaultChecked className="rounded" /> Active
+          </label>
+        </div>
         <div className="mt-4">
           <SaveButton>{addLabel}</SaveButton>
         </div>

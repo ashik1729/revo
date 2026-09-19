@@ -21,16 +21,9 @@ export default function DesignHome({ content, locale }: DesignHomeProps) {
   const productTitles = content.products.map((item) => item.title);
   const serviceTitles = content.services.map((item) => item.title);
 
-  const featuredTitle =
-    locale === "ar" ? "المنتجات الشائعة" : "Popular Items";
-  const featuredDescription =
-    locale === "ar"
-      ? "منتجات جاهزة للطلب مع تفاصيل كاملة عند الطلب."
-      : "Ready-to-order packaging picks — tap for full details and sizes.";
-  const productsDescription =
-    locale === "ar"
-      ? "تصميم تغليف بسيط لكل قطاع بطريقة عصرية ومستدامة."
-      : "Simple packaging design for every sector in a modern and sustainable way.";
+  const featuredTitle = content.featuredSectionTitle;
+  const featuredDescription = content.featuredSectionDescription;
+  const productsDescription = content.productsSectionDescription;
 
   return (
     <div className="design-v2">
@@ -38,17 +31,15 @@ export default function DesignHome({ content, locale }: DesignHomeProps) {
       <Navbar
         navItems={content.nav}
         locale={locale}
-        ctaLabel={locale === "ar" ? "طلب عرض سعر" : "Get a Quick Quote"}
+        ctaLabel={content.hero.ctaLabel}
       />
       <main>
         <HeroV2
           brandName={content.company.name}
           locale={locale}
-          ctaLabel={locale === "ar" ? "تسوق صديق للبيئة" : "Shop Eco-friendly"}
+          ctaLabel={content.hero.ctaLabel}
           ctaHref={content.hero.ctaHref}
-          secondaryCtaLabel={
-            locale === "ar" ? "حلول الأعمال" : "Business Solutions"
-          }
+          secondaryCtaLabel={content.hero.secondaryCtaLabel}
           secondaryCtaHref={content.hero.secondaryCtaHref}
           trustBadges={content.hero.trustBadges}
           slides={content.hero.slides}
