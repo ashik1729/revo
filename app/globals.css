@@ -120,6 +120,13 @@ body {
   font-family: var(--font-sans);
 }
 
+.font-arabic,
+html.locale-ar body,
+[lang="ar"],
+[dir="rtl"] {
+  font-family: var(--font-arabic), "Noto Sans Arabic", "Segoe UI", Tahoma, sans-serif;
+}
+
 ::selection {
   background-color: color-mix(in srgb, var(--accent) 25%, transparent);
 }

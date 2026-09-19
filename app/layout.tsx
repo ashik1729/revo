@@ -1,11 +1,18 @@
 import type { Metadata } from "next";
-import { Manrope } from "next/font/google";
+import { Manrope, Noto_Sans_Arabic } from "next/font/google";
 import "./globals.css";
 
 const manrope = Manrope({
   subsets: ["latin"],
   variable: "--font-manrope",
   display: "swap",
+});
+
+const notoArabic = Noto_Sans_Arabic({
+  subsets: ["arabic"],
+  variable: "--font-arabic",
+  display: "swap",
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -20,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${manrope.variable} scroll-smooth`}>
+    <html lang="en" className={`${manrope.variable} ${notoArabic.variable} scroll-smooth`} suppressHydrationWarning>
       <body className="min-h-screen bg-white font-sans text-slate-900 antialiased">
         {children}
       </body>

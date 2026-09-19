@@ -1,3 +1,4 @@
+import LocaleDocument from "@/components/LocaleDocument";
 import { isSupportedLocale } from "@/lib/i18n";
 
 interface LocaleLayoutProps {
@@ -13,5 +14,12 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
     return children;
   }
 
-  return <div dir={dir}>{children}</div>;
+  return (
+    <>
+      <LocaleDocument locale={locale} dir={dir} />
+      <div dir={dir} lang={locale} className={locale === "ar" ? "font-arabic" : undefined}>
+        {children}
+      </div>
+    </>
+  );
 }
