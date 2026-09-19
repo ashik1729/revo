@@ -16,7 +16,7 @@ export const companyInfo = {
   heroImageUrl: `${RP}/2025/01/Slide-1-1.webp`,
   aboutImageUrl: "/about-revo.jpg",
   contactBannerUrl: "/contact-banner.jpg",
-  contactSideImageUrl: `${RP}/2025/01/Homepage-Banner-5.jpg`,
+  contactSideImageUrl: "/media/full-catalogue-supply.jpg",
 } as const;
 
 export const heroSlidesByLocale: Record<
@@ -63,7 +63,7 @@ export const heroSlidesByLocale: Record<
         "Heat-resistant bagasse ware with matching lids for takeaway and catering.",
     },
     {
-      imageUrl: `${RP}/2025/01/Homepage-Banner-5.jpg`,
+      imageUrl: "/media/full-catalogue-supply.jpg",
       imageAlt: "Complete packaging catalogue",
       eyebrow: "Full Catalogue Supply",
       headline: "From Aluminium to Hygiene — One Partner",
@@ -101,7 +101,7 @@ export const heroSlidesByLocale: Record<
       subheadline: "أدوات باجاس مقاومة للحرارة مع أغطية للطلبات الخارجية والتموين.",
     },
     {
-      imageUrl: `${RP}/2025/01/Homepage-Banner-5.jpg`,
+      imageUrl: "/media/full-catalogue-supply.jpg",
       imageAlt: "كتالوج تغليف متكامل",
       eyebrow: "توريد الكتالوج الكامل",
       headline: "من الألمنيوم إلى النظافة — شريك واحد",
